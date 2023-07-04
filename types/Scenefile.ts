@@ -171,9 +171,11 @@ const CameraDataSchema = z
     ])
   );
 
-const SceneFileSchema = z.object({
-  name: z.string().optional(),
-  globalData: GlobalDataSchema,
-  cameraData: CameraDataSchema,
-  groups: z.array(GroupSchema),
-});
+const SceneFileSchema = z
+  .object({
+    name: z.string().optional(),
+    globalData: GlobalDataSchema,
+    cameraData: CameraDataSchema,
+    groups: z.array(GroupSchema),
+  })
+  .strict();
