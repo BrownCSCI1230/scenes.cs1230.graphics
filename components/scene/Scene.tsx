@@ -15,7 +15,7 @@ export default function Scene() {
       <color attach="background" args={["black"]} />
       <Grid infiniteGrid sectionColor="white" cellColor="white" />
       <PerspectiveCamera makeDefault position={[5, 2, 5]} />
-      <OrbitControls enableDamping enablePan target={[0, 0, 0]} />
+      <OrbitControls enableDamping enablePan target={[0, 0, 0]} makeDefault />
       <GizmoHelper alignment="bottom-right">
         <GizmoViewport
           axisColors={["red", "green", "blue"]}
