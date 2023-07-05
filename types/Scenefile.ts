@@ -13,24 +13,33 @@ export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
 export type Light = z.infer<typeof LightSchema>;
+export type Group = z.infer<typeof BaseGroupSchema> & {
+  groups?: Group[];
+};
 export type MasterGroup = z.infer<typeof MasterGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
 export type CameraData = z.infer<typeof CameraDataSchema>;
 export type Scenefile = z.infer<typeof SceneFileSchema>;
 
-const Vec2Schema = z.array(z.number()).refine((data) => data.length === 2, {
-  message: "Vec2 arrays should have a length of 2",
-});
+export const Vec2Schema = z
+  .array(z.number())
+  .refine((data) => data.length === 2, {
+    message: "Vec2 arrays should have a length of 2",
+  });
 
-const Vec3Schema = z.array(z.number()).refine((data) => data.length === 3, {
-  message: "Vec3 arrays should have a length of 3",
-});
+export const Vec3Schema = z
+  .array(z.number())
+  .refine((data) => data.length === 3, {
+    message: "Vec3 arrays should have a length of 3",
+  });
 
-const Vec4Schema = z.array(z.number()).refine((data) => data.length === 4, {
-  message: "Vec4 arrays should have a length of 4",
-});
+export const Vec4Schema = z
+  .array(z.number())
+  .refine((data) => data.length === 4, {
+    message: "Vec4 arrays should have a length of 4",
+  });
 
-const Mat4Schema = z
+export const Mat4Schema = z
   .array(z.array(z.number()))
   .refine(
     (data) => data.length === 4 && data.every((row) => row.length === 4),
@@ -39,13 +48,13 @@ const Mat4Schema = z
     }
   );
 
-const RGBSchema = z
+export const RGBSchema = z
   .array(z.number().int().nonnegative().max(255))
   .refine((data) => data.length === 3, {
     message: "RGB arrays should have a length of 3",
   });
 
-const PrimitiveBaseSchema = z.object({
+export const PrimitiveBaseSchema = z.object({
   ambient: RGBSchema.optional(),
   diffuse: RGBSchema.optional(),
   specular: RGBSchema.optional(),
@@ -61,7 +70,7 @@ const PrimitiveBaseSchema = z.object({
   bumpMapV: z.number().optional(),
 });
 
-const ShapePrimitiveSchema = PrimitiveBaseSchema.and(
+export const ShapePrimitiveSchema = PrimitiveBaseSchema.and(
   z.object({
     type: z.union([
       z.literal("cube"),
@@ -72,27 +81,30 @@ const ShapePrimitiveSchema = PrimitiveBaseSchema.and(
   })
 );
 
-const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
+export const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
   z.object({
     type: z.literal("mesh"),
     meshFile: z.string(),
   })
 );
 
-const PrimitiveSchema = z.union([ShapePrimitiveSchema, MeshPrimitiveSchema]);
+export const PrimitiveSchema = z.union([
+  ShapePrimitiveSchema,
+  MeshPrimitiveSchema,
+]);
 
-const PointLightSchema = z.object({
+export const PointLightSchema = z.object({
   type: z.literal("point"),
   position: Vec3Schema,
   attenuationCoeff: Vec3Schema,
 });
 
-const DirectionalLightSchema = z.object({
+export const DirectionalLightSchema = z.object({
   type: z.literal("directional"),
   direction: Vec3Schema,
 });
 
-const SpotLightSchema = z.object({
+export const SpotLightSchema = z.object({
   type: z.literal("spot"),
   position: Vec3Schema,
   direction: Vec3Schema,
@@ -101,14 +113,14 @@ const SpotLightSchema = z.object({
   thetaOuter: z.number(),
 });
 
-const LightSchema = z
+export const LightSchema = z
   .object({
     name: z.string().optional(),
     color: RGBSchema,
   })
   .and(z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]));
 
-const BaseGroupSchema = z
+export const BaseGroupSchema = z
   .object({
     name: z.string().optional(),
     primitives: z.array(PrimitiveSchema).optional(),
@@ -131,26 +143,24 @@ const BaseGroupSchema = z
     ])
   );
 
-type Group = z.infer<typeof BaseGroupSchema> & {
-  groups?: Group[];
-};
-
-const GroupSchema: z.ZodType<Group> = BaseGroupSchema.and(
+export const GroupSchema: z.ZodType<Group> = BaseGroupSchema.and(
   z.object({
     groups: z.lazy(() => GroupSchema.array()).optional(),
   })
 );
 
-const MasterGroupSchema = GroupSchema.and(z.object({ name: z.string() }));
+export const MasterGroupSchema = GroupSchema.and(
+  z.object({ name: z.string() })
+);
 
-const GlobalDataSchema = z.object({
+export const GlobalDataSchema = z.object({
   ambientCoeff: z.number(),
   diffuseCoeff: z.number(),
   specularCoeff: z.number(),
   transparentCoeff: z.number(),
 });
 
-const CameraDataSchema = z
+export const CameraDataSchema = z
   .object({
     position: Vec3Schema,
     up: Vec3Schema,
@@ -171,7 +181,7 @@ const CameraDataSchema = z
     ])
   );
 
-const SceneFileSchema = z
+export const SceneFileSchema = z
   .object({
     name: z.string().optional(),
     globalData: GlobalDataSchema,
