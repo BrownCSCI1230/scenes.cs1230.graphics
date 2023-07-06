@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "tailwind-fold.showTailwindImage": false,
+  "tailwind-fold.unfoldIfLineSelected": true
+}

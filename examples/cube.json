@@ -7,49 +7,21 @@
     "transparentCoeff": 0.0
   },
   "cameraData": {
-    "position": [
-      0,
-      0,
-      5
-    ],
-    "up": [
-      0,
-      1,
-      0
-    ],
-    "look": [
-      0,
-      0,
-      0
-    ],
+    "position": [0, 0, 5],
+    "up": [0, 1, 0],
+    "look": [0, 0, 0],
     "heightAngle": 45
   },
   "groups": [
     {
       "name": "cube",
-      "translate": [
-        0,
-        0,
-        0
-      ],
+      "translate": [0, 0, 0],
       "primitives": [
         {
           "type": "cube",
-          "ambient": [
-            0,
-            0,
-            0
-          ],
-          "diffuse": [
-            0,
-            0,
-            1
-          ],
-          "specular": [
-            1,
-            1,
-            1
-          ],
+          "ambient": [0, 0, 0],
+          "diffuse": [0, 0, 1],
+          "specular": [1, 1, 1],
           "shininess": 10
         }
       ]
