@@ -1,7 +1,8 @@
 "use client";
 
 import { useReducer, useCallback, createContext, useContext } from "react";
-import { ScenefileSchema, Scenefile, newScene } from "@/types/Scenefile";
+import newScene from "@/examples/newScene.json";
+import { ScenefileSchema, Scenefile } from "@/types/Scenefile";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
