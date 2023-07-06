@@ -11,7 +11,7 @@ import { Grid } from "@react-three/drei";
 
 export default function Scene() {
   return (
-    <Canvas className="flex flex-grow h-full">
+    <Canvas className="flex flex-grow">
       <color attach="background" args={["black"]} />
       <Grid infiniteGrid sectionColor="white" cellColor="white" />
       <PerspectiveCamera makeDefault position={[5, 2, 5]} />

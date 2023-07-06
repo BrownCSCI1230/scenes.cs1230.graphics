@@ -19,7 +19,7 @@ export type Group = z.infer<typeof BaseGroupSchema> & {
 export type MasterGroup = z.infer<typeof MasterGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
 export type CameraData = z.infer<typeof CameraDataSchema>;
-export type Scenefile = z.infer<typeof SceneFileSchema>;
+export type Scenefile = z.infer<typeof ScenefileSchema>;
 
 export const Vec2Schema = z
   .array(z.number())
@@ -145,7 +145,7 @@ export const BaseGroupSchema = z
 
 export const GroupSchema: z.ZodType<Group> = BaseGroupSchema.and(
   z.object({
-    groups: z.lazy(() => GroupSchema.array()).optional(),
+    groups: z.lazy(() => GroupSchema.array().optional()),
   })
 );
 
@@ -181,11 +181,42 @@ export const CameraDataSchema = z
     ])
   );
 
-export const SceneFileSchema = z
+export const ScenefileSchema = z
   .object({
     name: z.string().optional(),
     globalData: GlobalDataSchema,
     cameraData: CameraDataSchema,
-    groups: z.array(GroupSchema),
+    groups: z.array(GroupSchema).optional(),
   })
   .strict();
+
+export const cubeScene: Scenefile = {
+  name: "cube",
+  globalData: {
+    ambientCoeff: 0.1,
+    diffuseCoeff: 0.7,
+    specularCoeff: 0.2,
+    transparentCoeff: 0.0,
+  },
+  cameraData: {
+    position: [0, 0, 5],
+    up: [0, 1, 0],
+    look: [0, 0, 0],
+    heightAngle: 45,
+  },
+  groups: [
+    {
+      name: "cube",
+      translate: [0, 0, 0],
+      primitives: [
+        {
+          type: "cube",
+          ambient: [0, 0, 0],
+          diffuse: [0, 0, 1],
+          specular: [1, 1, 1],
+          shininess: 10,
+        },
+      ],
+    },
+  ],
+};
