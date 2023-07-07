@@ -8,6 +8,10 @@ export default function Upload() {
   const { loadFile } = useScenefile();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files?.length === 0) {
       return;
@@ -17,8 +21,14 @@ export default function Upload() {
 
   return (
     <>
-      <Button>Upload</Button>
-      <input type="file" accept=".json" hidden onChange={handleInputChange} />
+      <Button onClick={handleClick}>Upload</Button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".json"
+        hidden
+        onChange={handleInputChange}
+      />
     </>
   );
 }
