@@ -1,7 +1,7 @@
 import useScenefile from "@/hooks/useScenefile";
 
-export default function Outline() {
+export default function Editor() {
   const { scenefile } = useScenefile();
 
-  return <div>Outline</div>;
+  return <div>Editor</div>;
 }

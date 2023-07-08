@@ -5,13 +5,13 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   return (
-    <main className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden">
       <Header />
       <Separator />
-      <div className="flex h-full p-8 gap-4">
+      <main className="flex flex-grow p-8 gap-4 overflow-auto">
         <Scene />
         <Sidebar />
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
