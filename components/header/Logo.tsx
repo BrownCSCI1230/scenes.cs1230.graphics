@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import Link from "next/link";
 import { Bebas_Neue } from "next/font/google";
+import Link from "next/link";
+import { useRef, useState } from "react";
 
 type LogoState = "CS1230" | "SCENES";
 

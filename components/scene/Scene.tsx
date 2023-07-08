@@ -3,11 +3,11 @@
 import {
   GizmoHelper,
   GizmoViewport,
+  Grid,
   OrbitControls,
   PerspectiveCamera,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Grid } from "@react-three/drei";
 
 export default function Scene() {
   return (

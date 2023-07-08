@@ -1,14 +1,14 @@
 "use client";
 
-import Outline from "./outline/Outline";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import SceneJSON from "./json/SceneJSON";
 import Editor from "./editor/Editor";
+import SceneJSON from "./json/SceneJSON";
+import Outline from "./outline/Outline";
 
 const itemStyle =
   "flex flex-col overflow-auto flex-auto data-[state=closed]:flex-none";
