@@ -13,7 +13,7 @@ export default function Scene() {
   return (
     <Canvas className="border border-slate-200 dark:border-slate-800 rounded-lg">
       <color attach="background" args={["white"]} />
-      <Grid infiniteGrid sectionColor="white" cellColor="white" />
+      <Grid infiniteGrid sectionColor="lightgray" cellColor="gray" />
       <PerspectiveCamera makeDefault position={[5, 2, 5]} />
       <OrbitControls enableDamping enablePan target={[0, 0, 0]} makeDefault />
       <GizmoHelper alignment="bottom-right">

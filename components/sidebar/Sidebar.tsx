@@ -6,9 +6,15 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/sidebar-accordion";
+} from "../ui/accordion";
 import SceneJSON from "./json/SceneJSON";
 import Editor from "./editor/Editor";
+
+const itemStyle =
+  "flex flex-col overflow-auto flex-auto data-[state=closed]:flex-none";
+const triggerStyle = "pt-0 pb-1 font-semibold hover:no-underline";
+const contentStyle =
+  "pl-2 flex-auto overflow-auto data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Sidebar() {
   return (
@@ -18,21 +24,21 @@ export default function Sidebar() {
         className="flex flex-col flex-auto gap-2 h-full"
         defaultValue={["outline"]}
       >
-        <AccordionItem value="outline">
-          <AccordionTrigger className="pt-0 pb-1">Outline</AccordionTrigger>
-          <AccordionContent className="pl-2">
+        <AccordionItem value="outline" className={itemStyle}>
+          <AccordionTrigger className={triggerStyle}>OUTLINE</AccordionTrigger>
+          <AccordionContent className={contentStyle}>
             <Outline />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="editor">
-          <AccordionTrigger className="pt-0 pb-1">Editor</AccordionTrigger>
-          <AccordionContent className="pl-2">
+        <AccordionItem value="editor" className={itemStyle}>
+          <AccordionTrigger className={triggerStyle}>EDITOR</AccordionTrigger>
+          <AccordionContent className={contentStyle}>
             <Editor />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="json">
-          <AccordionTrigger className="pt-0 pb-1">JSON</AccordionTrigger>
-          <AccordionContent className="pl-2">
+        <AccordionItem value="json" className={itemStyle}>
+          <AccordionTrigger className={triggerStyle}>JSON</AccordionTrigger>
+          <AccordionContent className={contentStyle}>
             <SceneJSON />
           </AccordionContent>
         </AccordionItem>
