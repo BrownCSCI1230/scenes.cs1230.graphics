@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-col h-screen max-h-screen overflow-hidden">
       <Header />
       <Separator />
-      <main className="flex flex-grow p-8 gap-4 overflow-auto">
+      <main className="flex flex-grow p-8 gap-4 overflow-auto text-slate-700">
         <Scene />
         <Sidebar />
       </main>

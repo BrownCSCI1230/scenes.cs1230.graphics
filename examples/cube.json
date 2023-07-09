@@ -1,5 +1,5 @@
 {
-  "name": "cube",
+  "name": "Cube",
   "globalData": {
     "ambientCoeff": 0.1,
     "diffuseCoeff": 0.7,
@@ -14,7 +14,7 @@
   },
   "groups": [
     {
-      "name": "cube",
+      "name": "A lonely cube",
       "translate": [0, 0, 0],
       "primitives": [
         {

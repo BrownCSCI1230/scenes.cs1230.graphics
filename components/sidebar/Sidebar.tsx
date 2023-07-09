@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -18,11 +19,11 @@ const contentStyle =
 
 export default function Sidebar() {
   return (
-    <aside className="flex flex-col basis-96 h-full">
+    <aside className="flex flex-col basis-96 overflow-hidden w-96 h-full">
       <Accordion
         type="multiple"
         className="flex flex-col flex-auto gap-2 h-full"
-        defaultValue={["outline"]}
+        defaultValue={["outline", "editor"]}
       >
         <AccordionItem value="outline" className={itemStyle}>
           <AccordionTrigger className={triggerStyle}>OUTLINE</AccordionTrigger>
@@ -36,7 +37,7 @@ export default function Sidebar() {
             <Editor />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="json" className={itemStyle}>
+        <AccordionItem value="json" className={cn(itemStyle, "basis-1/3")}>
           <AccordionTrigger className={triggerStyle}>JSON</AccordionTrigger>
           <AccordionContent className={contentStyle}>
             <SceneJSON />

@@ -1,6 +1,7 @@
 "use client";
 
 import newScene from "@/examples/newScene.json";
+import { assignIDs, loadJSON } from "@/lib/loadFile";
 import { Scenefile, ScenefileSchema } from "@/types/Scenefile";
 import { createContext, useCallback, useContext, useReducer } from "react";
 
@@ -28,7 +29,7 @@ export const ScenefileProvider = ({
     const result = ScenefileSchema.safeParse(data);
     if (result.success) {
       console.log("File parsed successfully");
-      dispatch({ type: "LOAD_FILE", scenefile: result.data });
+      dispatch({ type: "LOAD_FILE", scenefile: assignIDs(result.data) });
     } else {
       console.log("Error parsing file");
       console.error(result.error);
@@ -64,36 +65,5 @@ type UpdateGlobalDataAction = {
 };
 
 type ScenefileAction = LoadFileAction | UpdateGlobalDataAction;
-
-async function loadJSON(file: File) {
-  const readUploadedFileAsText = () => {
-    const fileReader = new FileReader();
-    return new Promise((resolve, reject) => {
-      fileReader.onerror = () => {
-        fileReader.abort();
-        reject(new DOMException("Problem parsing input file."));
-      };
-      fileReader.onload = () => {
-        let contents = fileReader.result;
-        if (contents === null) {
-          reject(new DOMException("Problem parsing input file."));
-          return;
-        }
-        if (typeof contents !== "string") {
-          contents = new TextDecoder("utf-8").decode(contents);
-        }
-        try {
-          const json = JSON.parse(contents);
-          resolve(json);
-        } catch (e) {
-          reject(new DOMException("Invalid JSON."));
-          return;
-        }
-      };
-      fileReader.readAsText(file);
-    });
-  };
-  return await readUploadedFileAsText();
-}
 
 export default useScenefile;

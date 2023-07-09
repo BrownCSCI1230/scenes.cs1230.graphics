@@ -5,7 +5,8 @@ export default function SceneJSON() {
 
   return (
     <pre className="text-xs text-slate-700">
-      {JSON.stringify(scenefile, null, 2)}
+      {/* hide id fields */}
+      {JSON.stringify(scenefile, null, 2).replace(/"id": "[^"]*",?/g, "")}
     </pre>
   );
 }

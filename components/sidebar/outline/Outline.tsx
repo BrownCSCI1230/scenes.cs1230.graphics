@@ -5,13 +5,15 @@ import {
 } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/utils";
+import { Group } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 const itemStyle = "border-none";
 const triggerStyle = "pt-0 pb-1";
-const contentStyle = "pl-2";
+const contentStyle =
+  "pl-5 data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Outline() {
   const { scenefile } = useScenefile();
@@ -20,17 +22,35 @@ export default function Outline() {
     <Accordion
       type="multiple"
       className="flex flex-col flex-auto gap-2 h-full"
-      defaultValue={["outline"]}
+      defaultValue={["root"]}
     >
-      <AccordionItem value="outline" className={itemStyle}>
+      <AccordionItem value="root" className={itemStyle}>
         <AccordionTrigger className={triggerStyle}>
           {scenefile.name ?? "Untitled Scene"}
         </AccordionTrigger>
-        <AccordionContent className={contentStyle}></AccordionContent>
+        <AccordionContent className={contentStyle}>
+          {scenefile.groups?.map((group) => (
+            <OutlineGroup key={group.id} group={group} />
+          ))}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );
 }
+
+const OutlineGroup = ({ group }: { group: Group }) => {
+  console.log("render");
+  return (
+    <AccordionItem value={group.id} className={itemStyle}>
+      <AccordionTrigger className={triggerStyle}>{group.name}</AccordionTrigger>
+      <AccordionContent className={contentStyle}>
+        {group.groups?.map((group) => (
+          <OutlineGroup key={group.id} group={group} />
+        ))}
+      </AccordionContent>
+    </AccordionItem>
+  );
+};
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,

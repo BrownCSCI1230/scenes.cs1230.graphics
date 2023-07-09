@@ -8,18 +8,25 @@ export type RGB = z.infer<typeof RGBSchema>;
 export type PrimitiveBase = z.infer<typeof PrimitiveBaseSchema>;
 export type ShapePrimitive = z.infer<typeof ShapePrimitiveSchema>;
 export type MeshPrimitive = z.infer<typeof MeshPrimitiveSchema>;
-export type Primitive = z.infer<typeof PrimitiveSchema>;
+export type _Primitive = z.infer<typeof PrimitiveSchema>;
 export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
-export type Light = z.infer<typeof LightSchema>;
-export type Group = z.infer<typeof BaseGroupSchema> & {
-  groups?: Group[];
+export type _Light = z.infer<typeof LightSchema>;
+export type _Group = z.infer<typeof BaseGroupSchema> & {
+  groups?: _Group[];
 };
 export type MasterGroup = z.infer<typeof MasterGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
 export type CameraData = z.infer<typeof CameraDataSchema>;
-export type Scenefile = z.infer<typeof ScenefileSchema>;
+export type _Scenefile = z.infer<typeof ScenefileSchema>;
+
+export type Primitive = z.infer<typeof PrimitiveSchemaWithID>;
+export type Light = z.infer<typeof LightSchemaWithID>;
+export type Group = z.infer<typeof BaseGroupSchemaWithID> & {
+  groups?: Group[];
+};
+export type Scenefile = z.infer<typeof ScenefileSchemaWithIDs>;
 
 export const Vec2Schema = z
   .array(z.number())
@@ -143,7 +150,7 @@ export const BaseGroupSchema = z
     ])
   );
 
-export const GroupSchema: z.ZodType<Group> = BaseGroupSchema.and(
+export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   z.object({
     groups: z.lazy(() => GroupSchema.array().optional()),
   })
@@ -190,33 +197,23 @@ export const ScenefileSchema = z
   })
   .strict();
 
-export const cubeScene: Scenefile = {
-  name: "cube",
-  globalData: {
-    ambientCoeff: 0.1,
-    diffuseCoeff: 0.7,
-    specularCoeff: 0.2,
-    transparentCoeff: 0.0,
-  },
-  cameraData: {
-    position: [0, 0, 5],
-    up: [0, 1, 0],
-    look: [0, 0, 0],
-    heightAngle: 45,
-  },
-  groups: [
-    {
-      name: "cube",
-      translate: [0, 0, 0],
-      primitives: [
-        {
-          type: "cube",
-          ambient: [0, 0, 0],
-          diffuse: [0, 0, 1],
-          specular: [1, 1, 1],
-          shininess: 10,
-        },
-      ],
-    },
-  ],
-};
+// Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
+
+export const PrimitiveSchemaWithID = PrimitiveSchema.and(
+  z.object({ id: z.string() })
+);
+export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
+export const BaseGroupSchemaWithID = BaseGroupSchema.and(
+  z.object({ id: z.string() })
+);
+export const GroupSchemaWithID: z.ZodType<Group> = BaseGroupSchemaWithID.and(
+  z.object({
+    groups: z.lazy(() => GroupSchemaWithID.array().optional()),
+  })
+);
+export const ScenefileSchemaWithIDs = z.object({
+  name: z.string().optional(),
+  globalData: GlobalDataSchema,
+  cameraData: CameraDataSchema,
+  groups: z.array(GroupSchemaWithID).optional(),
+});
