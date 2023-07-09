@@ -25,19 +25,19 @@ export default function Sidebar() {
         className="flex flex-col flex-auto gap-2 h-full"
         defaultValue={["outline", "editor"]}
       >
-        <AccordionItem value="outline" className={itemStyle}>
+        <AccordionItem value="outline" className={cn(itemStyle, "basis-1/2")}>
           <AccordionTrigger className={triggerStyle}>OUTLINE</AccordionTrigger>
           <AccordionContent className={contentStyle}>
             <Outline />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="editor" className={itemStyle}>
+        <AccordionItem value="editor" className={cn(itemStyle, "basis-1/2")}>
           <AccordionTrigger className={triggerStyle}>EDITOR</AccordionTrigger>
           <AccordionContent className={contentStyle}>
             <Editor />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="json" className={cn(itemStyle, "basis-1/3")}>
+        <AccordionItem value="json" className={cn(itemStyle, "basis-full")}>
           <AccordionTrigger className={triggerStyle}>JSON</AccordionTrigger>
           <AccordionContent className={contentStyle}>
             <SceneJSON />
