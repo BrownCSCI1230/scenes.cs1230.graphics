@@ -1,8 +1,4 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-} from "@/components/ui/accordion";
+import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/utils";
 import { Group } from "@/types/Scenefile";
@@ -19,27 +15,20 @@ export default function Outline() {
   const { scenefile } = useScenefile();
 
   return (
-    <Accordion
-      type="multiple"
-      className="flex flex-col flex-auto gap-2 h-full"
-      defaultValue={["root"]}
-    >
-      <AccordionItem value="root" className={itemStyle}>
-        <AccordionTrigger className={triggerStyle}>
-          {scenefile.name ?? "Untitled Scene"}
-        </AccordionTrigger>
-        <AccordionContent className={contentStyle}>
-          {scenefile.groups?.map((group) => (
-            <OutlineGroup key={group.id} group={group} />
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <AccordionItem value="root" className={itemStyle}>
+      <AccordionTrigger className={triggerStyle}>
+        {scenefile.name ?? "Untitled Scene"}
+      </AccordionTrigger>
+      <AccordionContent className={contentStyle}>
+        {scenefile.groups?.map((group) => (
+          <OutlineGroup key={group.id} group={group} />
+        ))}
+      </AccordionContent>
+    </AccordionItem>
   );
 }
 
 const OutlineGroup = ({ group }: { group: Group }) => {
-  console.log("render");
   return (
     <AccordionItem value={group.id} className={itemStyle}>
       <AccordionTrigger className={triggerStyle}>{group.name}</AccordionTrigger>
