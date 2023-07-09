@@ -127,28 +127,28 @@ export const LightSchema = z
   })
   .and(z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]));
 
+export const GroupTranformSchema = z.union([
+  z.object({
+    translate: Vec3Schema.optional(),
+    rotate: Vec3Schema.optional(),
+    scale: Vec3Schema.optional(),
+    matrix: z.never().optional(),
+  }),
+  z.object({
+    matrix: Mat4Schema.optional(),
+    translate: z.never().optional(),
+    scale: z.never().optional(),
+    rotate: z.never().optional(),
+  }),
+]);
+
 export const BaseGroupSchema = z
   .object({
     name: z.string().optional(),
     primitives: z.array(PrimitiveSchema).optional(),
     lights: z.array(LightSchema).optional(),
   })
-  .and(
-    z.union([
-      z.object({
-        translate: Vec3Schema.optional(),
-        rotate: Vec3Schema.optional(),
-        scale: Vec3Schema.optional(),
-        matrix: z.never().optional(),
-      }),
-      z.object({
-        matrix: Mat4Schema.optional(),
-        translate: z.never().optional(),
-        scale: z.never().optional(),
-        rotate: z.never().optional(),
-      }),
-    ])
-  );
+  .and(GroupTranformSchema);
 
 export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   z.object({
@@ -198,14 +198,18 @@ export const ScenefileSchema = z
   .strict();
 
 // Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
-
 export const PrimitiveSchemaWithID = PrimitiveSchema.and(
   z.object({ id: z.string() })
 );
 export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
-export const BaseGroupSchemaWithID = BaseGroupSchema.and(
-  z.object({ id: z.string() })
-);
+export const BaseGroupSchemaWithID = z
+  .object({
+    id: z.string(),
+    name: z.string().optional(),
+    primitives: z.array(PrimitiveSchemaWithID).optional(),
+    lights: z.array(LightSchemaWithID).optional(),
+  })
+  .and(GroupTranformSchema);
 export const GroupSchemaWithID: z.ZodType<Group> = BaseGroupSchemaWithID.and(
   z.object({
     groups: z.lazy(() => GroupSchemaWithID.array().optional()),
