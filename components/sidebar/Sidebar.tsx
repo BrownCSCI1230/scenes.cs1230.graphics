@@ -10,14 +10,12 @@ import {
 import Editor from "./editor/Editor";
 import SceneJSON from "./json/SceneJSON";
 import Outline from "./outline/Outline";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const itemStyle =
   "flex flex-col overflow-auto flex-auto data-[state=closed]:flex-none";
 const triggerStyle = "pt-0 pb-1 font-semibold hover:no-underline";
 const contentStyle =
-  "pl-2 flex-auto overflow-auto data-[state=closed]:animate-none data-[state=open]:animate-none";
+  "flex-auto overflow-auto data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Sidebar() {
   return (
@@ -46,7 +44,6 @@ export default function Sidebar() {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <ToastContainer position="bottom-right" />
     </aside>
   );
 }

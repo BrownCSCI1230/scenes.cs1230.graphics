@@ -28,38 +28,21 @@ export type Group = z.infer<typeof BaseGroupSchemaWithID> & {
 };
 export type Scenefile = z.infer<typeof ScenefileSchemaWithIDs>;
 
-export const Vec2Schema = z
-  .array(z.number())
-  .refine((data) => data.length === 2, {
-    message: "Vec2 arrays should have a length of 2",
-  });
+export const Vec2Schema = z.number().array().length(2);
 
-export const Vec3Schema = z
-  .array(z.number())
-  .refine((data) => data.length === 3, {
-    message: "Vec3 arrays should have a length of 3",
-  });
+export const Vec3Schema = z.number().array().length(3);
 
-export const Vec4Schema = z
-  .array(z.number())
-  .refine((data) => data.length === 4, {
-    message: "Vec4 arrays should have a length of 4",
-  });
+export const Vec4Schema = z.number().array().length(4);
 
-export const Mat4Schema = z
-  .array(z.array(z.number()))
-  .refine(
-    (data) => data.length === 4 && data.every((row) => row.length === 4),
-    {
-      message: "Mat4 should be a 4x4 matrix",
-    }
-  );
+export const Mat4Schema = z.array(z.number().array().length(4)).length(4);
 
 export const RGBSchema = z
-  .array(z.number().int().nonnegative().max(255))
-  .refine((data) => data.length === 3, {
-    message: "RGB arrays should have a length of 3",
-  });
+  .number()
+  .int()
+  .nonnegative()
+  .max(255)
+  .array()
+  .length(3);
 
 export const PrimitiveBaseSchema = z.object({
   ambient: RGBSchema.optional(),

@@ -8,7 +8,10 @@ export default function Upload() {
   const { scenefile } = useScenefile();
 
   const downloadScene = () => {
-    const jsonContent = JSON.stringify(scenefile, null, 2).replace(/"id": "[^"]*",?/g, "");
+    const jsonContent = JSON.stringify(scenefile, null, 2).replace(
+      /"id": "[^"]*",?/g,
+      ""
+    );
 
     const blob = new Blob([jsonContent], { type: "application/json" });
     const downloadUrl = URL.createObjectURL(blob);
@@ -25,7 +28,9 @@ export default function Upload() {
 
   return (
     <div className="p-1">
-      <Button onClick={downloadScene}>Download</Button>
+      <Button onClick={downloadScene} variant="outline">
+        Download
+      </Button>
     </div>
   );
 }

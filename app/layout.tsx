@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { ScenefileProvider } from "@/hooks/useScenefile";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ScenefileProvider>{children}</ScenefileProvider>
+        <Toaster />
       </body>
     </html>
   );
