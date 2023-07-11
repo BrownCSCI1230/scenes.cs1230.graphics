@@ -25,7 +25,7 @@
     },
     {
       "name": "A cube",
-      "translate": [0, 0, 0],
+      "translate": [0, 1, 0],
       "primitives": [
         {
           "type": "cube",

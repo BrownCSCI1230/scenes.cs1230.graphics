@@ -8,7 +8,8 @@ import * as React from "react";
 
 const itemStyle = "border-none";
 const triggerStyle = "pt-0 pb-1";
-const contentStyle = "pl-5 data-[state=closed]:animate-none data-[state=open]:animate-none";
+const contentStyle =
+  "pl-5 data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Outline() {
   const { scenefile } = useScenefile();
@@ -30,7 +31,11 @@ export default function Outline() {
 const OutlineGroup = ({ group }: { group: Group }) => {
   return (
     <AccordionItem value={group.id} className={itemStyle}>
-      <AccordionTrigger className={triggerStyle}>{group.name}</AccordionTrigger>
+      <AccordionTrigger className={triggerStyle}>
+        <span className={group.name ? "" : "opacity-50"}>
+          {group.name ?? "Untitled Group"}
+        </span>
+      </AccordionTrigger>
       <AccordionContent className={contentStyle}>
         {group.groups?.map((group) => (
           <OutlineGroup key={group.id} group={group} />
@@ -51,7 +56,8 @@ const AccordionTrigger = React.forwardRef<
         "flex flex-initial !pb-0 transition-all hover:underline [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0",
         className
       )}
-      {...props}>
+      {...props}
+    >
       <ChevronDownIcon className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 dark:text-slate-400" />
     </AccordionPrimitive.Trigger>
     {children}
