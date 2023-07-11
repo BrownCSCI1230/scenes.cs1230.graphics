@@ -10,6 +10,8 @@ import {
 import Editor from "./editor/Editor";
 import SceneJSON from "./json/SceneJSON";
 import Outline from "./outline/Outline";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const itemStyle =
   "flex flex-col overflow-auto flex-auto data-[state=closed]:flex-none";
@@ -44,6 +46,7 @@ export default function Sidebar() {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+      <ToastContainer position="bottom-right" />
     </aside>
   );
 }

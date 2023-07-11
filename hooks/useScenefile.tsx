@@ -4,6 +4,8 @@ import newScene from "@/examples/newScene.json";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import { Scenefile, ScenefileSchema } from "@/types/Scenefile";
 import { createContext, useCallback, useContext, useReducer } from "react";
+import { toast } from 'react-toastify';
+import { cleanErrors } from "./errors/cleanErrors";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
@@ -33,6 +35,7 @@ export const ScenefileProvider = ({
     } else {
       console.log("Error parsing file");
       console.error(result.error);
+      result.error.errors.forEach(e => toast.error(cleanErrors(e)))
     }
   }, []);
 
