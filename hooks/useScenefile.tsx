@@ -2,7 +2,7 @@
 
 import newScene from "@/examples/newScene.json";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
-import { Scenefile, ScenefileSchema } from "@/types/Scenefile";
+import { GlobalData, Scenefile, ScenefileSchema } from "@/types/Scenefile";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { toast } from 'react-toastify';
 import { cleanErrors } from "./errors/cleanErrors";
@@ -10,12 +10,14 @@ import { cleanErrors } from "./errors/cleanErrors";
 type ScenefileContextType = {
   scenefile: Scenefile;
   loadFile: (file: File) => void;
+  updateGlobalData: (globalData: GlobalData) => void;
 };
 
 // Create context
 const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: newScene,
   loadFile: () => {},
+  updateGlobalData: () => {},
 });
 
 // Context provider
@@ -39,8 +41,17 @@ export const ScenefileProvider = ({
     }
   }, []);
 
+  const updateGlobalData = useCallback(
+    () => (globalData: GlobalData) => {
+      dispatch({ type: "UPDATE_GLOBAL_DATA", globalData });
+    },
+    []
+  );
+
   return (
-    <ScenefileContext.Provider value={{ scenefile, loadFile }}>
+    <ScenefileContext.Provider
+      value={{ scenefile, loadFile, updateGlobalData }}
+    >
       {children}
     </ScenefileContext.Provider>
   );
@@ -54,7 +65,10 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
     case "LOAD_FILE":
       return action.scenefile;
     case "UPDATE_GLOBAL_DATA":
-      return state;
+      return {
+        ...state,
+        globalData: action.globalData,
+      };
   }
 };
 
@@ -65,6 +79,12 @@ type LoadFileAction = {
 
 type UpdateGlobalDataAction = {
   type: "UPDATE_GLOBAL_DATA";
+  globalData: GlobalData;
+};
+
+type UpdateSceneNameAction = {
+  type: "UPDATE_SCENE_NAME";
+  name: string;
 };
 
 type ScenefileAction = LoadFileAction | UpdateGlobalDataAction;

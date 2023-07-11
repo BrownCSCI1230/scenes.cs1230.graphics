@@ -102,7 +102,6 @@ export const PrimitiveSchema = z.union([
 
 export const PointLightSchema = z.object({
   type: z.literal("point"),
-  position: Vec3Schema,
   attenuationCoeff: Vec3Schema,
 });
 
@@ -113,7 +112,6 @@ export const DirectionalLightSchema = z.object({
 
 export const SpotLightSchema = z.object({
   type: z.literal("spot"),
-  position: Vec3Schema,
   direction: Vec3Schema,
   penumbra: z.number(),
   thetaInner: z.number(),
