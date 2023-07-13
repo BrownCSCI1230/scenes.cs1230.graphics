@@ -26,6 +26,7 @@ export type Light = z.infer<typeof LightSchemaWithID>;
 export type Group = z.infer<typeof BaseGroupSchemaWithID> & {
   groups?: Group[];
 };
+export type Selectable = Primitive | Light | Group;
 export type Scenefile = z.infer<typeof ScenefileSchemaWithIDs>;
 
 export const Vec2Schema = z.number().array().length(2);

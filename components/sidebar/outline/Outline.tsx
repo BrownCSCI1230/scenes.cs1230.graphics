@@ -1,49 +1,107 @@
 import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/utils";
-import { Group } from "@/types/Scenefile";
+import { Group, Light, Primitive, Selectable } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon, CubeIcon, SunIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 const itemStyle = "border-none";
 const triggerStyle = "pt-0 pb-1";
 const contentStyle =
-  "pl-5 data-[state=closed]:animate-none data-[state=open]:animate-none";
+  "pl-6 data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Outline() {
   const { scenefile } = useScenefile();
 
   return (
     <AccordionItem value="root" className={itemStyle}>
-      <AccordionTrigger className={triggerStyle}>
-        {scenefile.name ?? "Untitled Scene"}
+      <AccordionTrigger className={cn(triggerStyle)}>
+        <span className={scenefile.name ? "" : "opacity-50"}>
+          {scenefile.name ?? "Untitled Scene"}
+        </span>
       </AccordionTrigger>
       <AccordionContent className={contentStyle}>
         {scenefile.groups?.map((group) => (
-          <OutlineGroup key={group.id} group={group} />
+          <OutlineGroup key={group.id} item={group} title={group.name}>
+            {group.lights?.map((light) => (
+              <OutlineLight key={light.id} item={light} title={light.type} />
+            ))}
+            {group.primitives?.map((primitive) => (
+              <OutlinePrimitive
+                key={primitive.id}
+                item={primitive}
+                title={primitive.type}
+              />
+            ))}
+          </OutlineGroup>
         ))}
       </AccordionContent>
     </AccordionItem>
   );
 }
 
-const OutlineGroup = ({ group }: { group: Group }) => {
-  return (
-    <AccordionItem value={group.id} className={itemStyle}>
-      <AccordionTrigger className={triggerStyle}>
-        <span className={group.name ? "" : "opacity-50"}>
-          {group.name ?? "Untitled Group"}
-        </span>
-      </AccordionTrigger>
-      <AccordionContent className={contentStyle}>
-        {group.groups?.map((group) => (
-          <OutlineGroup key={group.id} group={group} />
-        ))}
-      </AccordionContent>
-    </AccordionItem>
-  );
+const OutlineItemTemplate = <T extends Selectable>({
+  fallbackTitle,
+  icon,
+  showTrigger,
+  titleStyle,
+}: {
+  fallbackTitle?: string;
+  icon?: React.ReactNode;
+  showTrigger?: boolean;
+  titleStyle?: string;
+}) => {
+  function OutlineItem({
+    item,
+    title,
+    action,
+    children,
+  }: {
+    item: T;
+    title?: string;
+    action?: () => void;
+    children?: React.ReactNode;
+  }) {
+    return (
+      <AccordionItem value={item.id} className={itemStyle}>
+        <AccordionTrigger
+          className={cn(triggerStyle, showTrigger ? "" : "hidden")}
+          disabled={!showTrigger}
+          hidden={!showTrigger}
+        >
+          <div className="flex items-center gap-2" onClick={action}>
+            {icon}
+            <span className={cn(title ? "" : "opacity-50", titleStyle)}>
+              {title ?? fallbackTitle}
+            </span>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className={contentStyle}>{children}</AccordionContent>
+      </AccordionItem>
+    );
+  }
+  return OutlineItem;
 };
+
+const OutlineGroup = OutlineItemTemplate<Group>({
+  fallbackTitle: "Untitled Group",
+  showTrigger: true,
+});
+
+const OutlinePrimitive = OutlineItemTemplate<Primitive>({
+  fallbackTitle: "Untitled Primitive",
+  icon: <CubeIcon color="orange" />,
+  showTrigger: false,
+  titleStyle: "font-normal text-slate-500",
+});
+
+const OutlineLight = OutlineItemTemplate<Light>({
+  fallbackTitle: "Untitled Light",
+  icon: <SunIcon color="gold" />,
+  showTrigger: false,
+  titleStyle: "font-normal text-slate-500",
+});
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
