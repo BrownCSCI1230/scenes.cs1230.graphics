@@ -1,3 +1,4 @@
+import { SelectedWithID } from "@/hooks/useScenefile";
 import { Group, Light, Primitive, Scenefile } from "@/types/Scenefile";
 
 const searchGroups = <T>(
@@ -5,11 +6,11 @@ const searchGroups = <T>(
   predicate: (group: Group) => T | undefined
 ): T | undefined => {
   const search = (groups?: Group[]): T | undefined => {
-    if (!groups) {
-      return;
-    }
+    if (!groups) return;
     for (const group of groups) {
-      return predicate(group) || search(group.groups);
+      const result = predicate(group);
+      if (result) return result;
+      search(group.groups);
     }
   };
   return search(scenefile.groups);
@@ -17,10 +18,10 @@ const searchGroups = <T>(
 
 export const getSelectedGroup = (
   scenefile: Scenefile,
-  selected: string
+  selected: SelectedWithID
 ): Group | undefined => {
   const predicate = (group: Group): Group | undefined => {
-    if (group.id === selected) {
+    if (group.id === selected.id) {
       return group;
     }
   };
@@ -29,12 +30,12 @@ export const getSelectedGroup = (
 
 export const getSelectedLight = (
   scenefile: Scenefile,
-  selected: string
+  selected: SelectedWithID
 ): Light | undefined => {
   const predicate = (group: Group): Light | undefined => {
     if (group.lights) {
       for (const light of group.lights) {
-        if (light.id === selected) {
+        if (light.id === selected.id) {
           return light;
         }
       }
@@ -45,12 +46,12 @@ export const getSelectedLight = (
 
 export const getSelectedPrimitive = (
   scenefile: Scenefile,
-  selected: string
+  selected: SelectedWithID
 ): Primitive | undefined => {
   const predicate = (group: Group): Primitive | undefined => {
     if (group.primitives) {
       for (const primitive of group.primitives) {
-        if (primitive.id === selected) {
+        if (primitive.id === selected.id) {
           return primitive;
         }
       }

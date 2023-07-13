@@ -7,11 +7,14 @@ export default function Editor() {
 
   // TODO: remove all of this since it's just for demonstration purposes
   // select the first group by default
-  const selected = scenefile.groups?.[0]?.id;
+  const selected = scenefile.groups?.[1]?.id;
 
   return (
     <div className="flex flex-col gap-2">
-      <Button variant="outline" onClick={() => select(selected || "")}>
+      <Button
+        variant="outline"
+        onClick={() => select({ type: "group", id: selected ?? "" })}
+      >
         Select cube (load cube.json first)
       </Button>
       <Button variant="outline" onClick={() => translateGroup([1, 0, 0])}>

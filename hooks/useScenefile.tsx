@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import newScene from "@/examples/newScene.json";
+import newScene from "@/examples/default.json";
 import { getSelectedGroup } from "@/lib/getSelected";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import { GlobalData, Scenefile, ScenefileSchema } from "@/types/Scenefile";
@@ -16,7 +16,7 @@ import { cleanErrors } from "./errors/cleanErrors";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
-  select: (id: string) => void;
+  select: (id: Selected) => void;
   loadFile: (file: File) => void;
   updateSceneName: (name: string) => void;
   updateGlobalData: (globalData: GlobalData) => void;
@@ -24,9 +24,29 @@ type ScenefileContextType = {
   setGroupTranslate: (translate: number[]) => void;
 };
 
+export type SelectedWithID = {
+  type: "group" | "primitive" | "light";
+  id: string;
+};
+
+export type SelectedWithoutID = {
+  type: "scene" | "global" | "camera";
+};
+
+export type Selected = SelectedWithID | SelectedWithoutID;
+
+const selectedHasID = (selected: Selected): selected is SelectedWithID =>
+  "id" in selected;
+
+const initialScenefileParseResult = ScenefileSchema.safeParse(newScene);
+if (!initialScenefileParseResult.success) {
+  throw new Error("Initial scenefile parse failed");
+}
+const initialScenefile: Scenefile = assignIDs(initialScenefileParseResult.data);
+
 // Create context
 const ScenefileContext = createContext<ScenefileContextType>({
-  scenefile: newScene,
+  scenefile: initialScenefile,
   select: () => {},
   loadFile: () => {},
   updateSceneName: () => {},
@@ -41,13 +61,13 @@ export const ScenefileProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [scenefile, dispatch] = useReducer(reducer, newScene);
-  const [selected, setSelected] = useState<string | undefined>();
+  const [scenefile, dispatch] = useReducer(reducer, initialScenefile);
+  const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
 
-  const select = useCallback((id: string) => {
-    console.log("Selected", id);
-    setSelected(id);
+  const select = useCallback((selected: Selected) => {
+    console.log("Selected", selected);
+    setSelected({ ...selected });
   }, []);
 
   const loadFile = useCallback(
@@ -85,7 +105,7 @@ export const ScenefileProvider = ({
 
   const translateGroup = useCallback(
     (translate: number[]) => {
-      if (!selected) return;
+      if (!selected || !selectedHasID(selected)) return;
       dispatch({ type: "TRANSLATE_GROUP", selected, translate });
     },
     [selected]
@@ -93,7 +113,7 @@ export const ScenefileProvider = ({
 
   const setGroupTranslate = useCallback(
     (translate: number[]) => {
-      if (!selected) return;
+      if (!selected || !selectedHasID(selected)) return;
       dispatch({ type: "SET_GROUP_TRANSLATE", selected, translate });
     },
     [selected]
@@ -174,13 +194,13 @@ type UpdateGlobalDataAction = {
 
 type TranslateGroupAction = {
   type: "TRANSLATE_GROUP";
-  selected: string;
+  selected: SelectedWithID;
   translate: number[];
 };
 
 type SetGroupTranslateAction = {
   type: "SET_GROUP_TRANSLATE";
-  selected: string;
+  selected: SelectedWithID;
   translate: number[];
 };
 
