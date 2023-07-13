@@ -12,7 +12,7 @@ import {
   useReducer,
   useState,
 } from "react";
-import { cleanErrors } from "./errors/cleanErrors";
+import { cleanErrors } from "../lib/errors/cleanErrors";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
