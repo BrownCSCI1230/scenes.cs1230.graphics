@@ -83,30 +83,40 @@ export const PrimitiveSchema = z.union([
   MeshPrimitiveSchema,
 ]);
 
-export const PointLightSchema = z.object({
-  type: z.literal("point"),
-  attenuationCoeff: Vec3Schema,
+export const BaseLightSchema = z.object({
+  name: z.string().optional(),
+  color: RGBSchema,
 });
 
-export const DirectionalLightSchema = z.object({
-  type: z.literal("directional"),
-  direction: Vec3Schema,
-});
-
-export const SpotLightSchema = z.object({
-  type: z.literal("spot"),
-  direction: Vec3Schema,
-  penumbra: z.number(),
-  thetaInner: z.number(),
-  thetaOuter: z.number(),
-});
-
-export const LightSchema = z
-  .object({
-    name: z.string().optional(),
-    color: RGBSchema,
+export const PointLightSchema = BaseLightSchema.and(
+  z.object({
+    type: z.literal("point"),
+    attenuationCoeff: Vec3Schema,
   })
-  .and(z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]));
+);
+
+export const DirectionalLightSchema = BaseLightSchema.and(
+  z.object({
+    type: z.literal("directional"),
+    direction: Vec3Schema,
+  })
+);
+
+export const SpotLightSchema = BaseLightSchema.and(
+  z.object({
+    type: z.literal("spot"),
+    direction: Vec3Schema,
+    penumbra: z.number(),
+    thetaInner: z.number(),
+    thetaOuter: z.number(),
+  })
+);
+
+export const LightSchema = z.union([
+  PointLightSchema,
+  DirectionalLightSchema,
+  SpotLightSchema,
+]);
 
 export const GroupTranformSchema = z.union([
   z.object({

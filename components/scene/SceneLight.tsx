@@ -1,18 +1,82 @@
 import { Light } from "@/types/Scenefile";
-import * as THREE from "three";
+import { useEffect, useRef, useState } from "react";
+import { Color, Matrix4 } from "three";
+
+const noTransform: Matrix4 = new Matrix4().identity();
 
 export default function SceneLight(light: Light) {
-  const colorR = (light.color?.[0] ?? 255) / 255;
-  const colorG = (light.color?.[1] ?? 255) / 255;
-  const colorB = (light.color?.[2] ?? 255) / 255;
+  const lightRef = useRef(null!);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const color = new THREE.Color(colorR, colorG, colorB);
+  // Janky solution for helper not being rendered on first render (as lightRef.current is null)
+  useEffect(() => {
+    if (lightRef.current) setIsMounted(true);
+  }, [lightRef]);
 
-  let component;
+  const colorR = (light.color[0] ?? 255) / 255;
+  const colorG = (light.color[1] ?? 255) / 255;
+  const colorB = (light.color[2] ?? 255) / 255;
+  const color = new Color(colorR, colorG, colorB);
+
   switch (light.type) {
     case "point":
-      component = <pointLight args={[color]} />;
-      break;
+      return (
+        <>
+          <pointLight ref={lightRef} color={color}></pointLight>
+          {isMounted && (
+            <pointLightHelper
+              args={[lightRef.current, 0.2, "gold"]}
+              matrix-copy={null}
+              matrix={{ ...noTransform }}
+            />
+          )}
+        </>
+      );
+    // TODO: handle spotlight direction; currently it always points down
+    case "spot":
+      return (
+        <>
+          <spotLight
+            ref={lightRef}
+            penumbra={light.penumbra}
+            angle={light.thetaOuter}
+            position={[0, 0, 0]}
+          />
+          {isMounted && (
+            <spotLightHelper
+              args={[lightRef.current, "gold"]}
+              matrix-copy={null}
+              matrix={{ ...noTransform }}
+            />
+          )}
+        </>
+      );
+    case "directional":
+      const norm = Math.sqrt(
+        light.direction[0] ** 2 +
+          light.direction[1] ** 2 +
+          light.direction[2] ** 2
+      );
+      const normalizedDirection = light.direction.map((x) => x / norm);
+      return (
+        <>
+          <directionalLight
+            ref={lightRef}
+            args={[color]}
+            position={[
+              -4 * normalizedDirection[0],
+              -4 * normalizedDirection[1],
+              -4 * normalizedDirection[2],
+            ]}
+          />
+          {isMounted && (
+            <directionalLightHelper
+              args={[lightRef.current, 0.2, "gold"]}
+              // matrix-copy={null}
+              // matrix={{ ...noTransform }}
+            />
+          )}
+        </>
+      );
   }
-  return component;
 }

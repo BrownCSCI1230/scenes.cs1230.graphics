@@ -4,7 +4,6 @@ import useScenefile from "@/hooks/useScenefile";
 import {
   GizmoHelper,
   GizmoViewport,
-  Grid,
   OrbitControls,
   PerspectiveCamera,
 } from "@react-three/drei";
@@ -16,9 +15,9 @@ export default function Scene() {
   return (
     // TODO: consider adding `frameloop="demand"` to Canvas: https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#on-demand-rendering
     <Canvas className="border border-slate-200 dark:border-slate-800 rounded-lg">
-      <color attach="background" args={["white"]} />
-      <Grid infiniteGrid sectionColor="lightgray" cellColor="gray" />
-      <PerspectiveCamera makeDefault position={[5, 2, 5]} />
+      <color attach="background" args={["#f8fafc"]} />
+      <gridHelper args={[10, 10]} />
+      <PerspectiveCamera position={[5, 2, 5]} makeDefault />
       <OrbitControls enableDamping enablePan target={[0, 0, 0]} makeDefault />
       <GizmoHelper alignment="bottom-right">
         <GizmoViewport

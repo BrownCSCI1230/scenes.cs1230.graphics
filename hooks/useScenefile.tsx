@@ -77,13 +77,14 @@ export const ScenefileProvider = ({
       if (result.success) {
         dispatch({ type: "LOAD_FILE", scenefile: assignIDs(result.data) });
       } else {
-        result.error.errors.forEach((e) =>
-          toast({
-            title: "Error parsing file",
-            description: cleanErrors(e),
-            variant: "destructive",
-          })
-        );
+        result.error.errors.forEach((e) => {
+          console.error(e.message, e.path),
+            toast({
+              title: "Error parsing file",
+              description: cleanErrors(e),
+              variant: "destructive",
+            });
+        });
       }
     },
     [toast]
