@@ -1,6 +1,9 @@
 "use client";
 
+import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/utils";
+import { Group } from "@/types/Scenefile";
+import { useCallback } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -18,12 +21,24 @@ const contentStyle =
   "flex-auto overflow-auto data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Sidebar() {
+  const { scenefile } = useScenefile();
+  const expandedIDs = useCallback(() => {
+    const ids: string[] = ["outline", "editor", "root"];
+    const addIDs = (item: Group) => {
+      ids.push(item.id);
+      item.groups?.forEach(addIDs);
+    };
+    scenefile?.groups?.forEach(addIDs);
+    return ids;
+  }, [scenefile.groups]);
+
   return (
     <aside className="flex flex-col basis-96 overflow-hidden w-96 h-full">
       <Accordion
+        key={scenefile.id}
         type="multiple"
         className="flex flex-col flex-auto gap-2 h-full"
-        defaultValue={["outline", "editor"]}
+        defaultValue={expandedIDs()}
       >
         <AccordionItem value="outline" className={cn(itemStyle, "basis-1/2")}>
           <AccordionTrigger className={triggerStyle}>OUTLINE</AccordionTrigger>

@@ -68,6 +68,7 @@ export function assignIDs(scenefile: _Scenefile): Scenefile {
     return assignIDsRecursive(group);
   });
   return {
+    id: uuidv4(),
     ...scenefile,
     groups,
   };
