@@ -17,6 +17,8 @@ export default function Upload() {
       return;
     }
     loadFile(e.target.files[0]);
+    // reset the input so that the same file can be uploaded again
+    e.target.value = "";
   };
 
   return (
@@ -27,7 +29,7 @@ export default function Upload() {
         type="file"
         accept=".json"
         hidden
-        onChange={handleInputChange}
+        onInput={handleInputChange}
       />
     </div>
   );

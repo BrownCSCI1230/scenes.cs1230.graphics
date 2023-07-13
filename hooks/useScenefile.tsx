@@ -2,6 +2,7 @@
 
 import { useToast } from "@/components/ui/use-toast";
 import newScene from "@/examples/default.json";
+import { cleanErrors } from "@/lib/errors/cleanErrors";
 import { getSelectedGroup } from "@/lib/getSelected";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import { GlobalData, Scenefile, ScenefileSchema } from "@/types/Scenefile";
@@ -12,7 +13,6 @@ import {
   useReducer,
   useState,
 } from "react";
-import { cleanErrors } from "../lib/errors/cleanErrors";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
