@@ -1,11 +1,11 @@
 import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { Group, Light, Primitive, Selectable } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { IconCube, IconSunHigh } from "@tabler/icons-react";
-import * as React from "react";
+import { forwardRef } from "react";
 
 const itemStyle = "border-none";
 const triggerStyle = "pt-0 pb-1";
@@ -119,7 +119,7 @@ const displayNames = {
   directional: "Directional Light",
 };
 
-const AccordionTrigger = React.forwardRef<
+const AccordionTrigger = forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (

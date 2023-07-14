@@ -2,7 +2,7 @@
 
 import { useToast } from "@/components/ui/use-toast";
 import newScene from "@/examples/default.json";
-import { cleanErrors } from "@/lib/errors/cleanErrors";
+import { cleanErrors } from "@/lib/cleanErrors";
 import { getSelectedGroup } from "@/lib/getSelected";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import { GlobalData, Scenefile, ScenefileSchema } from "@/types/Scenefile";

@@ -1,7 +1,7 @@
 "use client";
 
 import useScenefile from "@/hooks/useScenefile";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { Group } from "@/types/Scenefile";
 import { useCallback } from "react";
 import {
