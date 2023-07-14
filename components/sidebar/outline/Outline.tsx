@@ -3,7 +3,8 @@ import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/utils";
 import { Group, Light, Primitive, Selectable } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDownIcon, CubeIcon, SunIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { IconCube, IconSunHigh } from "@tabler/icons-react";
 import * as React from "react";
 
 const itemStyle = "border-none";
@@ -25,13 +26,17 @@ export default function Outline() {
         {scenefile.groups?.map((group) => (
           <OutlineGroup key={group.id} item={group} title={group.name}>
             {group.lights?.map((light) => (
-              <OutlineLight key={light.id} item={light} title={light.type} />
+              <OutlineLight
+                key={light.id}
+                item={light}
+                title={displayNames[light.type]}
+              />
             ))}
             {group.primitives?.map((primitive) => (
               <OutlinePrimitive
                 key={primitive.id}
                 item={primitive}
-                title={primitive.type}
+                title={displayNames[primitive.type]}
               />
             ))}
           </OutlineGroup>
@@ -91,17 +96,28 @@ const OutlineGroup = OutlineItemTemplate<Group>({
 
 const OutlinePrimitive = OutlineItemTemplate<Primitive>({
   fallbackTitle: "Untitled Primitive",
-  icon: <CubeIcon color="orange" />,
+  icon: <IconCube size={16} color="orange" />,
   showTrigger: false,
   titleStyle: "font-normal text-slate-500",
 });
 
 const OutlineLight = OutlineItemTemplate<Light>({
   fallbackTitle: "Untitled Light",
-  icon: <SunIcon color="gold" />,
+  icon: <IconSunHigh size={16} color="gold" />,
   showTrigger: false,
   titleStyle: "font-normal text-slate-500",
 });
+
+const displayNames = {
+  cube: "Cube",
+  sphere: "Sphere",
+  cylinder: "Cylinder",
+  cone: "Cone",
+  mesh: "Mesh",
+  point: "Point Light",
+  spot: "Spot Light",
+  directional: "Directional Light",
+};
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
