@@ -17,6 +17,7 @@ import {
 type ScenefileContextType = {
   scenefile: Scenefile;
   scenefilePath?: string;
+  originalScenefile: Scenefile;
   select: (id: Selected) => void;
   loadFile: (file: File) => void;
   updateSceneName: (name: string) => void;
@@ -49,6 +50,7 @@ const initialScenefile: Scenefile = assignIDs(initialScenefileParseResult.data);
 const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: initialScenefile,
   scenefilePath: undefined,
+  originalScenefile: initialScenefile,
   select: () => {},
   loadFile: () => {},
   updateSceneName: () => {},
@@ -65,6 +67,8 @@ export const ScenefileProvider = ({
 }) => {
   const [scenefile, dispatch] = useReducer(reducer, initialScenefile);
   const [scenefilePath, setScenefilePath] = useState<string>();
+  const [originalScenefile, setOriginalScenefile] =
+    useState<Scenefile>(initialScenefile);
   const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
 
@@ -78,8 +82,10 @@ export const ScenefileProvider = ({
       const data = await loadJSON(file);
       const result = ScenefileSchema.safeParse(data);
       if (result.success) {
-        dispatch({ type: "LOAD_FILE", scenefile: assignIDs(result.data) });
+        const scenefile = assignIDs(result.data);
+        dispatch({ type: "LOAD_FILE", scenefile: scenefile });
         setScenefilePath(file.name);
+        setOriginalScenefile(scenefile);
         console.log("Loaded file", file.name);
       } else {
         result.error.errors.forEach((e) => {
@@ -130,6 +136,7 @@ export const ScenefileProvider = ({
       value={{
         scenefile,
         scenefilePath,
+        originalScenefile,
         select,
         loadFile,
         updateSceneName,

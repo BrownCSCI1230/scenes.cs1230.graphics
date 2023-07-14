@@ -1,10 +1,12 @@
 "use client";
 
+import { useExitWarning } from "@/hooks/useExitWarning";
 import useScenefile from "@/hooks/useScenefile";
 import { ChangeEvent, useRef } from "react";
 import { Button } from "../ui/button";
 
 export default function Upload() {
+  useExitWarning();
   const { loadFile } = useScenefile();
   const inputRef = useRef<HTMLInputElement>(null);
 
