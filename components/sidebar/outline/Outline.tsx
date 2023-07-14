@@ -18,7 +18,7 @@ export default function Outline() {
   return (
     <AccordionItem value="root" className={itemStyle}>
       <AccordionTrigger className={cn(triggerStyle)}>
-        <span className={scenefile.name ? "" : "opacity-50"}>
+        <span className={scenefile.name ? "" : "text-slate-500"}>
           {scenefile.name ?? "Untitled Scene"}
         </span>
       </AccordionTrigger>
@@ -126,6 +126,7 @@ const AccordionTrigger = forwardRef<
   <AccordionPrimitive.Header className="flex items-center py-2 gap-2 text-sm font-medium cursor-pointer">
     <AccordionPrimitive.Trigger
       ref={ref}
+      aria-label="Toggle accordion"
       className={cn(
         "flex flex-initial !pb-0 transition-all hover:underline [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0",
         className
