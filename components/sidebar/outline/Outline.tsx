@@ -24,22 +24,7 @@ export default function Outline() {
       </AccordionTrigger>
       <AccordionContent className={contentStyle}>
         {scenefile.groups?.map((group) => (
-          <OutlineGroup key={group.id} item={group} title={group.name}>
-            {group.lights?.map((light) => (
-              <OutlineLight
-                key={light.id}
-                item={light}
-                title={displayNames[light.type]}
-              />
-            ))}
-            {group.primitives?.map((primitive) => (
-              <OutlinePrimitive
-                key={primitive.id}
-                item={primitive}
-                title={displayNames[primitive.type]}
-              />
-            ))}
-          </OutlineGroup>
+          <OutlineGroup key={group.id} {...group} />
         ))}
       </AccordionContent>
     </AccordionItem>
@@ -89,10 +74,31 @@ const OutlineItemTemplate = <T extends Selectable>({
   return OutlineItem;
 };
 
-const OutlineGroup = OutlineItemTemplate<Group>({
-  fallbackTitle: "Untitled Group",
-  showTrigger: true,
-});
+const OutlineGroup = (group: Group) => {
+  const OutlineGroupTemplate = OutlineItemTemplate<Group>({
+    fallbackTitle: "Untitled Group",
+    showTrigger: true,
+  });
+  return (
+    <OutlineGroupTemplate key={group.id} item={group} title={group.name}>
+      {group.lights?.map((light) => (
+        <OutlineLight
+          key={light.id}
+          item={light}
+          title={displayNames[light.type]}
+        />
+      ))}
+      {group.primitives?.map((primitive) => (
+        <OutlinePrimitive
+          key={primitive.id}
+          item={primitive}
+          title={displayNames[primitive.type]}
+        />
+      ))}
+      {group.groups?.map((group) => OutlineGroup(group))}
+    </OutlineGroupTemplate>
+  );
+};
 
 const OutlinePrimitive = OutlineItemTemplate<Primitive>({
   fallbackTitle: "Untitled Primitive",
