@@ -1,6 +1,8 @@
+import useScenefile from "@/hooks/useScenefile";
 import { Group } from "@/types/Scenefile";
 import SceneLight from "./SceneLight";
 import ScenePrimitive from "./ScenePrimitive";
+import { isTypeSelectedWithID } from "./isType";
 
 export default function SceneGroup(group: Group) {
   const translateX = group.translate?.[0] ?? 0;
@@ -12,14 +14,20 @@ export default function SceneGroup(group: Group) {
   const rotateX = group.rotate?.[0] ?? 0;
   const rotateY = group.rotate?.[1] ?? 0;
   const rotateZ = group.rotate?.[2] ?? 0;
+
+  const { toggleSelect, selected } = useScenefile();
+
+  const isSelected = isTypeSelectedWithID(selected) && selected.id === group.id
+
   return (
     // TODO: investigate whether it's good to nest <mesh> elements
     <mesh
+      onClick={(e) => toggleSelect({type: "group", id: group.id})}
       position={[translateX, translateY, translateZ]}
       scale={[scaleX, scaleY, scaleZ]}
       rotation={[rotateX, rotateY, rotateZ]}
     >
-      <meshStandardMaterial />
+      <meshStandardMaterial color={isSelected ? "yellow" : "white"} />
       {group.lights?.map((light) => (
         <SceneLight key={light.id} {...light} />
       ))}

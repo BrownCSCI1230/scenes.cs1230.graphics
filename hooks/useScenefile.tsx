@@ -1,5 +1,6 @@
 "use client";
 
+import { isTypeSelectedWithID } from "@/components/scene/isType";
 import { useToast } from "@/components/ui/use-toast";
 import newScene from "@/examples/default.json";
 import { cleanErrors } from "@/lib/cleanErrors";
@@ -19,6 +20,8 @@ type ScenefileContextType = {
   scenefilePath?: string;
   originalScenefile: Scenefile;
   select: (id: Selected) => void;
+  toggleSelect: (id: Selected) => void;
+  selected: Selected | undefined;
   loadFile: (file: File) => void;
   updateSceneName: (name: string) => void;
   updateGlobalData: (globalData: GlobalData) => void;
@@ -52,6 +55,8 @@ const ScenefileContext = createContext<ScenefileContextType>({
   scenefilePath: undefined,
   originalScenefile: initialScenefile,
   select: () => {},
+  toggleSelect: () => {},
+  selected: undefined,
   loadFile: () => {},
   updateSceneName: () => {},
   updateGlobalData: () => {},
@@ -76,6 +81,19 @@ export const ScenefileProvider = ({
     console.log("Selected", selected);
     setSelected({ ...selected });
   }, []);
+
+  // toggle version, so a second click deselects
+  const toggleSelect = useCallback((new_selected: Selected) => {
+    let previouslySelected = selected && isTypeSelectedWithID(selected) && isTypeSelectedWithID(new_selected) 
+                              && selected.id === new_selected.id
+    if (previouslySelected){
+      console.log("Deselected", selected)
+      setSelected(undefined);
+    } else {
+      console.log("Selected", new_selected);
+      setSelected({ ...new_selected });
+    }
+  }, [selected]);
 
   const loadFile = useCallback(
     async (file: File) => {
@@ -138,6 +156,8 @@ export const ScenefileProvider = ({
         scenefilePath,
         originalScenefile,
         select,
+        toggleSelect,
+        selected,
         loadFile,
         updateSceneName,
         updateGlobalData,
