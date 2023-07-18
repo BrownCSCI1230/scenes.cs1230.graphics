@@ -27,7 +27,6 @@ export type Group = z.infer<typeof BaseGroupSchemaWithID> & {
   groups?: Group[];
 };
 export type Scenefile = z.infer<typeof ScenefileSchemaWithIDs>;
-export type Selectable = Scenefile | Primitive | Light | Group;
 
 export const Vec2Schema = z.number().array().length(2);
 

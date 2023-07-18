@@ -26,7 +26,7 @@ export default function Scene() {
         />
       </GizmoHelper>
       {scenefile.groups?.map((group) => (
-        <SceneGroup key={group.id} {...group} />
+        <SceneGroup key={group.id} group={group} />
       ))}
     </Canvas>
   );

@@ -1,7 +1,7 @@
 import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
-import { Group, Light, Primitive, Selectable } from "@/types/Scenefile";
+import { Group, Light, Primitive } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { IconCube, IconSunHigh } from "@tabler/icons-react";
@@ -31,7 +31,7 @@ export default function Outline() {
   );
 }
 
-const OutlineItemTemplate = <T extends Selectable>({
+const OutlineItemTemplate = <T extends { id: string }>({
   fallbackTitle,
   icon,
   showTrigger,

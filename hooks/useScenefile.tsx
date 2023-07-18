@@ -1,12 +1,18 @@
 "use client";
 
-import { isTypeSelectedWithID } from "@/components/scene/isType";
 import { useToast } from "@/components/ui/use-toast";
 import newScene from "@/examples/default.json";
 import { cleanErrors } from "@/lib/cleanErrors";
-import { getSelectedGroup } from "@/lib/getSelected";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
-import { GlobalData, Scenefile, ScenefileSchema } from "@/types/Scenefile";
+import {
+  CameraData,
+  GlobalData,
+  Group,
+  Light,
+  Primitive,
+  Scenefile,
+  ScenefileSchema,
+} from "@/types/Scenefile";
 import {
   createContext,
   useCallback,
@@ -29,19 +35,26 @@ type ScenefileContextType = {
   setGroupTranslate: (translate: number[]) => void;
 };
 
-export type SelectedWithID = {
-  type: "group" | "primitive" | "light";
-  id: string;
+type TypeMap = {
+  scene: Scenefile;
+  global: GlobalData;
+  camera: CameraData;
+  group: Group;
+  primitive: Primitive;
+  light: Light;
 };
 
-export type SelectedWithoutID = {
-  type: "scene" | "global" | "camera";
-};
+export type Selected = {
+  [K in keyof TypeMap]: {
+    type: K;
+    item: TypeMap[K];
+  };
+}[keyof TypeMap];
 
-export type Selected = SelectedWithID | SelectedWithoutID;
+export type SelectedWithID = Selected & { id: string };
 
-const selectedHasID = (selected: Selected): selected is SelectedWithID =>
-  "id" in selected;
+export const selectedHasID = (selected: Selected): selected is SelectedWithID =>
+  "id" in selected.item;
 
 const initialScenefileParseResult = ScenefileSchema.safeParse(newScene);
 if (!initialScenefileParseResult.success) {
@@ -83,17 +96,18 @@ export const ScenefileProvider = ({
   }, []);
 
   // toggle version, so a second click deselects
-  const toggleSelect = useCallback((new_selected: Selected) => {
-    let previouslySelected = selected && isTypeSelectedWithID(selected) && isTypeSelectedWithID(new_selected) 
-                              && selected.id === new_selected.id
-    if (previouslySelected){
-      console.log("Deselected", selected)
-      setSelected(undefined);
-    } else {
-      console.log("Selected", new_selected);
-      setSelected({ ...new_selected });
-    }
-  }, [selected]);
+  const toggleSelect = useCallback(
+    (newSelected: Selected) => {
+      if (selected?.item === newSelected.item) {
+        console.log("Deselected", selected);
+        setSelected(undefined);
+      } else {
+        console.log("Selected", newSelected);
+        setSelected(newSelected);
+      }
+    },
+    [selected]
+  );
 
   const loadFile = useCallback(
     async (file: File) => {
@@ -135,16 +149,22 @@ export const ScenefileProvider = ({
 
   const translateGroup = useCallback(
     (translate: number[]) => {
-      if (!selected || !selectedHasID(selected)) return;
-      dispatch({ type: "TRANSLATE_GROUP", selected, translate });
+      if (!selected || selected.type !== "group" || !selectedHasID(selected))
+        return;
+      dispatch({ type: "TRANSLATE_GROUP", group: selected.item, translate });
     },
     [selected]
   );
 
   const setGroupTranslate = useCallback(
     (translate: number[]) => {
-      if (!selected || !selectedHasID(selected)) return;
-      dispatch({ type: "SET_GROUP_TRANSLATE", selected, translate });
+      if (!selected || selected.type !== "group" || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_GROUP_TRANSLATE",
+        group: selected.item,
+        translate,
+      });
     },
     [selected]
   );
@@ -188,21 +208,19 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
         globalData: action.globalData,
       };
     case "TRANSLATE_GROUP": {
-      const group = getSelectedGroup(state, action.selected);
-      if (group && action.translate.length === 3) {
-        if (!group.translate) group.translate = [0, 0, 0];
-        group.translate[0] += action.translate[0];
-        group.translate[1] += action.translate[1];
-        group.translate[2] += action.translate[2];
+      if (action.translate.length === 3) {
+        if (!action.group.translate) action.group.translate = [0, 0, 0];
+        action.group.translate[0] += action.translate[0];
+        action.group.translate[1] += action.translate[1];
+        action.group.translate[2] += action.translate[2];
       }
       return {
         ...state,
       };
     }
     case "SET_GROUP_TRANSLATE": {
-      const group = getSelectedGroup(state, action.selected);
-      if (group && action.translate.length === 3) {
-        group.translate = action.translate;
+      if (action.group && action.translate.length === 3) {
+        action.group.translate = action.translate;
       }
       return {
         ...state,
@@ -228,13 +246,13 @@ type UpdateGlobalDataAction = {
 
 type TranslateGroupAction = {
   type: "TRANSLATE_GROUP";
-  selected: SelectedWithID;
+  group: Group;
   translate: number[];
 };
 
 type SetGroupTranslateAction = {
   type: "SET_GROUP_TRANSLATE";
-  selected: SelectedWithID;
+  group: Group;
   translate: number[];
 };
 
