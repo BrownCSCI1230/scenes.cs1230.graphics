@@ -3,7 +3,7 @@
 import { cn } from "@/lib/cn";
 import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const before = " before:translate-y-[-100%] after:translate-y-0";
 const after = " before:translate-y-0 after:translate-y-[100%]";
@@ -14,7 +14,6 @@ const logoCharClassName = cn(
 const logoFont = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
 
 export default function LogoNew() {
-  const [hoveredIndex, setHoveredIndex] = useState<number>();
   const aRef = useRef<HTMLDivElement>(null);
   const bRef = useRef<HTMLDivElement>(null);
   const cRef = useRef<HTMLDivElement>(null);
@@ -24,10 +23,14 @@ export default function LogoNew() {
 
   const refs = [aRef, bRef, cRef, dRef, eRef, fRef];
 
+  const hoveredIndex = useRef<number>();
+  const leaveTimeout = useRef<NodeJS.Timeout>();
+
   const mouseEnter = (index: number) => {
     return () => {
-      if (hoveredIndex === undefined) {
-        setHoveredIndex(index);
+      leaveTimeout.current && clearTimeout(leaveTimeout.current);
+      if (hoveredIndex.current === undefined) {
+        hoveredIndex.current = index;
         refs.forEach((ref, i) => {
           setTimeout(() => {
             if (!ref.current) return;
@@ -35,22 +38,27 @@ export default function LogoNew() {
               before,
               after
             );
-          }, 50 * Math.abs(i - index));
+          }, Math.abs(i - index) * 50);
         });
       }
     };
   };
 
   const mouseLeave = () => {
-    if (hoveredIndex !== undefined) {
-      refs.forEach((ref, i) => {
-        setTimeout(() => {
-          if (!ref.current) return;
-          ref.current.className = ref.current.className.replace(after, before);
-        }, 50 * Math.abs(i - hoveredIndex));
-      });
+    if (hoveredIndex.current !== undefined) {
+      leaveTimeout.current = setTimeout(() => {
+        refs.forEach((ref, i) => {
+          setTimeout(() => {
+            if (!ref.current) return;
+            ref.current.className = ref.current.className.replace(
+              after,
+              before
+            );
+          }, Math.abs(i - hoveredIndex.current!) * 50);
+        });
+        hoveredIndex.current = undefined;
+      }, 200);
     }
-    setHoveredIndex(undefined);
   };
 
   return (
