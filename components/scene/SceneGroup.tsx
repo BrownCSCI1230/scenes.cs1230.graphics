@@ -22,7 +22,7 @@ export default function SceneGroup({ group }: { group: Group }) {
   return (
     // TODO: investigate whether it's good to nest <mesh> elements
     <mesh
-      onClick={(e) => toggleSelect({ type: "group", item: group })}
+      onClick={() => toggleSelect({ type: "group", item: group })}
       position={[translateX, translateY, translateZ]}
       scale={[scaleX, scaleY, scaleZ]}
       rotation={[rotateX, rotateY, rotateZ]}

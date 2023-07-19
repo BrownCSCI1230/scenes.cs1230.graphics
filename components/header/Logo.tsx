@@ -1,41 +1,57 @@
 "use client";
 
+import { cn } from "@/lib/cn";
 import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-type LogoState = "CS1230" | "SCENES";
-
-const mouseEnter = (ref: React.RefObject<HTMLDivElement>, state: LogoState) => {
-  return () => {
-    if (!ref.current || ref.current.className.includes(after)) return;
-    ref.current.className = ref.current.className.replace(before, after);
-    setTimeout(() => {
-      if (!ref.current) return;
-      ref.current.className = ref.current.className.replace(after, before);
-    }, 500);
-  };
-};
-
-const before =
-  " before:transition-none after:transition-none before:translate-y-[-100%] after:translate-y-0";
-const after =
-  " before:transition-transform after:transition-transform before:translate-y-0 after:translate-y-[100%]";
-const logoCharClassName =
-  "relative flex-1 h-full before:absolute before:inset-y-[7px] before:ml-[4.7px] after:absolute after:inset-y-[7px] after:ml-[4.7px] before:duration-500 after:duration-500 before:ease-in-out after:ease-in-out" +
-  before;
+const before = " before:translate-y-[-100%] after:translate-y-0";
+const after = " before:translate-y-0 after:translate-y-[100%]";
+const logoCharClassName = cn(
+  "relative flex-1 h-full before:absolute before:inset-y-[7px] before:ml-[4.7px] after:absolute after:inset-y-[7px] after:ml-[4.7px] before:duration-500 after:duration-500 before:ease-in-out after:ease-in-out before:transition-transform after:transition-transform",
+  before
+);
 const logoFont = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
 
 export default function LogoNew() {
-  const [logoState, setLogoState] = useState<LogoState>("CS1230");
-  const aRef = useRef(null);
-  const bRef = useRef(null);
-  const cRef = useRef(null);
-  const dRef = useRef(null);
-  const eRef = useRef(null);
-  const fRef = useRef(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number>();
+  const aRef = useRef<HTMLDivElement>(null);
+  const bRef = useRef<HTMLDivElement>(null);
+  const cRef = useRef<HTMLDivElement>(null);
+  const dRef = useRef<HTMLDivElement>(null);
+  const eRef = useRef<HTMLDivElement>(null);
+  const fRef = useRef<HTMLDivElement>(null);
 
   const refs = [aRef, bRef, cRef, dRef, eRef, fRef];
+
+  const mouseEnter = (index: number) => {
+    return () => {
+      if (hoveredIndex === undefined) {
+        setHoveredIndex(index);
+        refs.forEach((ref, i) => {
+          setTimeout(() => {
+            if (!ref.current) return;
+            ref.current.className = ref.current.className.replace(
+              before,
+              after
+            );
+          }, 50 * Math.abs(i - index));
+        });
+      }
+    };
+  };
+
+  const mouseLeave = () => {
+    if (hoveredIndex !== undefined) {
+      refs.forEach((ref, i) => {
+        setTimeout(() => {
+          if (!ref.current) return;
+          ref.current.className = ref.current.className.replace(after, before);
+        }, 50 * Math.abs(i - hoveredIndex));
+      });
+    }
+    setHoveredIndex(undefined);
+  };
 
   return (
     <Link
@@ -45,6 +61,7 @@ export default function LogoNew() {
       href="https://cs1230.graphics"
       target="_blank"
       aria-label="home"
+      onMouseLeave={mouseLeave}
     >
       <div
         className={
@@ -52,7 +69,7 @@ export default function LogoNew() {
           " bg-[#e54141] before:content-['C'] after:content-['S']"
         }
         ref={aRef}
-        onMouseEnter={mouseEnter(aRef, logoState)}
+        onMouseEnter={mouseEnter(0)}
       ></div>
       <div
         className={
@@ -60,7 +77,7 @@ export default function LogoNew() {
           " bg-[#fa8212] before:content-['S'] after:content-['C']"
         }
         ref={bRef}
-        onMouseEnter={mouseEnter(bRef, logoState)}
+        onMouseEnter={mouseEnter(1)}
       ></div>
       <div
         className={
@@ -68,7 +85,7 @@ export default function LogoNew() {
           " bg-[#f0c61b] before:content-['1'] after:content-['E']"
         }
         ref={cRef}
-        onMouseEnter={mouseEnter(cRef, logoState)}
+        onMouseEnter={mouseEnter(2)}
       ></div>
       <div
         className={
@@ -76,7 +93,7 @@ export default function LogoNew() {
           " bg-[#4db234] before:content-['2'] after:content-['N']"
         }
         ref={dRef}
-        onMouseEnter={mouseEnter(dRef, logoState)}
+        onMouseEnter={mouseEnter(3)}
       ></div>
       <div
         className={
@@ -84,7 +101,7 @@ export default function LogoNew() {
           " bg-[#2d93ca] before:content-['3'] after:content-['E']"
         }
         ref={eRef}
-        onMouseEnter={mouseEnter(eRef, logoState)}
+        onMouseEnter={mouseEnter(4)}
       ></div>
       <div
         className={
@@ -92,7 +109,7 @@ export default function LogoNew() {
           " bg-[#5d4bd1] before:content-['0'] after:content-['S']"
         }
         ref={fRef}
-        onMouseEnter={mouseEnter(fRef, logoState)}
+        onMouseEnter={mouseEnter(5)}
       ></div>
     </Link>
   );
