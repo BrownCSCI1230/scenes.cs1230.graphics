@@ -1,24 +1,29 @@
-import { Button } from "@/components/ui/button";
 import useScenefile from "@/hooks/useScenefile";
+import CameraEditor from "./editor_controls/CameraEditor";
+import GlobalEditor from "./editor_controls/GlobalEditor";
+import GroupEditor from "./editor_controls/GroupEditor";
+import LightEditor from "./editor_controls/LightEditor";
+import PrimitiveEditor from "./editor_controls/PrimitiveEditor";
+import SceneEditor from "./editor_controls/SceneEditor";
 
 export default function Editor() {
-  const { selected, translateGroup, setGroupTranslate } = useScenefile();
+  const { selected } = useScenefile();
+
+  const selectedEditor = () => {
+    switch(selected?.type) {
+      case "scene":     return <SceneEditor />;
+      case "global":    return <GlobalEditor />;
+      case "camera":    return <CameraEditor />;
+      case "light":     return <LightEditor />;
+      case "primitive": return <PrimitiveEditor />;
+      case "group":     return <GroupEditor />;
+      default:          return <p>...</p>
+    }
+  }
 
   return (
     <div className="flex flex-col gap-2">
-      {selected?.type === "group" && (
-        <>
-          <Button variant="outline" onClick={() => translateGroup([1, 0, 0])}>
-            Translate group by [1, 0, 0]
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setGroupTranslate([-1, 0, 0])}
-          >
-            Set group translate to [-1, 0, 0]
-          </Button>
-        </>
-      )}
+      {selectedEditor()}
     </div>
   );
 }
