@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import newScene from "@/examples/default.json";
+import defaultScene from "@/examples/default.json";
 import { cleanErrors } from "@/lib/cleanErrors";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import {
@@ -56,7 +56,7 @@ export type SelectedWithID = Selected & { id: string };
 export const selectedHasID = (selected: Selected): selected is SelectedWithID =>
   "id" in selected.item;
 
-const initialScenefileParseResult = ScenefileSchema.safeParse(newScene);
+const initialScenefileParseResult = ScenefileSchema.safeParse(defaultScene);
 if (!initialScenefileParseResult.success) {
   throw new Error("Initial scenefile parse failed");
 }
