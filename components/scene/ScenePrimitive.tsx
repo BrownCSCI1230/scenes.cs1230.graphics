@@ -11,13 +11,13 @@ export default function ScenePrimitive({
       component = <boxGeometry args={[1, 1, 1]} />;
       break;
     case "sphere":
-      component = <sphereGeometry args={[0.5, 32, 32]} />;
+      component = <sphereGeometry args={[0.5, 64, 64]} />;
       break;
     case "cylinder":
-      component = <cylinderGeometry args={[0.5, 0.5, 1, 32]} />;
+      component = <cylinderGeometry args={[0.5, 0.5, 1, 64]} />;
       break;
     case "cone":
-      component = <coneGeometry args={[0.5, 1, 32]} />;
+      component = <coneGeometry args={[0.5, 1, 256]} />;
       break;
   }
   return component;
