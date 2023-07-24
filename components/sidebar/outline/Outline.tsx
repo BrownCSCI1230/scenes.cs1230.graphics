@@ -4,7 +4,16 @@ import { cn } from "@/lib/cn";
 import { Group, Light, Primitive } from "@/types/Scenefile";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { IconCube, IconSunHigh } from "@tabler/icons-react";
+import {
+  IconArrowsDown,
+  IconCone,
+  IconCube,
+  IconCylinder,
+  IconLamp2,
+  IconSphere,
+  IconSunHigh,
+  IconTriangles,
+} from "@tabler/icons-react";
 import { forwardRef } from "react";
 
 const itemStyle = "border-none";
@@ -33,23 +42,23 @@ export default function Outline() {
 
 const OutlineItemTemplate = <T extends { id: string }>({
   fallbackTitle,
-  icon,
   showTrigger,
   titleStyle,
 }: {
   fallbackTitle?: string;
-  icon?: React.ReactNode;
   showTrigger?: boolean;
   titleStyle?: string;
 }) => {
   function OutlineItem({
     item,
     title,
+    icon,
     action,
     children,
   }: {
     item: T;
     title?: string;
+    icon?: React.ReactNode;
     action?: () => void;
     children?: React.ReactNode;
   }) {
@@ -86,6 +95,7 @@ const OutlineGroup = (group: Group) => {
           key={light.id}
           item={light}
           title={displayNames[light.type]}
+          icon={lightIcons[light.type]}
         />
       ))}
       {group.primitives?.map((primitive) => (
@@ -93,6 +103,7 @@ const OutlineGroup = (group: Group) => {
           key={primitive.id}
           item={primitive}
           title={displayNames[primitive.type]}
+          icon={primitiveIcons[primitive.type]}
         />
       ))}
       {group.groups?.map((group) => OutlineGroup(group))}
@@ -100,16 +111,28 @@ const OutlineGroup = (group: Group) => {
   );
 };
 
+const lightIcons = {
+  point: <IconSunHigh size={16} color="gold" />,
+  directional: <IconArrowsDown size={16} color="gold" />,
+  spot: <IconLamp2 size={16} color="gold" />,
+};
+
+const primitiveIcons = {
+  cube: <IconCube size={16} color="orange" />,
+  sphere: <IconSphere size={16} color="orange" />,
+  cone: <IconCone size={16} color="orange" />,
+  cylinder: <IconCylinder size={16} color="orange" />,
+  mesh: <IconTriangles size={16} color="orange" />,
+};
+
 const OutlinePrimitive = OutlineItemTemplate<Primitive>({
   fallbackTitle: "Untitled Primitive",
-  icon: <IconCube size={16} color="orange" />,
   showTrigger: false,
   titleStyle: "font-normal text-slate-500",
 });
 
 const OutlineLight = OutlineItemTemplate<Light>({
   fallbackTitle: "Untitled Light",
-  icon: <IconSunHigh size={16} color="gold" />,
   showTrigger: false,
   titleStyle: "font-normal text-slate-500",
 });
