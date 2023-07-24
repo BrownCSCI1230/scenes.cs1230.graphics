@@ -22,12 +22,13 @@ const contentStyle =
   "pl-6 data-[state=closed]:animate-none data-[state=open]:animate-none";
 
 export default function Outline() {
-  const { scenefile } = useScenefile();
+  const { select, scenefile } = useScenefile();
+  
 
   return (
     <AccordionItem value="root" className={itemStyle}>
       <AccordionTrigger className={cn(triggerStyle)}>
-        <span className={scenefile.name ? "" : "text-slate-500"}>
+        <span className={scenefile.name ? "" : "text-slate-500"} onClick={() => select({type: "scene", item: scenefile})}>
           {scenefile.name ?? "Untitled Scene"}
         </span>
       </AccordionTrigger>
@@ -84,18 +85,25 @@ const OutlineItemTemplate = <T extends { id: string }>({
 };
 
 const OutlineGroup = (group: Group) => {
+  const { select } = useScenefile();
+
   const OutlineGroupTemplate = OutlineItemTemplate<Group>({
     fallbackTitle: "Untitled Group",
     showTrigger: true,
   });
   return (
-    <OutlineGroupTemplate key={group.id} item={group} title={group.name}>
+    <OutlineGroupTemplate 
+      key={group.id}
+      item={group}
+      title={group.name}
+      action={() => select({type: "group", item: group})}>
       {group.lights?.map((light) => (
         <OutlineLight
           key={light.id}
           item={light}
           title={displayNames[light.type]}
           icon={lightIcons[light.type]}
+          action={() => select({type: "light", item: light})}
         />
       ))}
       {group.primitives?.map((primitive) => (
@@ -104,6 +112,7 @@ const OutlineGroup = (group: Group) => {
           item={primitive}
           title={displayNames[primitive.type]}
           icon={primitiveIcons[primitive.type]}
+          action={() => select({type: "primitive", item: primitive})}
         />
       ))}
       {group.groups?.map((group) => OutlineGroup(group))}
