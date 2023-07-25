@@ -33,6 +33,8 @@ type ScenefileContextType = {
   updateGlobalData: (globalData: GlobalData) => void;
   translateGroup: (translate: number[]) => void;
   setGroupTranslate: (translate: number[]) => void;
+  rotateGroup: (rotate: number[]) => void;
+  setGroupRotate: (rotate: number[]) => void;
 };
 
 type TypeMap = {
@@ -75,6 +77,8 @@ const ScenefileContext = createContext<ScenefileContextType>({
   updateGlobalData: () => {},
   translateGroup: () => {},
   setGroupTranslate: () => {},
+  rotateGroup: () => {},
+  setGroupRotate: () => {},
 });
 
 // Context provider
@@ -169,6 +173,28 @@ export const ScenefileProvider = ({
     [selected]
   );
 
+  const rotateGroup = useCallback(
+    (rotate: number[]) => {
+      if (!selected || selected.type !== "group" || !selectedHasID(selected))
+        return;
+      dispatch({ type: "ROTATE_GROUP", group: selected.item, rotate });
+    },
+    [selected]
+  );
+
+  const setGroupRotate = useCallback(
+    (rotate: number[]) => {
+      if (!selected || selected.type !== "group" || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_GROUP_ROTATE",
+        group: selected.item,
+        rotate,
+      });
+    },
+    [selected]
+  );
+
   return (
     <ScenefileContext.Provider
       value={{
@@ -183,6 +209,8 @@ export const ScenefileProvider = ({
         updateGlobalData,
         translateGroup,
         setGroupTranslate,
+        rotateGroup,
+        setGroupRotate
       }}
     >
       {children}
@@ -226,6 +254,25 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
         ...state,
       };
     }
+    case "ROTATE_GROUP": {
+      if (action.rotate.length === 3) {
+        if (!action.group.rotate) action.group.rotate = [0, 0, 0];
+        action.group.rotate[0] += action.rotate[0];
+        action.group.rotate[1] += action.rotate[1];
+        action.group.rotate[2] += action.rotate[2];
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_GROUP_ROTATE": {
+      if (action.group && action.rotate.length === 3) {
+        action.group.translate = action.rotate;
+      }
+      return {
+        ...state,
+      };
+    }
   }
 };
 
@@ -256,11 +303,25 @@ type SetGroupTranslateAction = {
   translate: number[];
 };
 
+type RotateGroupAction = {
+  type: "ROTATE_GROUP";
+  group: Group;
+  rotate: number[];
+};
+
+type SetGroupRotateAction = {
+  type: "SET_GROUP_ROTATE";
+  group: Group;
+  rotate: number[];
+};
+
 type ScenefileAction =
   | LoadFileAction
   | UpdateSceneNameAction
   | UpdateGlobalDataAction
   | TranslateGroupAction
-  | SetGroupTranslateAction;
+  | SetGroupTranslateAction
+  | RotateGroupAction
+  | SetGroupRotateAction;
 
 export default useScenefile;
