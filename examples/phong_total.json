@@ -19,7 +19,7 @@
         {
           "type": "directional",
           "direction": [-2, -4, -6],
-          "color": [255, 255, 255]
+          "color": [1, 1, 1]
         }
       ]
     },
@@ -30,7 +30,7 @@
         {
           "type": "point",
           "attenuationCoeff": [0, 0, 0],
-          "color": [177, 177, 177]
+          "color": [0.5, 0.5, 0.5]
         }
       ]
     },
@@ -41,7 +41,7 @@
         {
           "type": "point",
           "attenuationCoeff": [0, 0, 0],
-          "color": [177, 177, 177]
+          "color": [0.5, 0.5, 0.5]
         }
       ]
     },

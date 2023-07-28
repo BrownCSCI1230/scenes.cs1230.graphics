@@ -13,9 +13,9 @@ export default function SceneLight({ light }: { light: Light }) {
     if (lightRef.current) setIsMounted(true);
   }, [lightRef]);
 
-  const colorR = (light.color[0] ?? 255) / 255;
-  const colorG = (light.color[1] ?? 255) / 255;
-  const colorB = (light.color[2] ?? 255) / 255;
+  const colorR = light.color[0] ?? 1;
+  const colorG = light.color[1] ?? 1;
+  const colorB = light.color[2] ?? 1;
   const color = new Color(colorR, colorG, colorB);
 
   switch (light.type) {
@@ -53,9 +53,7 @@ export default function SceneLight({ light }: { light: Light }) {
       );
     case "directional":
       const norm = Math.sqrt(
-        light.direction[0] ** 2 +
-          light.direction[1] ** 2 +
-          light.direction[2] ** 2
+        light.direction[0] ** 2 + light.direction[1] ** 2 + light.direction[2] ** 2
       );
       const normalizedDirection = light.direction.map((x) => x / norm);
       return (

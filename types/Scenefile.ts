@@ -36,13 +36,7 @@ export const Vec4Schema = z.number().array().length(4);
 
 export const Mat4Schema = z.array(z.number().array().length(4)).length(4);
 
-export const RGBSchema = z
-  .number()
-  .int()
-  .nonnegative()
-  .max(255)
-  .array()
-  .length(3);
+export const RGBSchema = z.number().nonnegative().max(1).array().length(3);
 
 export const PrimitiveBaseSchema = z.object({
   ambient: RGBSchema.optional(),
@@ -78,10 +72,7 @@ export const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
   })
 );
 
-export const PrimitiveSchema = z.union([
-  ShapePrimitiveSchema,
-  MeshPrimitiveSchema,
-]);
+export const PrimitiveSchema = z.union([ShapePrimitiveSchema, MeshPrimitiveSchema]);
 
 export const BaseLightSchema = z.object({
   name: z.string().optional(),
@@ -112,11 +103,7 @@ export const SpotLightSchema = BaseLightSchema.and(
   })
 );
 
-export const LightSchema = z.union([
-  PointLightSchema,
-  DirectionalLightSchema,
-  SpotLightSchema,
-]);
+export const LightSchema = z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]);
 
 export const GroupTranformSchema = z.union([
   z.object({
@@ -147,15 +134,13 @@ export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   })
 );
 
-export const MasterGroupSchema = GroupSchema.and(
-  z.object({ name: z.string() })
-);
+export const MasterGroupSchema = GroupSchema.and(z.object({ name: z.string() }));
 
 export const GlobalDataSchema = z.object({
-  ambientCoeff: z.number(),
-  diffuseCoeff: z.number(),
-  specularCoeff: z.number(),
-  transparentCoeff: z.number(),
+  ambientCoeff: z.number().nonnegative().max(1),
+  diffuseCoeff: z.number().nonnegative().max(1),
+  specularCoeff: z.number().nonnegative().max(1),
+  transparentCoeff: z.number().nonnegative().max(1),
 });
 
 export const CameraDataSchema = z
@@ -189,9 +174,7 @@ export const ScenefileSchema = z
   .strict();
 
 // Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
-export const PrimitiveSchemaWithID = PrimitiveSchema.and(
-  z.object({ id: z.string() })
-);
+export const PrimitiveSchemaWithID = PrimitiveSchema.and(z.object({ id: z.string() }));
 export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
 export const BaseGroupSchemaWithID = z
   .object({
