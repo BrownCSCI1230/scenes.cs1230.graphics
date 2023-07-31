@@ -1,9 +1,6 @@
-import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
-import { Group, Light, Primitive } from "@/types/Scenefile";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { Group } from "@/types/Scenefile";
 import {
   IconArrowsDown,
   IconCone,
@@ -14,111 +11,130 @@ import {
   IconSunHigh,
   IconTriangles,
 } from "@tabler/icons-react";
-import { forwardRef } from "react";
-
-const itemStyle = "border-none";
-const triggerStyle = "pt-0 pb-1";
-const contentStyle =
-  "pl-6 data-[state=closed]:animate-none data-[state=open]:animate-none";
+import OutlineItem, {
+  OutlineItemContent,
+  OutlineItemHeader,
+} from "./OutlineItem";
 
 export default function Outline() {
-  const { select, scenefile } = useScenefile();
-  
+  const { select, selected, scenefile } = useScenefile();
 
   return (
-    <AccordionItem value="root" className={itemStyle}>
-      <AccordionTrigger className={cn(triggerStyle)}>
-        <span className={scenefile.name ? "" : "text-slate-500"} onClick={() => select({type: "scene", item: scenefile})}>
-          {scenefile.name ?? "Untitled Scene"}
-        </span>
-      </AccordionTrigger>
-      <AccordionContent className={contentStyle}>
-        {scenefile.groups?.map((group) => (
-          <OutlineGroup key={group.id} {...group} />
-        ))}
-      </AccordionContent>
-    </AccordionItem>
+    <OutlineScene
+      title={scenefile.name}
+      select={() => select({ type: "scene", item: scenefile })}
+      selected={selected?.item === scenefile}
+      depth={0}
+    >
+      {scenefile.groups?.map((group) => (
+        <OutlineGroup key={group.id} group={group} depth={1} />
+      ))}
+    </OutlineScene>
   );
 }
 
-const OutlineItemTemplate = <T extends { id: string }>({
+const SceneOutlineItemTemplate = ({
   fallbackTitle,
+  initialOpen,
   showTrigger,
-  titleStyle,
 }: {
   fallbackTitle?: string;
+  initialOpen?: boolean;
   showTrigger?: boolean;
-  titleStyle?: string;
-}) => {
-  function OutlineItem({
-    item,
+}) =>
+  function SceneOutlineItem({
     title,
     icon,
-    action,
+    select,
+    selected,
+    depth,
     children,
   }: {
-    item: T;
     title?: string;
     icon?: React.ReactNode;
-    action?: () => void;
+    select?: () => void;
+    selected?: boolean;
+    depth?: number;
     children?: React.ReactNode;
   }) {
     return (
-      <AccordionItem value={item.id} className={itemStyle}>
-        <AccordionTrigger
-          className={cn(triggerStyle, showTrigger ? "" : "hidden")}
-          disabled={!showTrigger}
-          hidden={!showTrigger}
-        >
-          <div className="flex items-center gap-2" onClick={action}>
-            {icon}
-            <span className={cn(title ? "" : "opacity-50", titleStyle)}>
-              {title ?? fallbackTitle}
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className={contentStyle}>{children}</AccordionContent>
-      </AccordionItem>
+      <OutlineItem
+        select={select}
+        showTrigger={showTrigger}
+        selected={selected}
+        initialOpen={initialOpen}
+        depth={depth}
+      >
+        <OutlineItemHeader>
+          {icon && <span>{icon}</span>}
+          <span className={cn(title ? "" : "opacity-50")}>
+            {title ?? fallbackTitle}
+          </span>
+        </OutlineItemHeader>
+        <OutlineItemContent>{children}</OutlineItemContent>
+      </OutlineItem>
     );
-  }
-  return OutlineItem;
-};
+  };
 
-const OutlineGroup = (group: Group) => {
-  const { select } = useScenefile();
+const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
+  const { select, selected } = useScenefile();
 
-  const OutlineGroupTemplate = OutlineItemTemplate<Group>({
-    fallbackTitle: "Untitled Group",
-    showTrigger: true,
-  });
   return (
-    <OutlineGroupTemplate 
+    <OutlineGroupTemplate
       key={group.id}
-      item={group}
       title={group.name}
-      action={() => select({type: "group", item: group})}>
+      select={() => select({ type: "group", item: group })}
+      selected={selected?.item === group}
+      depth={depth}
+    >
       {group.lights?.map((light) => (
         <OutlineLight
           key={light.id}
-          item={light}
           title={displayNames[light.type]}
           icon={lightIcons[light.type]}
-          action={() => select({type: "light", item: light})}
+          select={() => select({ type: "light", item: light })}
+          selected={selected?.item === light}
+          depth={(depth ?? 0) + 1}
         />
       ))}
       {group.primitives?.map((primitive) => (
         <OutlinePrimitive
           key={primitive.id}
-          item={primitive}
           title={displayNames[primitive.type]}
           icon={primitiveIcons[primitive.type]}
-          action={() => select({type: "primitive", item: primitive})}
+          select={() => select({ type: "primitive", item: primitive })}
+          selected={selected?.item === primitive}
+          depth={(depth ?? 0) + 1}
         />
       ))}
-      {group.groups?.map((group) => OutlineGroup(group))}
+      {group.groups?.map((group) =>
+        OutlineGroup({ group, depth: (depth ?? 0) + 1 })
+      )}
     </OutlineGroupTemplate>
   );
 };
+
+const OutlineScene = SceneOutlineItemTemplate({
+  fallbackTitle: "Untitled Scene",
+  showTrigger: true,
+  initialOpen: true,
+});
+
+const OutlineGroupTemplate = SceneOutlineItemTemplate({
+  fallbackTitle: "Untitled Group",
+  showTrigger: true,
+  initialOpen: true,
+});
+
+const OutlinePrimitive = SceneOutlineItemTemplate({
+  fallbackTitle: "Untitled Primitive",
+  showTrigger: false,
+});
+
+const OutlineLight = SceneOutlineItemTemplate({
+  fallbackTitle: "Untitled Light",
+  showTrigger: false,
+});
 
 const lightIcons = {
   point: <IconSunHigh size={16} color="gold" />,
@@ -134,18 +150,6 @@ const primitiveIcons = {
   mesh: <IconTriangles size={16} color="orange" />,
 };
 
-const OutlinePrimitive = OutlineItemTemplate<Primitive>({
-  fallbackTitle: "Untitled Primitive",
-  showTrigger: false,
-  titleStyle: "font-normal text-slate-500",
-});
-
-const OutlineLight = OutlineItemTemplate<Light>({
-  fallbackTitle: "Untitled Light",
-  showTrigger: false,
-  titleStyle: "font-normal text-slate-500",
-});
-
 const displayNames = {
   cube: "Cube",
   sphere: "Sphere",
@@ -156,24 +160,3 @@ const displayNames = {
   spot: "Spot Light",
   directional: "Directional Light",
 };
-
-const AccordionTrigger = forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex items-center py-2 gap-2 text-sm font-medium cursor-pointer">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      aria-label="Toggle accordion"
-      className={cn(
-        "flex flex-initial !pb-0 transition-all hover:underline [&[data-state=closed]>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0",
-        className
-      )}
-      {...props}
-    >
-      <ChevronDownIcon className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 dark:text-slate-400" />
-    </AccordionPrimitive.Trigger>
-    {children}
-  </AccordionPrimitive.Header>
-));
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;

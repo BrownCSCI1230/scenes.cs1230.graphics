@@ -96,7 +96,7 @@ export const ScenefileProvider = ({
 
   const select = useCallback((selected: Selected) => {
     console.log("Selected", selected);
-    setSelected({ ...selected });
+    setSelected(selected);
   }, []);
 
   // toggle version, so a second click deselects
@@ -210,7 +210,7 @@ export const ScenefileProvider = ({
         translateGroup,
         setGroupTranslate,
         rotateGroup,
-        setGroupRotate
+        setGroupRotate,
       }}
     >
       {children}
