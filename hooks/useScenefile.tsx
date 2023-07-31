@@ -35,6 +35,7 @@ type ScenefileContextType = {
   setGroupTranslate: (translate: number[]) => void;
   rotateGroup: (rotate: number[]) => void;
   setGroupRotate: (rotate: number[]) => void;
+  setGroupScale: (scale: number[]) => void;
 };
 
 type TypeMap = {
@@ -79,6 +80,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setGroupTranslate: () => {},
   rotateGroup: () => {},
   setGroupRotate: () => {},
+  setGroupScale: () => {},
 });
 
 // Context provider
@@ -96,7 +98,7 @@ export const ScenefileProvider = ({
 
   const select = useCallback((selected: Selected) => {
     console.log("Selected", selected);
-    setSelected(selected);
+    setSelected({ ...selected });
   }, []);
 
   // toggle version, so a second click deselects
@@ -195,6 +197,19 @@ export const ScenefileProvider = ({
     [selected]
   );
 
+  const setGroupScale = useCallback(
+    (scale: number[]) => {
+      if (!selected || selected.type !== "group" || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_GROUP_SCALE",
+        group: selected.item,
+        scale,
+      });
+    },
+    [selected]
+  );
+
   return (
     <ScenefileContext.Provider
       value={{
@@ -211,6 +226,7 @@ export const ScenefileProvider = ({
         setGroupTranslate,
         rotateGroup,
         setGroupRotate,
+        setGroupScale
       }}
     >
       {children}
@@ -267,7 +283,15 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
     }
     case "SET_GROUP_ROTATE": {
       if (action.group && action.rotate.length === 3) {
-        action.group.translate = action.rotate;
+        action.group.rotate = action.rotate;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_GROUP_SCALE": {
+      if (action.group && action.scale.length === 3) {
+        action.group.scale = action.scale;
       }
       return {
         ...state,
@@ -315,6 +339,12 @@ type SetGroupRotateAction = {
   rotate: number[];
 };
 
+type SetGroupScaleAction = {
+  type: "SET_GROUP_SCALE";
+  group: Group;
+  scale: number[];
+};
+
 type ScenefileAction =
   | LoadFileAction
   | UpdateSceneNameAction
@@ -322,6 +352,7 @@ type ScenefileAction =
   | TranslateGroupAction
   | SetGroupTranslateAction
   | RotateGroupAction
-  | SetGroupRotateAction;
+  | SetGroupRotateAction
+  | SetGroupScaleAction;
 
 export default useScenefile;

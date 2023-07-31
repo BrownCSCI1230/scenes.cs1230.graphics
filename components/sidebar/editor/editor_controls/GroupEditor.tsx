@@ -1,17 +1,16 @@
-import { Button } from "@/components/ui/button";
 import useScenefile from "@/hooks/useScenefile";
 import assert from "assert";
-import TripleInput from "./TripleInput";
+import TripleInput from "../editor_components/TripleInput";
 
 
 export default function GroupEditor() {
-  const { selected, translateGroup, setGroupTranslate, setGroupRotate } = useScenefile();
+  const { selected, translateGroup, setGroupTranslate, setGroupRotate, setGroupScale } = useScenefile();
   assert(selected?.type === "group")
 
   let group = selected.item
   let translate = group.translate ? group.translate : [0, 0, 0]
   let rotation = group.rotate ? group.rotate : [0, 0, 0]
-  console.log(rotation)
+  let scale = group.scale ? group.scale : [1, 1, 1]
 
   assert(translate.length === 3)
 
@@ -27,7 +26,7 @@ export default function GroupEditor() {
         onYChange={(value) => setGroupTranslate([translate[0], value, translate[2]])}
         onZChange={(value) => setGroupTranslate([translate[0], translate[1], value])}
       />
-      {/* <TripleInput
+      <TripleInput
         label="rot"
         x={rotation[0]}
         y={rotation[1]}
@@ -35,16 +34,16 @@ export default function GroupEditor() {
         onXChange={(value) => setGroupRotate([value, rotation[1], rotation[2]])}
         onYChange={(value) => setGroupRotate([rotation[0], value, rotation[2]])}
         onZChange={(value) => setGroupRotate([rotation[0], rotation[1], value])}
-      /> */}
-      <Button variant="outline" onClick={() => translateGroup([1, 0, 0])}>
-        Translate group by [1, 0, 0]
-      </Button>
-      <Button
-        variant="outline"
-        onClick={() => setGroupTranslate([-1, 0, 0])}
-      >
-        Set group translate to [-1, 0, 0]
-      </Button>
+      />
+      <TripleInput
+        label="scale"
+        x={scale[0]}
+        y={scale[1]}
+        z={scale[2]}
+        onXChange={(value) => setGroupScale([value, scale[1], scale[2]])}
+        onYChange={(value) => setGroupScale([scale[0], value, scale[2]])}
+        onZChange={(value) => setGroupScale([scale[0], scale[1], value])}
+      />
     </>
   )
 }
