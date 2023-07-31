@@ -6,10 +6,14 @@ import { cleanErrors } from "@/lib/cleanErrors";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import {
   CameraData,
+  GenericProperty,
   GlobalData,
+  GlobalDataProperty,
   Group,
   Light,
+  LightProperty,
   Primitive,
+  PrimitiveProperty,
   Scenefile,
   ScenefileSchema,
 } from "@/types/Scenefile";
@@ -20,6 +24,8 @@ import {
   useReducer,
   useState,
 } from "react";
+
+
 
 type ScenefileContextType = {
   scenefile: Scenefile;
@@ -36,6 +42,9 @@ type ScenefileContextType = {
   rotateGroup: (rotate: number[]) => void;
   setGroupRotate: (rotate: number[]) => void;
   setGroupScale: (scale: number[]) => void;
+  setPrimitiveProperty: (property: PrimitiveProperty, value: GenericProperty) => void;
+  setLightProperty: (property: LightProperty, value: GenericProperty) => void;
+  setGlobalDataProperty: (property: GlobalDataProperty, value: GenericProperty) => void;
 };
 
 type TypeMap = {
@@ -81,6 +90,9 @@ const ScenefileContext = createContext<ScenefileContextType>({
   rotateGroup: () => {},
   setGroupRotate: () => {},
   setGroupScale: () => {},
+  setPrimitiveProperty: () => {},
+  setLightProperty: () => {},
+  setGlobalDataProperty: () => {},
 });
 
 // Context provider
@@ -141,14 +153,14 @@ export const ScenefileProvider = ({
 
   const updateSceneName = useCallback(
     () => (name: string) => {
-      dispatch({ type: "UPDATE_SCENE_NAME", name });
+      dispatch({ type: "UPDATE_SCENE_NAME", name: name });
     },
     []
   );
 
   const updateGlobalData = useCallback(
     () => (globalData: GlobalData) => {
-      dispatch({ type: "UPDATE_GLOBAL_DATA", globalData });
+      dispatch({ type: "UPDATE_GLOBAL_DATA", globalData: globalData });
     },
     []
   );
@@ -157,7 +169,7 @@ export const ScenefileProvider = ({
     (translate: number[]) => {
       if (!selected || selected.type !== "group" || !selectedHasID(selected))
         return;
-      dispatch({ type: "TRANSLATE_GROUP", group: selected.item, translate });
+      dispatch({ type: "TRANSLATE_GROUP", group: selected.item, translate: translate });
     },
     [selected]
   );
@@ -169,7 +181,7 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_GROUP_TRANSLATE",
         group: selected.item,
-        translate,
+        translate: translate,
       });
     },
     [selected]
@@ -179,7 +191,7 @@ export const ScenefileProvider = ({
     (rotate: number[]) => {
       if (!selected || selected.type !== "group" || !selectedHasID(selected))
         return;
-      dispatch({ type: "ROTATE_GROUP", group: selected.item, rotate });
+      dispatch({ type: "ROTATE_GROUP", group: selected.item, rotate: rotate });
     },
     [selected]
   );
@@ -191,7 +203,7 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_GROUP_ROTATE",
         group: selected.item,
-        rotate,
+        rotate: rotate,
       });
     },
     [selected]
@@ -204,7 +216,49 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_GROUP_SCALE",
         group: selected.item,
-        scale,
+        scale: scale,
+      });
+    },
+    [selected]
+  );
+
+  const setPrimitiveProperty = useCallback(
+    (property: PrimitiveProperty, value: GenericProperty) => {
+      if (!selected || selected.type !== "primitive" || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_PRIMITIVE_PROPERTY",
+        primitive: selected.item,
+        property: property,
+        value: value,
+      });
+    },
+    [selected]
+  );
+
+  const setLightProperty = useCallback(
+    (property: LightProperty, value: GenericProperty) => {
+      if (!selected || selected.type !== "light" || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_LIGHT_PROPERTY",
+        light: selected.item,
+        property: property,
+        value: value,
+      });
+    },
+    [selected]
+  );
+
+  const setGlobalDataProperty = useCallback( 
+    (property: GlobalDataProperty, value: GenericProperty) => {
+      if (!selected || (selected.type !== "global" && selected.type !== "scene") || !selectedHasID(selected))
+        return;
+      dispatch({
+        type: "SET_GLOBAL_DATA_PROPERTY",
+        globalData: (selected.type == "global") ? selected.item : selected.item.globalData,
+        property: property,
+        value: value,
       });
     },
     [selected]
@@ -226,7 +280,10 @@ export const ScenefileProvider = ({
         setGroupTranslate,
         rotateGroup,
         setGroupRotate,
-        setGroupScale
+        setGroupScale,
+        setPrimitiveProperty,
+        setLightProperty,
+        setGlobalDataProperty
       }}
     >
       {children}
@@ -297,8 +354,36 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
         ...state,
       };
     }
+    case "SET_PRIMITIVE_PROPERTY": {
+      if (action.primitive && action.property in action.primitive) {
+        (action.primitive as any)[action.property] = action.value;
+      }
+      return {
+        ...state,
+      }
+    }
+    case "SET_LIGHT_PROPERTY": {
+      if (action.light && action.property in action.light) {
+        (action.light as any)[action.property] = action.value;
+      }
+      return {
+        ...state
+      }
+    }
+    case "SET_GLOBAL_DATA_PROPERTY": {
+      if (action.globalData && action.property in action.globalData) {
+        (action.globalData as any)[action.property] = action.value;
+      }
+      return {
+        ...state
+      }
+    }
   }
 };
+
+function isValidProperty(obj: object, key: PrimitiveProperty) {
+  return key in obj;
+}
 
 type LoadFileAction = {
   type: "LOAD_FILE";
@@ -345,6 +430,27 @@ type SetGroupScaleAction = {
   scale: number[];
 };
 
+type SetPrimitivePropertyAction = {
+  type: "SET_PRIMITIVE_PROPERTY";
+  primitive: Primitive;
+  property: PrimitiveProperty;
+  value: GenericProperty;
+}
+
+type SetLightPropertyAction = {
+  type: "SET_LIGHT_PROPERTY";
+  light: Light;
+  property: LightProperty;
+  value: GenericProperty;
+}
+
+type SetGlobalDataPropertyAction = {
+  type: "SET_GLOBAL_DATA_PROPERTY";
+  globalData: GlobalData;
+  property: GlobalDataProperty;
+  value: GenericProperty;
+}
+
 type ScenefileAction =
   | LoadFileAction
   | UpdateSceneNameAction
@@ -353,6 +459,9 @@ type ScenefileAction =
   | SetGroupTranslateAction
   | RotateGroupAction
   | SetGroupRotateAction
-  | SetGroupScaleAction;
+  | SetGroupScaleAction
+  | SetPrimitivePropertyAction
+  | SetLightPropertyAction
+  | SetGlobalDataPropertyAction;
 
 export default useScenefile;

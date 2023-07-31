@@ -6,6 +6,8 @@ export type Vec4 = z.infer<typeof Vec4Schema>;
 export type Mat4 = z.infer<typeof Mat4Schema>;
 export type RGB = z.infer<typeof RGBSchema>;
 export type PrimitiveBase = z.infer<typeof PrimitiveBaseSchema>;
+export type PrimitiveProperty = keyof PrimitiveBase;
+export type GenericProperty = string | number | number[] // all the possible types a value can be.
 export type ShapePrimitive = z.infer<typeof ShapePrimitiveSchema>;
 export type MeshPrimitive = z.infer<typeof MeshPrimitiveSchema>;
 export type _Primitive = z.infer<typeof PrimitiveSchema>;
@@ -13,11 +15,13 @@ export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
 export type _Light = z.infer<typeof LightSchema>;
+export type LightProperty = keyof SpotLight | keyof DirectionalLight | keyof PointLight;
 export type _Group = z.infer<typeof BaseGroupSchema> & {
   groups?: _Group[];
 };
 export type MasterGroup = z.infer<typeof MasterGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
+export type GlobalDataProperty = keyof GlobalData;
 export type CameraData = z.infer<typeof CameraDataSchema>;
 export type _Scenefile = z.infer<typeof ScenefileSchema>;
 
