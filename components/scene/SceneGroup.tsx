@@ -27,7 +27,7 @@ export default function SceneGroup({ group }: { group: Group }) {
       scale={[scaleX, scaleY, scaleZ]}
       rotation={[rotateX, rotateY, rotateZ]}
     >
-      <meshStandardMaterial color={isSelected ? "yellow" : "white"} />
+      
       {group.lights?.map((light) => (
         <SceneLight key={light.id} light={light} />
       ))}
