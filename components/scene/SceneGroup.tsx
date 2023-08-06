@@ -1,4 +1,4 @@
-import useScenefile, { selectedHasID } from "@/hooks/useScenefile";
+import useScenefile from "@/hooks/useScenefile";
 import { Group } from "@/types/Scenefile";
 import SceneLight from "./SceneLight";
 import ScenePrimitive from "./ScenePrimitive";
@@ -16,8 +16,7 @@ export default function SceneGroup({ group }: { group: Group }) {
 
   const { toggleSelect, selected } = useScenefile();
 
-  const isSelected =
-    selected && selectedHasID(selected) && selected.item === group;
+  const isSelected = selected && selected.item === group;
 
   return (
     // TODO: investigate whether it's good to nest <mesh> elements
