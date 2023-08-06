@@ -27,13 +27,14 @@ export default function ScenePrimitive({
   primitive: Primitive;
 }) {
 
-  const { scenefile } = useScenefile();
+  const { scenefile, lights } = useScenefile();
 
   // the uniform does not update with the primitive controls...
   // TODO: find some way to hook on dispatch of the primitive update? 
   const uniforms = useMemo(() => {
 
     console.log("UNIFORM UPDATE");
+    console.log("LIGHTS", lights)
     let ambient = primitive.ambient ?? [0, 0, 0];
     let diffuse = primitive.diffuse ?? [0, 0, 0];
     let specular = primitive.specular ?? [0, 0, 0];
@@ -42,8 +43,8 @@ export default function ScenePrimitive({
     let diffuseCoefficient = scenefile.globalData.diffuseCoeff ?? 1.0;
     let specularCoefficient = scenefile.globalData.specularCoeff ?? 1.0;
     let transparentCoefficient = scenefile.globalData.transparentCoeff ?? 1.0;
-    // TODO: get all lights from the scene, and pass them to the shader
-    // (how to do best if they are in different groups?)
+    let sceneLights = lights ?? [];
+    let lightCount = sceneLights.length;
 
     return {
       ambientColor: { value: new Color(ambient[0], ambient[1], ambient[2]) },
@@ -54,8 +55,11 @@ export default function ScenePrimitive({
       diffuseCoefficient: { value: diffuseCoefficient },
       specularCoefficient: { value: specularCoefficient },
       transparentCoefficient: { value: transparentCoefficient },
+      lightCount: { value: lightCount },
+      // TODO: ingest lightPosition, direction, addit. information from various types of lights (point, directional, spot)
+
     };
-  }, [scenefile, primitive]);
+  }, [scenefile, primitive, lights]);
 
   
   return (

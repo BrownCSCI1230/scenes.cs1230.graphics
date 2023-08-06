@@ -15,12 +15,13 @@ import {
   Primitive,
   PrimitiveProperty,
   Scenefile,
-  ScenefileSchema,
+  ScenefileSchema
 } from "@/types/Scenefile";
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
   useState,
 } from "react";
@@ -31,6 +32,7 @@ type ScenefileContextType = {
   scenefile: Scenefile;
   scenefilePath?: string;
   originalScenefile: Scenefile;
+  lights: Light[];
   select: (id: Selected) => void;
   toggleSelect: (id: Selected) => void;
   selected: Selected | undefined;
@@ -79,6 +81,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: initialScenefile,
   scenefilePath: undefined,
   originalScenefile: initialScenefile,
+  lights: [],
   select: () => {},
   toggleSelect: () => {},
   selected: undefined,
@@ -107,6 +110,31 @@ export const ScenefileProvider = ({
     useState<Scenefile>(initialScenefile);
   const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
+
+  const [lights, setLights] = useState<Light[]>([]);
+
+  // TODO: use something like LightCTM in HelperTypes to colllect CTM info along recursive path?
+  // .. is there a better way to collect light info than this?
+  const getLightsRecursive = useCallback((group: Group) => {
+    let allLights: Light[] = [];
+    if (group.lights) {
+      allLights = allLights.concat(group.lights);
+    }
+    if (group.groups) {
+      group.groups.forEach((childGroup) => {
+        allLights = allLights.concat(getLightsRecursive(childGroup));
+      });
+    }
+    return allLights;
+  }, []);
+
+  // TODO: maybe a better way to dispatch this only on light-based edits? (add or remove)
+  useEffect(() => {
+    if (scenefile) {
+      const allLights = getLightsRecursive(scenefile);
+      setLights(allLights);
+    }
+  }, [scenefile, getLightsRecursive]);
 
   const select = useCallback((selected: Selected) => {
     console.log("Selected", selected);
@@ -270,6 +298,7 @@ export const ScenefileProvider = ({
         scenefile,
         scenefilePath,
         originalScenefile,
+        lights,
         select,
         toggleSelect,
         selected,
