@@ -15,7 +15,7 @@ import {
   Primitive,
   PrimitiveProperty,
   Scenefile,
-  ScenefileSchema
+  ScenefileSchema,
 } from "@/types/Scenefile";
 import {
   createContext,
@@ -68,6 +68,11 @@ export type Selected = {
     item: TypeMap[K];
   };
 }[keyof TypeMap];
+
+export type SelectedWithID = Selected & { id: string };
+
+export const selectedHasID = (selected: Selected): selected is SelectedWithID =>
+  "id" in selected.item;
 
 const initialScenefileParseResult = ScenefileSchema.safeParse(defaultScene);
 if (!initialScenefileParseResult.success) {
