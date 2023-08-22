@@ -1,30 +1,34 @@
 import useScenefile from "@/hooks/useScenefile";
-import assert from "assert";
-import TripleInput from "../editor_components/TripleInput";
-
+import TripleInput from "../components/TripleInput";
 
 export default function GroupEditor() {
-  const { selected, translateGroup, setGroupTranslate, setGroupRotate, setGroupScale } = useScenefile();
-  assert(selected?.type === "group")
+  const { selected, setGroupTranslate, setGroupRotate, setGroupScale } =
+    useScenefile();
 
-  let group = selected.item
-  let translate = group.translate ? group.translate : [0, 0, 0]
-  let rotation = group.rotate ? group.rotate : [0, 0, 0]
-  let scale = group.scale ? group.scale : [1, 1, 1]
+  if (selected?.type !== "group") return null;
 
-  assert(translate.length === 3)
+  const group = selected.item;
+  const translate = group.translate ? group.translate : [0, 0, 0];
+  const rotation = group.rotate ? group.rotate : [0, 0, 0];
+  const scale = group.scale ? group.scale : [1, 1, 1];
 
   return (
     <>
-      <p><b>{group.name}</b></p>
+      <h3>{group.name}</h3>
       <TripleInput
         label="pos"
         x={translate[0]}
         y={translate[1]}
         z={translate[2]}
-        onXChange={(value) => setGroupTranslate([value, translate[1], translate[2]])}
-        onYChange={(value) => setGroupTranslate([translate[0], value, translate[2]])}
-        onZChange={(value) => setGroupTranslate([translate[0], translate[1], value])}
+        onXChange={(value) =>
+          setGroupTranslate([value, translate[1], translate[2]])
+        }
+        onYChange={(value) =>
+          setGroupTranslate([translate[0], value, translate[2]])
+        }
+        onZChange={(value) =>
+          setGroupTranslate([translate[0], translate[1], value])
+        }
       />
       <TripleInput
         label="rot"
@@ -45,5 +49,5 @@ export default function GroupEditor() {
         onZChange={(value) => setGroupScale([scale[0], scale[1], value])}
       />
     </>
-  )
+  );
 }

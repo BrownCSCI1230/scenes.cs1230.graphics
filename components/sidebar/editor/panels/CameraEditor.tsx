@@ -1,14 +1,13 @@
 import useScenefile from "@/hooks/useScenefile";
-import assert from "assert";
-
 
 export default function CameraEditor() {
   const { selected } = useScenefile();
-  assert(selected?.type === "camera")
+
+  if (selected?.type !== "camera") return null;
 
   return (
     <>
       <p>TODO: put in info and edit controls</p>
     </>
-  )
+  );
 }

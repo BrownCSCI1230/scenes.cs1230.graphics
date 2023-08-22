@@ -55,7 +55,6 @@ type ScenefileContextType = {
 
 type TypeMap = {
   scene: Scenefile;
-  global: GlobalData;
   camera: CameraData;
   group: Group;
   primitive: Primitive;
@@ -85,10 +84,10 @@ const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: initialScenefile,
   scenefilePath: undefined,
   originalScenefile: initialScenefile,
-  lights: [],
-  select: () => {},
-  toggleSelect: () => {},
   selected: undefined,
+  select: () => {},
+  lights: [],
+  toggleSelect: () => {},
   loadFile: () => {},
   updateSceneName: () => {},
   updateGlobalData: () => {},
@@ -281,15 +280,10 @@ export const ScenefileProvider = ({
 
   const setGlobalDataProperty = useCallback(
     (property: GlobalDataProperty, value: GenericProperty) => {
-      if (
-        !selected ||
-        (selected.type !== "global" && selected.type !== "scene")
-      )
-        return;
+      if (!selected || selected.type !== "scene") return;
       dispatch({
         type: "SET_GLOBAL_DATA_PROPERTY",
-        globalData:
-          selected.type == "global" ? selected.item : selected.item.globalData,
+        globalData: selected.item.globalData,
         property: property,
         value: value,
       });
