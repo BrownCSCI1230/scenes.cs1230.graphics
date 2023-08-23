@@ -6,7 +6,6 @@ import useScenefile from "@/hooks/useScenefile";
 import { phongFragShader } from "@/shaders/phongFragmentShader";
 import { phongVertexShader } from "@/shaders/phongVertexShader";
 
-
 const primitiveComponent = (primitive: Primitive) => {
   switch (primitive.type) {
     case "cube":
@@ -19,22 +18,20 @@ const primitiveComponent = (primitive: Primitive) => {
       return <coneGeometry args={[0.5, 1, 256]} />;
   }
   return <></>;
-}
+};
 
 export default function ScenePrimitive({
   primitive,
 }: {
   primitive: Primitive;
 }) {
-
   const { scenefile, lights } = useScenefile();
 
   // the uniform does not update with the primitive controls...
-  // TODO: find some way to hook on dispatch of the primitive update? 
+  // TODO: find some way to hook on dispatch of the primitive update?
   const uniforms = useMemo(() => {
-
-    console.log("UNIFORM UPDATE");
-    console.log("LIGHTS", lights)
+    // console.log("UNIFORM UPDATE");
+    // console.log("LIGHTS", lights)
     let ambient = primitive.ambient ?? [0, 0, 0];
     let diffuse = primitive.diffuse ?? [0, 0, 0];
     let specular = primitive.specular ?? [0, 0, 0];
@@ -49,7 +46,9 @@ export default function ScenePrimitive({
     return {
       ambientColor: { value: new Color(ambient[0], ambient[1], ambient[2]) },
       diffuseColor: { value: new Color(diffuse[0], diffuse[1], diffuse[2]) },
-      specularColor: { value: new Color(specular[0], specular[1], specular[2]) },
+      specularColor: {
+        value: new Color(specular[0], specular[1], specular[2]),
+      },
       shininess: { value: shininess },
       ambientCoefficient: { value: ambientCoefficient },
       diffuseCoefficient: { value: diffuseCoefficient },
@@ -57,15 +56,13 @@ export default function ScenePrimitive({
       transparentCoefficient: { value: transparentCoefficient },
       lightCount: { value: lightCount },
       // TODO: ingest lightPosition, direction, addit. information from various types of lights (point, directional, spot)
-
     };
   }, [scenefile, primitive, lights]);
 
-  
   return (
     <mesh
-      // TODO: how to incorportate onClick stacked on top of group onClick?? (will need custom logic.)
-      // onClick={() => toggleSelect({ type: "primitive", item: primitive })}
+    // TODO: how to incorportate onClick stacked on top of group onClick?? (will need custom logic.)
+    // onClick={() => toggleSelect({ type: "primitive", item: primitive })}
     >
       <shaderMaterial
         uniforms={uniforms}
@@ -74,5 +71,5 @@ export default function ScenePrimitive({
       />
       {primitiveComponent(primitive)}
     </mesh>
-  )
+  );
 }

@@ -53,7 +53,7 @@ type ScenefileContextType = {
   ) => void;
 };
 
-type TypeMap = {
+type SelectedMap = {
   scene: Scenefile;
   camera: CameraData;
   group: Group;
@@ -62,11 +62,11 @@ type TypeMap = {
 };
 
 export type Selected = {
-  [K in keyof TypeMap]: {
+  [K in keyof SelectedMap]: {
     type: K;
-    item: TypeMap[K];
+    item: SelectedMap[K];
   };
-}[keyof TypeMap];
+}[keyof SelectedMap];
 
 export type SelectedWithID = Selected & { id: string };
 
@@ -399,8 +399,12 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
       };
     }
     case "SET_GLOBAL_DATA_PROPERTY": {
-      if (action.globalData && action.property in action.globalData) {
-        (action.globalData as any)[action.property] = action.value;
+      if (
+        action.globalData &&
+        action.property in action.globalData &&
+        typeof action.value === "number"
+      ) {
+        action.globalData[action.property] = action.value;
       }
       return {
         ...state,

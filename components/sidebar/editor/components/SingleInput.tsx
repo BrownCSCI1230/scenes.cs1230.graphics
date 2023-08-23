@@ -1,34 +1,37 @@
-import { Input } from "@/components/ui/input";
+import { InputProps } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/cn";
 import { GenericProperty } from "@/types/Scenefile";
-import React, { ChangeEvent } from "react";
-
-const SCROLL_SCALE = 0.1;
+import { useId } from "react";
+import DraggableInput from "./DraggableInput";
 
 // a singleProperty is a GenericProperty without number[]
 type SingleProperty = Exclude<GenericProperty, number[]>;
 
-interface SingleInputProps {
+interface SingleInputProps extends InputProps {
   label: string;
   val: SingleProperty;
-  onChange: (value: SingleProperty) => void;
 }
 
-const SingleInput: React.FC<SingleInputProps> = ({ label, val, onChange }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value);
-  };
-
+export default function SingleInput({
+  label,
+  val,
+  className,
+  ...props
+}: SingleInputProps) {
+  const id = useId();
   return (
     <div className="flex justify-end items-center">
-      <label className="mr-2">{label}</label>
-      <Input
-        className="max-w-[6rem] w-auto"
+      <Label className="mr-2" htmlFor={id}>
+        {label}
+      </Label>
+      <DraggableInput
+        {...props}
+        id={id}
+        className={cn("max-w-[4rem] w-auto", className)}
         type="number"
         value={val}
-        onChange={handleChange}
       />
     </div>
   );
-};
-
-export default SingleInput;
+}

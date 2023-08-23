@@ -25,14 +25,23 @@ export default function SceneEditor() {
           placeholder="Untited Scene"
         ></Input>
       </EditorSection>
-      <EditorSection label="Global properties">
-        {globalDataProperties.map((key: GlobalDataProperty, index) => {
+      <EditorSection label="Global coefficients">
+        {globalDataProperties.map((key: GlobalDataProperty) => {
           return (
             <SingleInput
-              key={index}
-              label={key}
+              key={key}
+              // remove last 5 characters and capitalize first letter
+              label={
+                key.slice(0, -5).charAt(0).toUpperCase() + key.slice(1, -5)
+              }
               val={globalData[key]}
-              onChange={(value) => setGlobalDataProperty(key, value)}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value);
+                setGlobalDataProperty(key, value);
+              }}
+              min={0}
+              max={1}
+              step={0.01}
             />
           );
         })}
