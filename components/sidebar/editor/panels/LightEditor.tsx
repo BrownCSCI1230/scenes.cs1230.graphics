@@ -85,8 +85,8 @@ export default function LightEditor() {
           <SingleInput
             key={index}
             label={property}
-            val={light[property]}
-            onChange={(value) => setLightProperty(property, value)}
+            value={light[property]}
+            onChange={(e) => setLightProperty(property, e.target.value)}
           />
         );
       })}
@@ -117,8 +117,8 @@ export default function LightEditor() {
           <SingleInput
             key={index}
             label={property}
-            val={light[property]}
-            onChange={(value) => setLightProperty(property, value)}
+            value={light[property]}
+            onChange={(e) => setLightProperty(property, e.target.value)}
           />
         );
       })}

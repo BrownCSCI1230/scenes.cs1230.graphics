@@ -35,7 +35,7 @@ type ScenefileContextType = {
   toggleSelect: (id: Selected) => void;
   selected: Selected | undefined;
   loadFile: (file: File) => void;
-  updateSceneName: (name: string) => void;
+  setSceneName: (name: string) => void;
   updateGlobalData: (globalData: GlobalData) => void;
   translateGroup: (translate: number[]) => void;
   setGroupTranslate: (translate: number[]) => void;
@@ -89,7 +89,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   lights: [],
   toggleSelect: () => {},
   loadFile: () => {},
-  updateSceneName: () => {},
+  setSceneName: () => {},
   updateGlobalData: () => {},
   translateGroup: () => {},
   setGroupTranslate: () => {},
@@ -139,6 +139,10 @@ export const ScenefileProvider = ({
     }
   }, [scenefile, getLightsRecursive]);
 
+  useEffect(() => {
+    if (selected?.type === "scene") selected.item = scenefile;
+  }, [scenefile, selected]);
+
   const select = useCallback((selected: Selected) => {
     console.log("Selected", selected);
     setSelected({ ...selected });
@@ -182,19 +186,13 @@ export const ScenefileProvider = ({
     [toast]
   );
 
-  const updateSceneName = useCallback(
-    () => (name: string) => {
-      dispatch({ type: "UPDATE_SCENE_NAME", name: name });
-    },
-    []
-  );
+  const setSceneName = useCallback((name: string) => {
+    dispatch({ type: "SET_SCENE_NAME", name: name });
+  }, []);
 
-  const updateGlobalData = useCallback(
-    () => (globalData: GlobalData) => {
-      dispatch({ type: "UPDATE_GLOBAL_DATA", globalData: globalData });
-    },
-    []
-  );
+  const updateGlobalData = useCallback((globalData: GlobalData) => {
+    dispatch({ type: "UPDATE_GLOBAL_DATA", globalData: globalData });
+  }, []);
 
   const translateGroup = useCallback(
     (translate: number[]) => {
@@ -302,7 +300,7 @@ export const ScenefileProvider = ({
         toggleSelect,
         selected,
         loadFile,
-        updateSceneName,
+        setSceneName,
         updateGlobalData,
         translateGroup,
         setGroupTranslate,
@@ -326,7 +324,8 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
   switch (action.type) {
     case "LOAD_FILE":
       return action.scenefile;
-    case "UPDATE_SCENE_NAME":
+    case "SET_SCENE_NAME":
+      console.log("setting scene name", action.name);
       return {
         ...state,
         name: action.name,
@@ -422,8 +421,8 @@ type LoadFileAction = {
   scenefile: Scenefile;
 };
 
-type UpdateSceneNameAction = {
-  type: "UPDATE_SCENE_NAME";
+type SetSceneNameAction = {
+  type: "SET_SCENE_NAME";
   name: string;
 };
 
@@ -485,7 +484,7 @@ type SetGlobalDataPropertyAction = {
 
 type ScenefileAction =
   | LoadFileAction
-  | UpdateSceneNameAction
+  | SetSceneNameAction
   | UpdateGlobalDataAction
   | TranslateGroupAction
   | SetGroupTranslateAction

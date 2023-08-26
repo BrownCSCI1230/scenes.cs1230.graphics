@@ -5,12 +5,12 @@ import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
 
 export default function SceneEditor() {
-  const { selected, setGlobalDataProperty } = useScenefile();
+  const { scenefile, selected, setSceneName, setGlobalDataProperty } =
+    useScenefile();
 
   if (selected?.type !== "scene") return null;
 
-  const scene = selected.item;
-  const globalData = scene.globalData;
+  const globalData = scenefile.globalData;
   const globalDataProperties: GlobalDataProperty[] = Object.keys(
     globalData
   ) as GlobalDataProperty[];
@@ -23,6 +23,10 @@ export default function SceneEditor() {
           autoComplete="off"
           id="scene name"
           placeholder="Untited Scene"
+          value={scenefile.name ?? ""}
+          onChange={(e) => {
+            setSceneName(e.target.value);
+          }}
         ></Input>
       </EditorSection>
       <EditorSection label="Global coefficients">
@@ -30,18 +34,16 @@ export default function SceneEditor() {
           return (
             <SingleInput
               key={key}
-              // remove last 5 characters and capitalize first letter
-              label={
-                key.slice(0, -5).charAt(0).toUpperCase() + key.slice(1, -5)
-              }
-              val={globalData[key]}
-              onChange={(e) => {
-                const value = parseFloat(e.target.value);
-                setGlobalDataProperty(key, value);
-              }}
+              label={globalPropertyDisplayNames[key]}
+              value={globalData[key]}
               min={0}
               max={1}
-              step={0.01}
+              step={0.001}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value);
+                if (isNaN(value)) return;
+                setGlobalDataProperty(key, value);
+              }}
             />
           );
         })}
@@ -49,3 +51,10 @@ export default function SceneEditor() {
     </div>
   );
 }
+
+const globalPropertyDisplayNames: Record<GlobalDataProperty, string> = {
+  ambientCoeff: "Ambient",
+  diffuseCoeff: "Diffuse",
+  specularCoeff: "Specular",
+  transparentCoeff: "Transparent",
+};

@@ -68,7 +68,7 @@ const SceneOutlineItemTemplate = ({
         <OutlineItemHeader>
           {icon && <span>{icon}</span>}
           <span className={cn(title ? "" : "opacity-50")}>
-            {title ?? fallbackTitle}
+            {title || fallbackTitle}
           </span>
         </OutlineItemHeader>
         <OutlineItemContent>{children}</OutlineItemContent>

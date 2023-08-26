@@ -3,7 +3,7 @@
     "ambientCoeff": 1,
     "diffuseCoeff": 1,
     "specularCoeff": 1,
-    "transparentCoeff": 1
+    "transparentCoeff": 0
   },
   "cameraData": {
     "position": [5, 2, 5],
@@ -29,7 +29,7 @@
       "primitives": [
         {
           "type": "cube",
-          "ambient": [1, 0, 0],
+          "ambient": [0.5, 0.5, 0.5],
           "diffuse": [1, 1, 1],
           "specular": [1, 1, 1],
           "shininess": 10

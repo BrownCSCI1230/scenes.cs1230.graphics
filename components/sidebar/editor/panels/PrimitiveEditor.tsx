@@ -66,8 +66,8 @@ export default function PrimitiveEditor() {
       />
       <SingleInput
         label="shininess"
-        val={shininess}
-        onChange={(value) => setPrimitiveProperty("shininess", value)}
+        value={shininess}
+        onChange={(e) => setPrimitiveProperty("shininess", e.target.value)}
       />
     </>
   );
