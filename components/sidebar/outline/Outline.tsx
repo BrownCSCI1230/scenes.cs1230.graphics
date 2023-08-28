@@ -3,6 +3,7 @@ import { cn } from "@/lib/cn";
 import { Group } from "@/types/Scenefile";
 import {
   IconArrowsDown,
+  IconCamera,
   IconCone,
   IconCube,
   IconCylinder,
@@ -16,6 +17,7 @@ import OutlineItem, {
   OutlineItemHeader,
 } from "./OutlineItem";
 
+
 export default function Outline() {
   const { select, selected, scenefile } = useScenefile();
 
@@ -26,6 +28,13 @@ export default function Outline() {
       selected={selected?.item === scenefile}
       depth={0}
     >
+      <OutlineCamera 
+        title={"Camera"}
+        icon={cameraIcon}
+        select={() => select({ type: "camera", item: scenefile.cameraData })}
+        selected={selected?.item === scenefile.cameraData}
+        depth={1}
+      />
       {scenefile.groups?.map((group) => (
         <OutlineGroup key={group.id} group={group} depth={1} />
       ))}
@@ -120,6 +129,11 @@ const OutlineScene = SceneOutlineItemTemplate({
   initialOpen: true,
 });
 
+const OutlineCamera = SceneOutlineItemTemplate({
+  fallbackTitle: "Camera",
+  showTrigger: false,
+})
+
 const OutlineGroupTemplate = SceneOutlineItemTemplate({
   fallbackTitle: "Untitled Group",
   showTrigger: true,
@@ -149,6 +163,8 @@ const primitiveIcons = {
   cylinder: <IconCylinder size={16} color="orange" />,
   mesh: <IconTriangles size={16} color="orange" />,
 };
+
+const cameraIcon =  <IconCamera size={16} color="#4079bf" />
 
 const displayNames = {
   cube: "Cube",

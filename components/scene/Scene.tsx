@@ -9,6 +9,7 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import SceneGroup from "./SceneGroup";
+import SceneCamera from "./SceneCamera";
 
 export default function Scene() {
   const { scenefile } = useScenefile();
@@ -25,6 +26,7 @@ export default function Scene() {
           labelColor="white"
         />
       </GizmoHelper>
+      <SceneCamera camera={scenefile.cameraData}/>
       {scenefile.groups?.map((group) => (
         <SceneGroup key={group.id} group={group} />
       ))}

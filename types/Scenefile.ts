@@ -23,6 +23,7 @@ export type MasterGroup = z.infer<typeof MasterGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
 export type GlobalDataProperty = keyof GlobalData;
 export type CameraData = z.infer<typeof CameraDataSchema>;
+export type CameraProperty = keyof CameraData;
 export type _Scenefile = z.infer<typeof ScenefileSchema>;
 
 export type Primitive = z.infer<typeof PrimitiveSchemaWithID>;

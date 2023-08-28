@@ -6,6 +6,7 @@ import { cleanErrors } from "@/lib/cleanErrors";
 import { assignIDs, loadJSON } from "@/lib/loadFile";
 import {
   CameraData,
+  CameraProperty,
   GenericProperty,
   GlobalData,
   GlobalDataProperty,
@@ -51,6 +52,10 @@ type ScenefileContextType = {
     property: GlobalDataProperty,
     value: GenericProperty
   ) => void;
+  setCameraPosition: (translate: number[]) => void;
+  setCameraLook: (look: number[]) => void;
+  setCameraUp: (up: number[]) => void;
+  setCameraProperty: (property: CameraProperty, value: GenericProperty) => void;
 };
 
 type SelectedMap = {
@@ -99,6 +104,10 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setPrimitiveProperty: () => {},
   setLightProperty: () => {},
   setGlobalDataProperty: () => {},
+  setCameraPosition: () => {},
+  setCameraLook: () => {},
+  setCameraUp: () => {},
+  setCameraProperty: () => {},
 });
 
 // Context provider
@@ -218,6 +227,52 @@ export const ScenefileProvider = ({
     [selected]
   );
 
+  const setCameraPosition = useCallback(
+    (translate: number[]) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_TRANSLATE",
+        camera: selected.item,
+        translate: translate
+      });
+    }, [selected]
+  )
+
+  const setCameraLook = useCallback(
+    (look: number[]) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_LOOK",
+        camera: selected.item,
+        look: look
+      });
+    }, [selected]
+  )
+
+  const setCameraUp = useCallback(
+    (up: number[]) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_UP",
+        camera: selected.item,
+        up: up
+      });
+    }, [selected]
+  )
+
+  const setCameraProperty = useCallback(
+    (property: CameraProperty, value: GenericProperty) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_PROPERTY",
+        camera: selected.item,
+        property: property,
+        value: value,
+      });
+    },
+    [selected]
+  );
+
   const rotateGroup = useCallback(
     (rotate: number[]) => {
       if (!selected || selected.type !== "group") return;
@@ -310,6 +365,10 @@ export const ScenefileProvider = ({
         setPrimitiveProperty,
         setLightProperty,
         setGlobalDataProperty,
+        setCameraPosition,
+        setCameraLook,
+        setCameraUp,
+        setCameraProperty,
       }}
     >
       {children}
@@ -376,6 +435,38 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
     case "SET_GROUP_SCALE": {
       if (action.group && action.scale.length === 3) {
         action.group.scale = action.scale;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_TRANSLATE": {
+      if (action.camera && action.translate.length === 3) {
+        action.camera.position = action.translate;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_LOOK": {
+      if (action.camera && action.look.length === 3) {
+        action.camera.look = action.look;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_UP": {
+      if (action.camera && action.up.length === 3) {
+        action.camera.up = action.up;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_PROPERTY": {
+      if (action.camera && action.property in action.camera) {
+        (action.camera as any)[action.property] = action.value;
       }
       return {
         ...state,
@@ -461,6 +552,31 @@ type SetGroupScaleAction = {
   scale: number[];
 };
 
+type SetCameraTranslateAction = {
+  type: "SET_CAMERA_TRANSLATE";
+  camera: CameraData;
+  translate: number[];
+};
+
+type SetCameraLookAction = {
+  type: "SET_CAMERA_LOOK";
+  camera: CameraData;
+  look: number[];
+};
+
+type SetCameraUpAction = {
+  type: "SET_CAMERA_UP";
+  camera: CameraData;
+  up: number[];
+};
+
+type SetCameraPropertyAction= {
+  type: "SET_CAMERA_PROPERTY";
+  camera: CameraData;
+  property: CameraProperty;
+  value: GenericProperty;
+};
+
 type SetPrimitivePropertyAction = {
   type: "SET_PRIMITIVE_PROPERTY";
   primitive: Primitive;
@@ -491,6 +607,10 @@ type ScenefileAction =
   | RotateGroupAction
   | SetGroupRotateAction
   | SetGroupScaleAction
+  | SetCameraTranslateAction
+  | SetCameraLookAction
+  | SetCameraUpAction
+  | SetCameraPropertyAction
   | SetPrimitivePropertyAction
   | SetLightPropertyAction
   | SetGlobalDataPropertyAction;
