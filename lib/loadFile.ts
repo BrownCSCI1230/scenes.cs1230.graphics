@@ -1,4 +1,11 @@
-import { Group, Scenefile, _Group, _Scenefile } from "@/types/Scenefile";
+import {
+  Group,
+  Scenefile,
+  TemplateGroup,
+  _Group,
+  _Scenefile,
+  _TemplateGroup,
+} from "@/types/Scenefile";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -43,7 +50,7 @@ export async function loadJSON(file: File): Promise<unknown> {
  * @returns The scenefile with IDs assigned.
  */
 export function assignIDs(scenefile: _Scenefile): Scenefile {
-  const assignIDsRecursive = (group: _Group): Group => {
+  const assignGroupIDs = (group: _Group): Group => {
     return {
       ...group,
       id: uuidv4(),
@@ -60,16 +67,39 @@ export function assignIDs(scenefile: _Scenefile): Scenefile {
         };
       }),
       groups: group.groups?.map((group) => {
-        return assignIDsRecursive(group);
+        return assignGroupIDs(group);
       }),
     };
   };
-  const groups = scenefile.groups?.map((group) => {
-    return assignIDsRecursive(group);
-  });
+  const assignTemplateIDs = (group: _TemplateGroup): TemplateGroup => {
+    return {
+      ...group,
+      id: uuidv4(),
+      lights: group.lights?.map((light) => {
+        return {
+          ...light,
+          id: uuidv4(),
+        };
+      }),
+      primitives: group.primitives?.map((primitive) => {
+        return {
+          ...primitive,
+          id: uuidv4(),
+        };
+      }),
+      groups: group.groups?.map((group) => {
+        return assignGroupIDs(group);
+      }),
+    };
+  };
+  const groups = scenefile.groups?.map((group) => assignGroupIDs(group));
+  const templateGroups = scenefile.templateGroups?.map((group) =>
+    assignTemplateIDs(group)
+  );
   return {
     id: uuidv4(),
     ...scenefile,
     groups,
+    templateGroups,
   };
 }

@@ -7,7 +7,7 @@ export type Mat4 = z.infer<typeof Mat4Schema>;
 export type RGB = z.infer<typeof RGBSchema>;
 export type PrimitiveBase = z.infer<typeof PrimitiveBaseSchema>;
 export type PrimitiveProperty = keyof PrimitiveBase;
-export type GenericProperty = string | number | number[] // all the possible types a value can be.
+export type GenericProperty = string | number | number[]; // all the possible types a value can be.
 export type ShapePrimitive = z.infer<typeof ShapePrimitiveSchema>;
 export type MeshPrimitive = z.infer<typeof MeshPrimitiveSchema>;
 export type _Primitive = z.infer<typeof PrimitiveSchema>;
@@ -15,11 +15,14 @@ export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
 export type _Light = z.infer<typeof LightSchema>;
-export type LightProperty = keyof SpotLight | keyof DirectionalLight | keyof PointLight;
+export type LightProperty =
+  | keyof SpotLight
+  | keyof DirectionalLight
+  | keyof PointLight;
 export type _Group = z.infer<typeof BaseGroupSchema> & {
   groups?: _Group[];
 };
-export type MasterGroup = z.infer<typeof MasterGroupSchema>;
+export type _TemplateGroup = z.infer<typeof TemplateGroupSchema>;
 export type GlobalData = z.infer<typeof GlobalDataSchema>;
 export type GlobalDataProperty = keyof GlobalData;
 export type CameraData = z.infer<typeof CameraDataSchema>;
@@ -31,6 +34,7 @@ export type Light = z.infer<typeof LightSchemaWithID>;
 export type Group = z.infer<typeof BaseGroupSchemaWithID> & {
   groups?: Group[];
 };
+export type TemplateGroup = z.infer<typeof TemplateGroupSchemaWithID>;
 export type Scenefile = z.infer<typeof ScenefileSchemaWithIDs>;
 
 export const Vec2Schema = z.number().array().length(2);
@@ -77,7 +81,10 @@ export const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
   })
 );
 
-export const PrimitiveSchema = z.union([ShapePrimitiveSchema, MeshPrimitiveSchema]);
+export const PrimitiveSchema = z.union([
+  ShapePrimitiveSchema,
+  MeshPrimitiveSchema,
+]);
 
 export const BaseLightSchema = z.object({
   name: z.string().optional(),
@@ -108,7 +115,11 @@ export const SpotLightSchema = BaseLightSchema.and(
   })
 );
 
-export const LightSchema = z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]);
+export const LightSchema = z.union([
+  PointLightSchema,
+  DirectionalLightSchema,
+  SpotLightSchema,
+]);
 
 export const GroupTranformSchema = z.union([
   z.object({
@@ -139,7 +150,9 @@ export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   })
 );
 
-export const MasterGroupSchema = GroupSchema.and(z.object({ name: z.string() }));
+export const TemplateGroupSchema = GroupSchema.and(
+  z.object({ name: z.string() })
+);
 
 export const GlobalDataSchema = z.object({
   ambientCoeff: z.number().nonnegative().max(1),
@@ -175,11 +188,14 @@ export const ScenefileSchema = z
     globalData: GlobalDataSchema,
     cameraData: CameraDataSchema,
     groups: z.array(GroupSchema).optional(),
+    templateGroups: z.array(TemplateGroupSchema).optional(),
   })
   .strict();
 
 // Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
-export const PrimitiveSchemaWithID = PrimitiveSchema.and(z.object({ id: z.string() }));
+export const PrimitiveSchemaWithID = PrimitiveSchema.and(
+  z.object({ id: z.string() })
+);
 export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
 export const BaseGroupSchemaWithID = z
   .object({
@@ -194,10 +210,14 @@ export const GroupSchemaWithID: z.ZodType<Group> = BaseGroupSchemaWithID.and(
     groups: z.lazy(() => GroupSchemaWithID.array().optional()),
   })
 );
+export const TemplateGroupSchemaWithID = GroupSchemaWithID.and(
+  z.object({ name: z.string() })
+);
 export const ScenefileSchemaWithIDs = z.object({
   id: z.string(),
   name: z.string().optional(),
   globalData: GlobalDataSchema,
   cameraData: CameraDataSchema,
   groups: z.array(GroupSchemaWithID).optional(),
+  templateGroups: z.array(TemplateGroupSchemaWithID).optional(),
 });

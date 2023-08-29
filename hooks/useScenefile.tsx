@@ -148,6 +148,7 @@ export const ScenefileProvider = ({
     }
   }, [scenefile, getLightsRecursive]);
 
+  // TODO: figure out why selected.item != scenefile then remove this
   useEffect(() => {
     if (selected?.type === "scene") selected.item = scenefile;
   }, [scenefile, selected]);
