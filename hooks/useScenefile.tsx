@@ -44,6 +44,7 @@ type ScenefileContextType = {
   setCameraUp: (up: number[]) => void;
   setCameraProperty: (property: CameraProperty, value: GenericProperty) => void;
   setAddPrimitive: (primitive: string) => void;
+  setAddLight: (light: string) => void;
   setAddGroup: () => void;
 };
 
@@ -98,6 +99,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setCameraUp: () => {},
   setCameraProperty: () => {},
   setAddPrimitive: () => {},
+  setAddLight: () => {},
   setAddGroup: () => {},
 });
 
@@ -376,13 +378,51 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
     [selected, scenefile]
   );
 
+  const setAddLight = useCallback(
+    (light: string) => {
+      if (!selected || selected.type !== "group") return;
+      if (!selected.item.lights) selected.item.lights = [];
+      switch (light) {
+        case "point":
+          selected.item.lights.push({
+            type: "point",
+            color: [1, 1, 1],
+            attenuationCoeff: [0, 0, 0],
+            id: Math.random().toString(),
+          });
+          break;
+        case "directional":
+          selected.item.lights.push({
+            type: "directional",
+            color: [1, 1, 1],
+            direction: [1, 1, 1],
+            id: Math.random().toString(),
+          });
+          break;
+        case "spot":
+          selected.item.lights.push({
+            type: "spot",
+            color: [1, 1, 1],
+            id: Math.random().toString(),
+            direction: [1, 1, 1],
+            penumbra: 1,
+            thetaInner: 0.5,
+            thetaOuter: 1,
+          });
+          break;
+      }
+      dispatch({ type: "LOAD_FILE", scenefile: scenefile });
+    },
+    [selected, scenefile]
+  );
+
   const setAddGroup = useCallback(() => {
     if (!selected) return;
     if (selected.type == "group" || selected.type == "scene") {
       if (!selected.item.groups) selected.item.groups = [];
       selected.item.groups.push({
         id: Math.random().toString(),
-        name: "Untitled Group " + Math.random().toString(),
+        name: "Untitled Group " + selected.item.groups.length,
         translate: [0, 0, 0],
         rotate: [0, 0, 0],
         scale: [1, 1, 1],
@@ -417,6 +457,7 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
         setCameraUp,
         setCameraProperty,
         setAddPrimitive,
+        setAddLight,
         setAddGroup,
       }}>
       {children}

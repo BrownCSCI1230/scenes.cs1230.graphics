@@ -52,7 +52,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
       select && select();
     };
 
-    const { setAddPrimitive, setAddGroup } = useScenefile();
+    const { setAddPrimitive, setAddLight, setAddGroup } = useScenefile();
 
     return (
       <div ref={ref} className={cn("flex flex-col select-none", className)} {...props}>
@@ -98,15 +98,27 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddLight("point");
+                                  select && select();
+                                }}>
                                 <IconSunHigh size={16} color="gold" className="mr-2" />
                                 <span>Point</span>
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddLight("directional");
+                                  select && select();
+                                }}>
                                 <IconArrowsDown size={16} color="gold" className="mr-2" />
                                 <span>Directional</span>
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddLight("spot");
+                                  select && select();
+                                }}>
                                 <IconLamp2 size={16} color="gold" className="mr-2" />
                                 <span>Spot</span>
                               </DropdownMenuItem>
