@@ -383,6 +383,9 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
       selected.item.groups.push({
         id: Math.random().toString(),
         name: "Untitled Group " + Math.random().toString(),
+        translate: [0, 0, 0],
+        rotate: [0, 0, 0],
+        scale: [1, 1, 1],
       });
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });
     }
