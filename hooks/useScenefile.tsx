@@ -18,14 +18,7 @@ import {
   Scenefile,
   ScenefileSchema,
 } from "@/types/Scenefile";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useReducer, useState } from "react";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
@@ -43,19 +36,14 @@ type ScenefileContextType = {
   rotateGroup: (rotate: number[]) => void;
   setGroupRotate: (rotate: number[]) => void;
   setGroupScale: (scale: number[]) => void;
-  setPrimitiveProperty: (
-    property: PrimitiveProperty,
-    value: GenericProperty
-  ) => void;
+  setPrimitiveProperty: (property: PrimitiveProperty, value: GenericProperty) => void;
   setLightProperty: (property: LightProperty, value: GenericProperty) => void;
-  setGlobalDataProperty: (
-    property: GlobalDataProperty,
-    value: GenericProperty
-  ) => void;
+  setGlobalDataProperty: (property: GlobalDataProperty, value: GenericProperty) => void;
   setCameraPosition: (translate: number[]) => void;
   setCameraLook: (look: number[]) => void;
   setCameraUp: (up: number[]) => void;
   setCameraProperty: (property: CameraProperty, value: GenericProperty) => void;
+  setAddPrimitive: (primitive: string) => void;
 };
 
 type SelectedMap = {
@@ -108,18 +96,14 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setCameraLook: () => {},
   setCameraUp: () => {},
   setCameraProperty: () => {},
+  setAddPrimitive: () => {},
 });
 
 // Context provider
-export const ScenefileProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const ScenefileProvider = ({ children }: { children: React.ReactNode }) => {
   const [scenefile, dispatch] = useReducer(reducer, initialScenefile);
   const [scenefilePath, setScenefilePath] = useState<string>();
-  const [originalScenefile, setOriginalScenefile] =
-    useState<Scenefile>(initialScenefile);
+  const [originalScenefile, setOriginalScenefile] = useState<Scenefile>(initialScenefile);
   const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
 
@@ -234,10 +218,11 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_CAMERA_TRANSLATE",
         camera: selected.item,
-        translate: translate
+        translate: translate,
       });
-    }, [selected]
-  )
+    },
+    [selected]
+  );
 
   const setCameraLook = useCallback(
     (look: number[]) => {
@@ -245,10 +230,11 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_CAMERA_LOOK",
         camera: selected.item,
-        look: look
+        look: look,
       });
-    }, [selected]
-  )
+    },
+    [selected]
+  );
 
   const setCameraUp = useCallback(
     (up: number[]) => {
@@ -256,10 +242,11 @@ export const ScenefileProvider = ({
       dispatch({
         type: "SET_CAMERA_UP",
         camera: selected.item,
-        up: up
+        up: up,
       });
-    }, [selected]
-  )
+    },
+    [selected]
+  );
 
   const setCameraProperty = useCallback(
     (property: CameraProperty, value: GenericProperty) => {
@@ -345,6 +332,48 @@ export const ScenefileProvider = ({
     [selected]
   );
 
+  const setAddPrimitive = useCallback(
+    (primitive: string) => {
+      if (!selected || selected.type !== "group") return;
+      if (!selected.item.primitives) selected.item.primitives = [];
+      switch (primitive) {
+        case "cone":
+          selected.item.primitives.push({
+            type: "cone",
+            id: Math.random().toString(),
+          });
+          break;
+        case "cube":
+          selected.item.primitives.push({
+            type: "cube",
+            id: Math.random().toString(),
+          });
+          break;
+        case "cylinder":
+          selected.item.primitives.push({
+            type: "cylinder",
+            id: Math.random().toString(),
+          });
+          break;
+        case "sphere":
+          selected.item.primitives.push({
+            type: "sphere",
+            id: Math.random().toString(),
+          });
+          break;
+        case "mesh":
+          selected.item.primitives.push({
+            type: "mesh",
+            meshFile: "meshes/monkey.obj",
+            id: Math.random().toString(),
+          });
+          break;
+      }
+      dispatch({ type: "LOAD_FILE", scenefile: scenefile });
+    },
+    [selected, scenefile]
+  );
+
   return (
     <ScenefileContext.Provider
       value={{
@@ -370,8 +399,8 @@ export const ScenefileProvider = ({
         setCameraLook,
         setCameraUp,
         setCameraProperty,
-      }}
-    >
+        setAddPrimitive,
+      }}>
       {children}
     </ScenefileContext.Provider>
   );
@@ -571,7 +600,7 @@ type SetCameraUpAction = {
   up: number[];
 };
 
-type SetCameraPropertyAction= {
+type SetCameraPropertyAction = {
   type: "SET_CAMERA_PROPERTY";
   camera: CameraData;
   property: CameraProperty;

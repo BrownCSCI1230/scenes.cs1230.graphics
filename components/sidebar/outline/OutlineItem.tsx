@@ -23,6 +23,7 @@ import {
   IconTriangles,
 } from "@tabler/icons-react";
 
+import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
 import { ChevronDownIcon, PlusIcon, Share1Icon } from "@radix-ui/react-icons";
 import React, { forwardRef, useState } from "react";
@@ -50,6 +51,8 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
       }
       select && select();
     };
+
+    const { setAddPrimitive } = useScenefile();
 
     return (
       <div ref={ref} className={cn("flex flex-col select-none", className)} {...props}>
@@ -83,56 +86,80 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                       <Share1Icon className="h-4 w-4 mr-2 text-purple-500" />
                       Group
                     </DropdownMenuItem>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        <span className="mr-8">Light</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          <DropdownMenuItem>
-                            <IconSunHigh size={16} color="gold" className="mr-2" />
-                            <span>Point</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconArrowsDown size={16} color="gold" className="mr-2" />
-                            <span>Directional</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconLamp2 size={16} color="gold" className="mr-2" />
-                            <span>Spot</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        <span className="mr-4">Primitive</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          <DropdownMenuItem>
-                            <IconCube size={16} color="orange" className="mr-2" />
-                            <span>Cube</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconSphere size={16} color="orange" className="mr-2" />
-                            <span>Sphere</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconCone size={16} color="orange" className="mr-2" />
-                            <span>Cone</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconCylinder size={16} color="orange" className="mr-2" />
-                            <span>Cylinder</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <IconTriangles size={16} color="orange" className="mr-2" />
-                            <span>Mesh</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
+                    {depth !== 0 && (
+                      <>
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <span className="mr-8">Light</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem>
+                                <IconSunHigh size={16} color="gold" className="mr-2" />
+                                <span>Point</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <IconArrowsDown size={16} color="gold" className="mr-2" />
+                                <span>Directional</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <IconLamp2 size={16} color="gold" className="mr-2" />
+                                <span>Spot</span>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <span className="mr-4">Primitive</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddPrimitive("cube");
+                                  select && select();
+                                }}>
+                                <IconCube size={16} color="orange" className="mr-2" />
+                                <span>Cube</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddPrimitive("sphere");
+                                  select && select();
+                                }}>
+                                <IconSphere size={16} color="orange" className="mr-2" />
+                                <span>Sphere</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddPrimitive("cone");
+                                  select && select();
+                                }}>
+                                <IconCone size={16} color="orange" className="mr-2" />
+                                <span>Cone</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddPrimitive("cylinder");
+                                  select && select();
+                                }}>
+                                <IconCylinder size={16} color="orange" className="mr-2" />
+                                <span>Cylinder</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setAddPrimitive("mesh");
+                                  select && select();
+                                }}>
+                                <IconTriangles size={16} color="orange" className="mr-2" />
+                                <span>Mesh</span>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                      </>
+                    )}
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
