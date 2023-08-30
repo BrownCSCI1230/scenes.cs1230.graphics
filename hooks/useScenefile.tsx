@@ -74,6 +74,8 @@ if (!initialScenefileParseResult.success) {
 }
 const initialScenefile: Scenefile = assignIDs(initialScenefileParseResult.data);
 
+type PrimitiveTypeNames = "cone" | "cube" | "cylinder" | "sphere";
+
 // Create context
 const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: initialScenefile,
@@ -341,30 +343,6 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
       if (!selected || selected.type !== "group") return;
       if (!selected.item.primitives) selected.item.primitives = [];
       switch (primitive) {
-        case "cone":
-          selected.item.primitives.push({
-            type: "cone",
-            id: Math.random().toString(),
-          });
-          break;
-        case "cube":
-          selected.item.primitives.push({
-            type: "cube",
-            id: Math.random().toString(),
-          });
-          break;
-        case "cylinder":
-          selected.item.primitives.push({
-            type: "cylinder",
-            id: Math.random().toString(),
-          });
-          break;
-        case "sphere":
-          selected.item.primitives.push({
-            type: "sphere",
-            id: Math.random().toString(),
-          });
-          break;
         case "mesh":
           selected.item.primitives.push({
             type: "mesh",
@@ -372,6 +350,11 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
             id: Math.random().toString(),
           });
           break;
+        default:
+          selected.item.primitives.push({
+            type: primitive as PrimitiveTypeNames,
+            id: Math.random().toString(),
+          });
       }
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });
     },
