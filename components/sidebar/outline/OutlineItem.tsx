@@ -1,7 +1,30 @@
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu-custom";
+
+import {
+  IconArrowsDown,
+  IconCone,
+  IconCube,
+  IconCylinder,
+  IconLamp2,
+  IconSphere,
+  IconSunHigh,
+  IconTriangles,
+} from "@tabler/icons-react";
+
 import { cn } from "@/lib/cn";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon, PlusIcon, Share1Icon } from "@radix-ui/react-icons";
 import React, { forwardRef, useState } from "react";
 
 interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
@@ -13,19 +36,7 @@ interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
 }
 
 const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
-  (
-    {
-      initialOpen,
-      showTrigger,
-      select,
-      selected,
-      depth,
-      className,
-      children,
-      ...props
-    },
-    ref
-  ) => {
+  ({ initialOpen, showTrigger, select, selected, depth, className, children, ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(initialOpen ?? false);
     const childrenArray = React.Children.toArray(children);
 
@@ -41,11 +52,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
     };
 
     return (
-      <div
-        ref={ref}
-        className={cn("flex flex-col select-none", className)}
-        {...props}
-      >
+      <div ref={ref} className={cn("flex flex-col select-none", className)} {...props}>
         <div
           className={cn(
             "header",
@@ -53,8 +60,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
             selected ? "bg-orange-200 hover:bg-orange-200" : "bg-transparent"
           )}
           style={{ paddingLeft: `${(depth ?? 0) + 0.5}rem` }}
-          onClick={handleHeaderClick}
-        >
+          onClick={handleHeaderClick}>
           {showTrigger && (
             <ChevronDownIcon
               className={cn(
@@ -63,9 +69,73 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
               )}
             />
           )}
-          {header && (
-            <div className="content flex flex-1 items-center gap-2 py-2">
-              {header}
+          {header && <div className="content flex flex-1 items-center gap-2 py-2">{header}</div>}
+
+          {showTrigger && selected && (
+            <div onClick={(e) => e.stopPropagation()}>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="h-6 w-6 rounded-sm flex items-center justify-center hover:bg-orange-300">
+                  <PlusIcon className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" sideOffset={5}>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onSelect={() => console.log("insert before")}>
+                      <Share1Icon className="h-4 w-4 mr-2 text-purple-500" />
+                      Group
+                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <span className="mr-8">Light</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuItem>
+                            <IconSunHigh size={16} color="gold" className="mr-2" />
+                            <span>Point</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconArrowsDown size={16} color="gold" className="mr-2" />
+                            <span>Directional</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconLamp2 size={16} color="gold" className="mr-2" />
+                            <span>Spot</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <span className="mr-4">Primitive</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuItem>
+                            <IconCube size={16} color="orange" className="mr-2" />
+                            <span>Cube</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconSphere size={16} color="orange" className="mr-2" />
+                            <span>Sphere</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconCone size={16} color="orange" className="mr-2" />
+                            <span>Cone</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconCylinder size={16} color="orange" className="mr-2" />
+                            <span>Cylinder</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <IconTriangles size={16} color="orange" className="mr-2" />
+                            <span>Mesh</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           )}
         </div>
