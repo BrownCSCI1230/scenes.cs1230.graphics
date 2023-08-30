@@ -52,7 +52,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
       select && select();
     };
 
-    const { setAddPrimitive } = useScenefile();
+    const { setAddPrimitive, setAddGroup } = useScenefile();
 
     return (
       <div ref={ref} className={cn("flex flex-col select-none", className)} {...props}>
@@ -82,7 +82,11 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={5}>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem onSelect={() => console.log("insert before")}>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        setAddGroup();
+                        select && select();
+                      }}>
                       <Share1Icon className="h-4 w-4 mr-2 text-purple-500" />
                       Group
                     </DropdownMenuItem>

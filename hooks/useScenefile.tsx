@@ -44,6 +44,7 @@ type ScenefileContextType = {
   setCameraUp: (up: number[]) => void;
   setCameraProperty: (property: CameraProperty, value: GenericProperty) => void;
   setAddPrimitive: (primitive: string) => void;
+  setAddGroup: () => void;
 };
 
 type SelectedMap = {
@@ -97,6 +98,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setCameraUp: () => {},
   setCameraProperty: () => {},
   setAddPrimitive: () => {},
+  setAddGroup: () => {},
 });
 
 // Context provider
@@ -374,6 +376,18 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
     [selected, scenefile]
   );
 
+  const setAddGroup = useCallback(() => {
+    if (!selected) return;
+    if (selected.type == "group" || selected.type == "scene") {
+      if (!selected.item.groups) selected.item.groups = [];
+      selected.item.groups.push({
+        id: Math.random().toString(),
+        name: "Untitled Group " + Math.random().toString(),
+      });
+      dispatch({ type: "LOAD_FILE", scenefile: scenefile });
+    }
+  }, [selected, scenefile]);
+
   return (
     <ScenefileContext.Provider
       value={{
@@ -400,6 +414,7 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
         setCameraUp,
         setCameraProperty,
         setAddPrimitive,
+        setAddGroup,
       }}>
       {children}
     </ScenefileContext.Provider>
