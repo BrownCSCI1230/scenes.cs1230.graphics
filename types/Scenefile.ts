@@ -124,7 +124,7 @@ export const LightSchema = z.union([
 export const GroupTranformSchema = z.union([
   z.object({
     translate: Vec3Schema.optional(),
-    rotate: Vec3Schema.optional(),
+    rotate: Vec4Schema.optional(),
     scale: Vec3Schema.optional(),
     matrix: z.never().optional(),
   }),

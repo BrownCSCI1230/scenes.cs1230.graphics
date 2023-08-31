@@ -10,9 +10,9 @@ export default function SceneGroup({ group }: { group: Group }) {
   const scaleX = group.scale?.[0] ?? 1;
   const scaleY = group.scale?.[1] ?? 1;
   const scaleZ = group.scale?.[2] ?? 1;
-  const rotateX = group.rotate?.[0] ?? 0;
-  const rotateY = group.rotate?.[1] ?? 0;
-  const rotateZ = group.rotate?.[2] ?? 0;
+  const rotateX = group.rotate ? ((group.rotate[0] * group.rotate[3]) / 180) * Math.PI : 0;
+  const rotateY = group.rotate ? ((group.rotate[1] * group.rotate[3]) / 180) * Math.PI : 0;
+  const rotateZ = group.rotate ? ((group.rotate[2] * group.rotate[3]) / 180) * Math.PI : 0;
 
   const { toggleSelect, selected } = useScenefile();
 
@@ -24,9 +24,7 @@ export default function SceneGroup({ group }: { group: Group }) {
       onClick={() => toggleSelect({ type: "group", item: group })}
       position={[translateX, translateY, translateZ]}
       scale={[scaleX, scaleY, scaleZ]}
-      rotation={[rotateX, rotateY, rotateZ]}
-    >
-      
+      rotation={[rotateX, rotateY, rotateZ]}>
       {group.lights?.map((light) => (
         <SceneLight key={light.id} light={light} />
       ))}

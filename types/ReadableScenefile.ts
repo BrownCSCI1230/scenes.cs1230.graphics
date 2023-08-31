@@ -27,7 +27,7 @@ type Group = {
   lights?: Light[];
   groups?: Group[];
 } & (
-  | { translate?: Vec3; rotate?: Vec3; scale?: Vec3; matrix?: never }
+  | { translate?: Vec3; rotate?: Vec4; scale?: Vec3; matrix?: never }
   | { matrix?: Mat4; translate?: never; scale?: never; rotate?: never }
 ); // can provide translate, rotate, and scale vectors, or a matrix, but not both
 
@@ -48,10 +48,7 @@ type Primitive = {
   bumpMapFile?: string;
   bumpMapU?: number;
   bumpMapV?: number;
-} & (
-  | { type: "cube" | "sphere" | "cylinder" | "cone" }
-  | { type: "mesh"; meshFile: string }
-); // must provide a meshFile if type is Mesh, but must not if type is Shape
+} & ({ type: "cube" | "sphere" | "cylinder" | "cone" } | { type: "mesh"; meshFile: string }); // must provide a meshFile if type is Mesh, but must not if type is Shape
 
 type Light = {
   name?: string;
