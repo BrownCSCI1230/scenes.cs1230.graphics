@@ -110,8 +110,8 @@ export const SpotLightSchema = BaseLightSchema.and(
     type: z.literal("spot"),
     direction: Vec3Schema,
     penumbra: z.number(),
-    thetaInner: z.number(),
-    thetaOuter: z.number(),
+    angle: z.number(),
+    attenuationCoeff: Vec3Schema,
   })
 );
 

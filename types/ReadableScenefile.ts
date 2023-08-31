@@ -69,8 +69,8 @@ type SpotLight = {
   type: "spot";
   direction: Vec3;
   penumbra: number;
-  thetaInner: number;
-  thetaOuter: number;
+  angle: number;
+  attenuationCoeff: Vec3;
 };
 
 type Vec2 = number[];
