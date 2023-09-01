@@ -21,8 +21,8 @@
           "color": [0.5, 0.5, 1],
           "direction": [1, -1, 0],
           "penumbra": 1,
-          "thetaInner": 0.5,
-          "thetaOuter": 0.7
+          "angle": 30,
+          "attenuationCoeff": [1, 0, 0]
         }
       ]
     },

@@ -389,8 +389,8 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
             id: Math.random().toString(),
             direction: [1, 1, 1],
             penumbra: 1,
-            thetaInner: 0.5,
-            thetaOuter: 1,
+            angle: 10,
+            attenuationCoeff: [1, 0, 0],
           });
           break;
       }

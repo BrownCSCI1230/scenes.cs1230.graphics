@@ -39,7 +39,7 @@ export default function SceneLight({ light }: { light: Light }) {
           <spotLight
             ref={lightRef}
             penumbra={light.penumbra}
-            angle={light.thetaOuter}
+            angle={light.angle}
             position={[0, 0, 0]}
           />
           {isMounted && (

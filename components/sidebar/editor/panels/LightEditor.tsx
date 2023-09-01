@@ -16,8 +16,8 @@ const LIGHT_PROPERTIES_BY_TYPE: { [name: string]: LightProperties } = {
     triple: ["direction"],
   },
   spot: {
-    single: ["penumbra", "thetaInner", "thetaOuter"],
-    triple: ["direction"],
+    single: ["penumbra", "angle"],
+    triple: ["direction", "attenuationCoeff"],
   },
 };
 const BASE_PROPERTIES: LightProperties = {
@@ -28,14 +28,8 @@ const BASE_PROPERTIES: LightProperties = {
 const ALL_PROPERTIES: LightProperties = { single: [], triple: [] };
 for (const lightType in LIGHT_PROPERTIES_BY_TYPE) {
   const lightProps = LIGHT_PROPERTIES_BY_TYPE[lightType];
-  ALL_PROPERTIES["single"] = [
-    ...ALL_PROPERTIES["single"],
-    ...lightProps["single"],
-  ];
-  ALL_PROPERTIES["triple"] = [
-    ...ALL_PROPERTIES["triple"],
-    ...lightProps["triple"],
-  ];
+  ALL_PROPERTIES["single"] = [...ALL_PROPERTIES["single"], ...lightProps["single"]];
+  ALL_PROPERTIES["triple"] = [...ALL_PROPERTIES["triple"], ...lightProps["triple"]];
 }
 
 export default function LightEditor() {
@@ -68,15 +62,9 @@ export default function LightEditor() {
             x={prop[0]}
             y={prop[1]}
             z={prop[2]}
-            onXChange={(value) =>
-              setLightProperty(property, [value, prop[1], prop[2]])
-            }
-            onYChange={(value) =>
-              setLightProperty(property, [prop[0], value, prop[2]])
-            }
-            onZChange={(value) =>
-              setLightProperty(property, [prop[0], prop[1], value])
-            }
+            onXChange={(value) => setLightProperty(property, [value, prop[1], prop[2]])}
+            onYChange={(value) => setLightProperty(property, [prop[0], value, prop[2]])}
+            onZChange={(value) => setLightProperty(property, [prop[0], prop[1], value])}
           />
         );
       })}
@@ -100,15 +88,9 @@ export default function LightEditor() {
             x={prop[0]}
             y={prop[1]}
             z={prop[2]}
-            onXChange={(value) =>
-              setLightProperty(property, [value, prop[1], prop[2]])
-            }
-            onYChange={(value) =>
-              setLightProperty(property, [prop[0], value, prop[2]])
-            }
-            onZChange={(value) =>
-              setLightProperty(property, [prop[0], prop[1], value])
-            }
+            onXChange={(value) => setLightProperty(property, [value, prop[1], prop[2]])}
+            onYChange={(value) => setLightProperty(property, [prop[0], value, prop[2]])}
+            onZChange={(value) => setLightProperty(property, [prop[0], prop[1], value])}
           />
         );
       })}
