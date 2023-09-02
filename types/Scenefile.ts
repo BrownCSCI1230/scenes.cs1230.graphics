@@ -15,10 +15,7 @@ export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
 export type _Light = z.infer<typeof LightSchema>;
-export type LightProperty =
-  | keyof SpotLight
-  | keyof DirectionalLight
-  | keyof PointLight;
+export type LightProperty = keyof SpotLight | keyof DirectionalLight | keyof PointLight;
 export type _Group = z.infer<typeof BaseGroupSchema> & {
   groups?: _Group[];
 };
@@ -61,6 +58,7 @@ export const PrimitiveBaseSchema = z.object({
   bumpMapFile: z.string().optional(),
   bumpMapU: z.number().optional(),
   bumpMapV: z.number().optional(),
+  ior: z.number().optional(),
 });
 
 export const ShapePrimitiveSchema = PrimitiveBaseSchema.and(
@@ -81,10 +79,7 @@ export const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
   })
 );
 
-export const PrimitiveSchema = z.union([
-  ShapePrimitiveSchema,
-  MeshPrimitiveSchema,
-]);
+export const PrimitiveSchema = z.union([ShapePrimitiveSchema, MeshPrimitiveSchema]);
 
 export const BaseLightSchema = z.object({
   name: z.string().optional(),
@@ -115,11 +110,7 @@ export const SpotLightSchema = BaseLightSchema.and(
   })
 );
 
-export const LightSchema = z.union([
-  PointLightSchema,
-  DirectionalLightSchema,
-  SpotLightSchema,
-]);
+export const LightSchema = z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]);
 
 export const GroupTranformSchema = z.union([
   z.object({
@@ -150,9 +141,7 @@ export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   })
 );
 
-export const TemplateGroupSchema = GroupSchema.and(
-  z.object({ name: z.string() })
-);
+export const TemplateGroupSchema = GroupSchema.and(z.object({ name: z.string() }));
 
 export const GlobalDataSchema = z.object({
   ambientCoeff: z.number().nonnegative().max(1),
@@ -193,9 +182,7 @@ export const ScenefileSchema = z
   .strict();
 
 // Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
-export const PrimitiveSchemaWithID = PrimitiveSchema.and(
-  z.object({ id: z.string() })
-);
+export const PrimitiveSchemaWithID = PrimitiveSchema.and(z.object({ id: z.string() }));
 export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
 export const BaseGroupSchemaWithID = z
   .object({
@@ -210,9 +197,7 @@ export const GroupSchemaWithID: z.ZodType<Group> = BaseGroupSchemaWithID.and(
     groups: z.lazy(() => GroupSchemaWithID.array().optional()),
   })
 );
-export const TemplateGroupSchemaWithID = GroupSchemaWithID.and(
-  z.object({ name: z.string() })
-);
+export const TemplateGroupSchemaWithID = GroupSchemaWithID.and(z.object({ name: z.string() }));
 export const ScenefileSchemaWithIDs = z.object({
   id: z.string(),
   name: z.string().optional(),
