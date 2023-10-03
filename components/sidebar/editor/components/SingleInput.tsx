@@ -4,7 +4,7 @@ import { useId } from "react";
 import DraggableInput, { DraggableInputProps } from "./DraggableInput";
 
 interface SingleInputProps extends DraggableInputProps {
-  label: string;
+  label?: string;
 }
 
 export default function SingleInput({
@@ -15,9 +15,11 @@ export default function SingleInput({
   const id = useId();
   return (
     <div className="flex justify-end items-center">
-      <Label className="mr-2" htmlFor={id}>
-        {label}
-      </Label>
+      {label !== undefined && (
+        <Label className="mr-2" htmlFor={id}>
+          {label}
+        </Label>
+      )}
       <DraggableInput
         {...props}
         id={id}

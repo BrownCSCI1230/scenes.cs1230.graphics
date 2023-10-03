@@ -18,7 +18,6 @@ function lookAndUpToRotation(look: Vector3, up: Vector3): Euler {
 }
 
 export default function SceneLight({ camera }: { camera: CameraData }) {
-
   const cameraRef = useRef(null!);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -27,34 +26,31 @@ export default function SceneLight({ camera }: { camera: CameraData }) {
     if (cameraRef.current) setIsMounted(true);
   }, [cameraRef]);
 
-
   const { selected } = useScenefile();
   const isSelected = selected && selected.item === camera;
 
-  let pos = camera.position
+  let pos = camera.position;
 
-  let look = camera.look ? new Vector3(camera.look[0],camera.look[1],camera.look[2]) : new Vector3(0, 0, 0)
-  let up = new Vector3(camera.up[0],camera.up[1],camera.up[2])
+  let look = camera.look
+    ? new Vector3(camera.look[0], camera.look[1], camera.look[2])
+    : new Vector3(0, 0, 0);
+  let up = new Vector3(camera.up[0], camera.up[1], camera.up[2]);
 
-  const rot = lookAndUpToRotation(look, up)
-  console.log(`rot: ${rot.toArray()}`)
+  const rot = lookAndUpToRotation(look, up);
+  // console.log(`rot: ${rot.toArray()}`)
 
   return (
     <>
-      <PerspectiveCamera 
+      <PerspectiveCamera
         ref={cameraRef}
         aspect={1200 / 600} // TODO: use heightangle to calculate aspect ratio
-        position={[pos[0],pos[1],pos[2]]}
+        position={[pos[0], pos[1], pos[2]]}
         near={1}
         far={2}
-        fov={camera.heightAngle} 
+        fov={camera.heightAngle}
         rotation={rot}
-        />
-      {isMounted && (
-            <cameraHelper
-              args={[cameraRef.current]}
-            />
-          )}
+      />
+      {isMounted && <cameraHelper args={[cameraRef.current]} />}
     </>
-  )
+  );
 }

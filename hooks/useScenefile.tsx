@@ -18,7 +18,14 @@ import {
   Scenefile,
   ScenefileSchema,
 } from "@/types/Scenefile";
-import { createContext, useCallback, useContext, useEffect, useReducer, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 type ScenefileContextType = {
   scenefile: Scenefile;
@@ -36,12 +43,20 @@ type ScenefileContextType = {
   rotateGroup: (rotate: number[]) => void;
   setGroupRotate: (rotate: number[]) => void;
   setGroupScale: (scale: number[]) => void;
-  setPrimitiveProperty: (property: PrimitiveProperty, value: GenericProperty) => void;
+  setPrimitiveProperty: (
+    property: PrimitiveProperty,
+    value: GenericProperty
+  ) => void;
   setLightProperty: (property: LightProperty, value: GenericProperty) => void;
-  setGlobalDataProperty: (property: GlobalDataProperty, value: GenericProperty) => void;
+  setGlobalDataProperty: (
+    property: GlobalDataProperty,
+    value: GenericProperty
+  ) => void;
   setCameraPosition: (translate: number[]) => void;
-  setCameraLook: (look: number[]) => void;
+  setCameraLook: (look?: number[]) => void;
+  setCameraFocus: (focus?: number[]) => void;
   setCameraUp: (up: number[]) => void;
+  setCameraHeightAngle: (value: number) => void;
   setCameraProperty: (property: CameraProperty, value: GenericProperty) => void;
   setAddPrimitive: (primitive: string) => void;
   setAddLight: (light: string) => void;
@@ -98,7 +113,9 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setGlobalDataProperty: () => {},
   setCameraPosition: () => {},
   setCameraLook: () => {},
+  setCameraFocus: () => {},
   setCameraUp: () => {},
+  setCameraHeightAngle: () => {},
   setCameraProperty: () => {},
   setAddPrimitive: () => {},
   setAddLight: () => {},
@@ -106,10 +123,15 @@ const ScenefileContext = createContext<ScenefileContextType>({
 });
 
 // Context provider
-export const ScenefileProvider = ({ children }: { children: React.ReactNode }) => {
+export const ScenefileProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [scenefile, dispatch] = useReducer(reducer, initialScenefile);
   const [scenefilePath, setScenefilePath] = useState<string>();
-  const [originalScenefile, setOriginalScenefile] = useState<Scenefile>(initialScenefile);
+  const [originalScenefile, setOriginalScenefile] =
+    useState<Scenefile>(initialScenefile);
   const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
 
@@ -171,6 +193,7 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
         dispatch({ type: "LOAD_FILE", scenefile: scenefile });
         setScenefilePath(file.name);
         setOriginalScenefile(scenefile);
+        setSelected(undefined);
         console.log("Loaded file", file.name);
       } else {
         result.error.errors.forEach((e) => {
@@ -231,12 +254,24 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
   );
 
   const setCameraLook = useCallback(
-    (look: number[]) => {
+    (look?: number[]) => {
       if (!selected || selected.type !== "camera") return;
       dispatch({
         type: "SET_CAMERA_LOOK",
         camera: selected.item,
         look: look,
+      });
+    },
+    [selected]
+  );
+
+  const setCameraFocus = useCallback(
+    (focus?: number[]) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_FOCUS",
+        camera: selected.item,
+        focus: focus,
       });
     },
     [selected]
@@ -249,6 +284,18 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
         type: "SET_CAMERA_UP",
         camera: selected.item,
         up: up,
+      });
+    },
+    [selected]
+  );
+
+  const setCameraHeightAngle = useCallback(
+    (value: number) => {
+      if (!selected || selected.type !== "camera") return;
+      dispatch({
+        type: "SET_CAMERA_HEIGHT_ANGLE",
+        camera: selected.item,
+        value: value,
       });
     },
     [selected]
@@ -437,12 +484,15 @@ export const ScenefileProvider = ({ children }: { children: React.ReactNode }) =
         setGlobalDataProperty,
         setCameraPosition,
         setCameraLook,
+        setCameraFocus,
         setCameraUp,
+        setCameraHeightAngle,
         setCameraProperty,
         setAddPrimitive,
         setAddLight,
         setAddGroup,
-      }}>
+      }}
+    >
       {children}
     </ScenefileContext.Provider>
   );
@@ -521,8 +571,18 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
       };
     }
     case "SET_CAMERA_LOOK": {
-      if (action.camera && action.look.length === 3) {
+      if (action.camera && action.look?.length === 3) {
         action.camera.look = action.look;
+        action.camera.focus = undefined;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_FOCUS": {
+      if (action.camera && action.focus?.length === 3) {
+        action.camera.focus = action.focus;
+        action.camera.look = undefined;
       }
       return {
         ...state,
@@ -531,6 +591,14 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
     case "SET_CAMERA_UP": {
       if (action.camera && action.up.length === 3) {
         action.camera.up = action.up;
+      }
+      return {
+        ...state,
+      };
+    }
+    case "SET_CAMERA_HEIGHT_ANGLE": {
+      if (action.camera && typeof action.value === "number") {
+        action.camera.heightAngle = action.value;
       }
       return {
         ...state,
@@ -633,13 +701,25 @@ type SetCameraTranslateAction = {
 type SetCameraLookAction = {
   type: "SET_CAMERA_LOOK";
   camera: CameraData;
-  look: number[];
+  look?: number[];
+};
+
+type SetCameraFocusAction = {
+  type: "SET_CAMERA_FOCUS";
+  camera: CameraData;
+  focus?: number[];
 };
 
 type SetCameraUpAction = {
   type: "SET_CAMERA_UP";
   camera: CameraData;
   up: number[];
+};
+
+type SetCameraHeightAngleAction = {
+  type: "SET_CAMERA_HEIGHT_ANGLE";
+  camera: CameraData;
+  value: number;
 };
 
 type SetCameraPropertyAction = {
@@ -681,7 +761,9 @@ type ScenefileAction =
   | SetGroupScaleAction
   | SetCameraTranslateAction
   | SetCameraLookAction
+  | SetCameraFocusAction
   | SetCameraUpAction
+  | SetCameraHeightAngleAction
   | SetCameraPropertyAction
   | SetPrimitivePropertyAction
   | SetLightPropertyAction

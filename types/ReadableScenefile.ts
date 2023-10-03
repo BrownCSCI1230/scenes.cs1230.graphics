@@ -49,7 +49,10 @@ type Primitive = {
   bumpMapU?: number;
   bumpMapV?: number;
   ior?: number;
-} & ({ type: "cube" | "sphere" | "cylinder" | "cone" } | { type: "mesh"; meshFile: string }); // must provide a meshFile if type is Mesh, but must not if type is Shape
+} & (
+  | { type: "cube" | "sphere" | "cylinder" | "cone" }
+  | { type: "mesh"; meshFile: string }
+); // must provide a meshFile if type is Mesh, but must not if type is Shape
 
 type Light = {
   name?: string;

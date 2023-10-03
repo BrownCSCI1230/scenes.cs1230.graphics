@@ -9,7 +9,7 @@ export default function EditorSection({ label, children }: EditorSectionProps) {
       <h4 className="text-sm font-medium bg-slate-100 p-2 rounded-t-md">
         {label}
       </h4>
-      <div className="flex flex-col gap-2 bg-slate-50 p-2 rounded-b-md">
+      <div className="flex flex-col gap-2 bg-slate-25 p-2 rounded-b-md">
         {children}
       </div>
     </div>
