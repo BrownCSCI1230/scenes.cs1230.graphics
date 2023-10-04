@@ -3,8 +3,24 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useCamera from "@/hooks/useCamera";
 import useScenefile from "@/hooks/useScenefile";
 import { useEffect, useState } from "react";
+import { Euler, Matrix4, Vector3 } from "three";
 import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
+
+
+function lookUpFromEuler(euler: Euler): [number[], number[]] {
+
+  const matrix = new Matrix4();
+  matrix.makeRotationFromEuler(euler);
+
+  const lookVector = new Vector3(0, 0, 1); // Default look direction
+  const upVector = new Vector3(0, 1, 0);    // Default up direction
+
+  lookVector.applyMatrix4(matrix);
+  upVector.applyMatrix4(matrix);
+
+  return [[lookVector.x, lookVector.y, lookVector.z], [upVector.x, upVector.y, upVector.z]];
+}
 
 export default function CameraEditor() {
   const {
@@ -48,7 +64,18 @@ export default function CameraEditor() {
   return (
     <>
       {/* ADD BUTTON HERE */}
-      <button onClick={(e) => setCameraPosition([viewport.position.x, viewport.position.y, viewport.position.z])}>yeehaw</button>
+      <button onClick={(e) => {
+          const [look, up] = lookUpFromEuler(viewport.rotation)
+
+          setCameraPosition([viewport.position.x, viewport.position.y, viewport.position.z])
+          setCameraLook(look)
+          setCameraUp(up)
+        }
+
+        }>SCENE CAM ={">"} VIEWPORT</button>
+      <button onClick={(e) => {
+          alert("TODO")}
+        }>VIEWPORT ={">"} SCENE CAM</button>
       <EditorSection label="Position">
         <SingleInput
           label="X"

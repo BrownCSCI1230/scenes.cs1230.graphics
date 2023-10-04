@@ -8,15 +8,13 @@ import {
   OrbitControls,
   PerspectiveCamera
 } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import SceneCamera from "./SceneCamera";
 import SceneGroup from "./SceneGroup";
 
 export default function Scene() {
   const { scenefile } = useScenefile();
   const { setViewport } = useCamera();
-
-  const perspectiveCamera = useThree();
 
   return (
     // TODO: consider adding `frameloop="demand"` to Canvas: https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#on-demand-rendering

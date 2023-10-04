@@ -29,7 +29,7 @@ export const CameraProvider = ({
   children: React.ReactNode;
 }) => {
   const [viewport, setViewport] = useState<ViewportInfo>({
-    position: new Vector3(),
+    position: new Vector3(5,2,5),
     rotation: new Euler()
   });
 
