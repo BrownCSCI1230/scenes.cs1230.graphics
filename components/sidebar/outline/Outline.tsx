@@ -11,6 +11,7 @@ import {
   IconSphere,
   IconSunHigh,
   IconTriangles,
+  IconRubberStamp
 } from "@tabler/icons-react";
 import OutlineItem, {
   OutlineItemContent,
@@ -96,14 +97,17 @@ const SceneOutlineItemTemplate = ({
 
 const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
   const { select, selected } = useScenefile();
+  const isTemplateGroupUser = isATemplateGroupUser(group);
+  const GroupTemplate = isTemplateGroupUser ? OutlineTemplateGroupTemplate : OutlineGroupTemplate;
 
   return (
-    <OutlineGroupTemplate
+    <GroupTemplate
       key={group.id}
       title={group.name}
       select={() => select({ type: "group", item: group })}
       selected={selected?.item === group}
       depth={depth}
+      icon={isTemplateGroupUser ? <IconRubberStamp size={16} color="#15a334" /> : undefined}
     >
       {group.lights?.map((light) => (
         <OutlineLight
@@ -128,7 +132,7 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
       {group.groups?.map((group) =>
         OutlineGroup({ group, depth: (depth ?? 0) + 1 })
       )}
-    </OutlineGroupTemplate>
+    </GroupTemplate>
   );
 };
 
@@ -146,6 +150,12 @@ const OutlineCamera = SceneOutlineItemTemplate({
 const OutlineGroupTemplate = SceneOutlineItemTemplate({
   fallbackTitle: "Untitled Group",
   showTrigger: true,
+  initialOpen: true,
+});
+
+const OutlineTemplateGroupTemplate = SceneOutlineItemTemplate({
+  fallbackTitle: "Untitled Template Group",
+  showTrigger: false,
   initialOpen: true,
 });
 
