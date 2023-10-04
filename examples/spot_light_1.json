@@ -4,7 +4,7 @@
     "ambientCoeff": 0.5,
     "diffuseCoeff": 0.5,
     "specularCoeff": 0.5,
-    "transparentCoeff": 0
+    "transparentCoeff": 1
   },
   "cameraData": {
     "position": [-6.0, 4.0, 4.0],
@@ -14,12 +14,15 @@
   },
   "groups": [
     {
-      "translate": [0, 3, 0],
+      "translate": [0.0, 4.0, 0.0],
       "lights": [
         {
-          "type": "point",
+          "type": "spot",
           "color": [1.0, 1.0, 1.0],
-          "attenuationCoeff": [0.8, 0.2, 0.0]
+          "direction": [0.0, -1.0, 0.0],
+          "angle": 30.0,
+          "penumbra": 20.0,
+          "attenuationCoeff": [0.8, 0.05, 0.0]
         }
       ]
     },
