@@ -14,7 +14,7 @@ type CameraContextType = {
   viewport: ViewportInfo;
   setViewport: (viewport: ViewportInfo) => void;
   perspectiveCamera?: React.RefObject<THREE.PerspectiveCamera>;
-  syncViewport: () => void;
+  updateViewport: (viewportInfo: ViewportInfo) => void;
 };
 
 const CameraContext = createContext<CameraContextType>({
@@ -24,7 +24,7 @@ const CameraContext = createContext<CameraContextType>({
   },
   setViewport: () => {},
   perspectiveCamera: undefined,
-  syncViewport: () => {},
+  updateViewport: () => {},
 });
 
 export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
@@ -34,9 +34,20 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const perspectiveCamera = useRef<THREE.PerspectiveCamera>(null);
 
-  const syncViewport = () => {
-    perspectiveCamera.current?.position.copy(viewport.position);
-    perspectiveCamera.current?.rotation.copy(viewport.rotation);
+  const updateViewport = (viewportInfo: ViewportInfo) => {
+    if (!perspectiveCamera.current?.position) return;
+    perspectiveCamera.current?.position.set(
+      viewportInfo.position.x,
+      viewportInfo.position.y,
+      viewportInfo.position.z
+    );
+    console.log(perspectiveCamera.current?.rotation);
+    perspectiveCamera.current?.rotation.set(
+      viewportInfo.rotation.x,
+      viewportInfo.rotation.y,
+      viewportInfo.rotation.z
+    );
+    console.log(perspectiveCamera.current?.rotation);
   };
 
   return (
@@ -45,7 +56,7 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
         viewport,
         setViewport,
         perspectiveCamera,
-        syncViewport,
+        updateViewport,
       }}
     >
       {children}

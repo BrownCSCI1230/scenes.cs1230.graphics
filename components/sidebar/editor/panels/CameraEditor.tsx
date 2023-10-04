@@ -1,5 +1,12 @@
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import useCamera from "@/hooks/useCamera";
 import useScenefile from "@/hooks/useScenefile";
 import { useEffect, useState } from "react";
@@ -7,19 +14,40 @@ import { Euler, Matrix4, Vector3 } from "three";
 import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
 
-
 function lookUpFromEuler(euler: Euler): [number[], number[]] {
-
   const matrix = new Matrix4();
   matrix.makeRotationFromEuler(euler);
 
   const lookVector = new Vector3(0, 0, 1); // Default look direction
-  const upVector = new Vector3(0, 1, 0);    // Default up direction
+  const upVector = new Vector3(0, 1, 0); // Default up direction
 
   lookVector.applyMatrix4(matrix);
   upVector.applyMatrix4(matrix);
 
-  return [[lookVector.x, lookVector.y, lookVector.z], [upVector.x, upVector.y, upVector.z]];
+  return [
+    [lookVector.x, lookVector.y, lookVector.z],
+    [upVector.x, upVector.y, upVector.z],
+  ];
+}
+
+function eulerFromLookUp(look: number[], up: number[]): Euler {
+  const matrix = new Matrix4();
+  matrix.makeBasis(
+    new Vector3(look[0], look[1], look[2]),
+    new Vector3(up[0], up[1], up[2]),
+    new Vector3(0, 0, 1)
+  );
+
+  const euler = new Euler();
+  euler.setFromRotationMatrix(matrix);
+
+  return euler;
+}
+
+function eulerFromFocusUp(focus: number[], up: number[]): Euler {
+  const look = [-focus[0], -focus[1], -focus[2]];
+
+  return eulerFromLookUp(look, up);
 }
 
 export default function CameraEditor() {
@@ -32,7 +60,7 @@ export default function CameraEditor() {
     setCameraHeightAngle,
   } = useScenefile();
 
-  const { viewport }  = useCamera();
+  const { viewport, updateViewport } = useCamera();
 
   // console.log(viewport.position);
 
@@ -63,19 +91,61 @@ export default function CameraEditor() {
 
   return (
     <>
-      {/* ADD BUTTON HERE */}
-      <button onClick={(e) => {
-          const [look, up] = lookUpFromEuler(viewport.rotation)
-
-          setCameraPosition([viewport.position.x, viewport.position.y, viewport.position.z])
-          setCameraLook(look)
-          setCameraUp(up)
-        }
-
-        }>SCENE CAM ={">"} VIEWPORT</button>
-      <button onClick={(e) => {
-          alert("TODO")}
-        }>VIEWPORT ={">"} SCENE CAM</button>
+      <div className="flex gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="flex-1"
+                variant="outline"
+                onClick={() => {
+                  updateViewport({
+                    position: new Vector3(
+                      camera.position[0],
+                      camera.position[1],
+                      camera.position[2]
+                    ),
+                    rotation:
+                      orientationMode === "look"
+                        ? eulerFromLookUp(look, camera.up)
+                        : eulerFromFocusUp(focus, camera.up),
+                  });
+                }}
+              >
+                Reset viewport
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[18em] text-center">
+              <p>Reset the viewport to match the view of the scene camera</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="flex-1"
+                variant="default"
+                onClick={() => {
+                  const [look, up] = lookUpFromEuler(viewport.rotation);
+                  setCameraPosition([
+                    viewport.position.x,
+                    viewport.position.y,
+                    viewport.position.z,
+                  ]);
+                  setCameraLook(look);
+                  setCameraUp(up);
+                }}
+              >
+                Save view
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[18em] text-center">
+              <p>Save the current view of the viewport to the scene camera</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       <EditorSection label="Position">
         <SingleInput
           label="X"
