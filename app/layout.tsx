@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
+import { CameraProvider } from "@/hooks/useCamera";
 import { ScenefileProvider } from "@/hooks/useScenefile";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ScenefileProvider>{children}</ScenefileProvider>
+        <ScenefileProvider><CameraProvider>{children}</CameraProvider></ScenefileProvider>
         <Toaster />
       </body>
     </html>

@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCamera from "@/hooks/useCamera";
 import useScenefile from "@/hooks/useScenefile";
 import { useState } from "react";
 import EditorSection from "../components/EditorSection";
@@ -14,6 +15,10 @@ export default function CameraEditor() {
     setCameraUp,
     setCameraHeightAngle,
   } = useScenefile();
+
+  const { viewport }  = useCamera();
+
+  // console.log(viewport.position);
 
   const camera = selected?.type === "camera" ? selected?.item : undefined;
 
@@ -36,6 +41,8 @@ export default function CameraEditor() {
 
   return (
     <>
+      {/* ADD BUTTON HERE */}
+      <button onClick={(e) => setCameraPosition([viewport.position.x, viewport.position.y, viewport.position.z])}>yeehaw</button>
       <EditorSection label="Position">
         <SingleInput
           label="X"
