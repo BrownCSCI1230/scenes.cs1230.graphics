@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useScenefile from "@/hooks/useScenefile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
 
@@ -24,13 +24,19 @@ export default function CameraEditor() {
         : "focus"
       : "look"
   );
+  const [look, setLook] = useState(camera?.look ?? [0, 0, 0]);
+  const [focus, setFocus] = useState(camera?.focus ?? [0, 0, 0]);
 
-  const orientationVector = (orientationMode === "look"
-    ? camera?.look
-    : camera?.focus) ?? [0, 0, 0];
+  const orientationVector = orientationMode === "look" ? look : focus;
+  const setOrientationVector = orientationMode === "look" ? setLook : setFocus;
 
-  const setOrientationVector =
-    orientationMode === "look" ? setCameraLook : setCameraFocus;
+  useEffect(() => {
+    if (orientationMode === "look") {
+      setCameraLook(orientationVector);
+    } else {
+      setCameraFocus(orientationVector);
+    }
+  }, [orientationMode, orientationVector, setCameraLook, setCameraFocus]);
 
   if (selected?.type !== "camera" || !camera) return null;
 
