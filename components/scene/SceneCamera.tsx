@@ -10,6 +10,8 @@ function lookAndUpToRotation(look: Vector3, up: Vector3): Euler {
   const right = new Vector3().crossVectors(up, forward).normalize();
   const newUp = new Vector3().crossVectors(forward, right);
 
+  // 
+
   const matrix = new Matrix4().makeBasis(right, newUp, forward);
   const euler = new Euler();
   euler.setFromRotationMatrix(matrix);
@@ -33,7 +35,8 @@ export default function SceneLight({ camera }: { camera: CameraData }) {
 
   let look = camera.look
     ? new Vector3(camera.look[0], camera.look[1], camera.look[2])
-    : new Vector3(0, 0, 0);
+    : new Vector3(camera.position[0] - camera.focus[0], camera.position[1] - camera.focus[1], camera.position[2] - camera.focus[2]);
+  
   let up = new Vector3(camera.up[0], camera.up[1], camera.up[2]);
 
   const rot = lookAndUpToRotation(look, up);
@@ -43,7 +46,7 @@ export default function SceneLight({ camera }: { camera: CameraData }) {
     <>
       <PerspectiveCamera
         ref={cameraRef}
-        aspect={1200 / 600} // TODO: use heightangle to calculate aspect ratio
+        aspect={1200 / 600}
         position={[pos[0], pos[1], pos[2]]}
         near={1}
         far={2}
