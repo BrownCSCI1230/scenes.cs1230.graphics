@@ -23,6 +23,9 @@ export default function PrimitiveEditor() {
             key={index}
             label={index === 0 ? "R" : index === 1 ? "G" : "B"}
             value={value}
+            min={0}
+            max={1}
+            step={0.1}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;
@@ -41,6 +44,9 @@ export default function PrimitiveEditor() {
             key={index}
             label={index === 0 ? "R" : index === 1 ? "G" : "B"}
             value={value}
+            min={0}
+            max={1}
+            step={0.1}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;
@@ -59,6 +65,9 @@ export default function PrimitiveEditor() {
             key={index}
             label={index === 0 ? "R" : index === 1 ? "G" : "B"}
             value={value}
+            min={0}
+            max={1}
+            step={0.1}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;

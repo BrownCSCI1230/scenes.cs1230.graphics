@@ -2,6 +2,7 @@ import useScenefile from "@/hooks/useScenefile";
 import { LightProperty } from "@/types/Scenefile";
 import SingleInput from "../components/SingleInput";
 import TripleInput from "../components/TripleInput";
+import EditorSection from "../components/EditorSection";
 
 // TODO: find better way to infer this from actual Zod types??
 type SingleTripleProp = "single" | "triple";
@@ -50,58 +51,93 @@ export default function LightEditor() {
     }
   }
 
+  const propToLabelArray = (prop: string) => {
+    switch (prop) {
+      case "direction":
+        return ["X", "Y", "Z"];
+      case "color":
+        return ["R", "G", "B"];
+      case "attenuationCoeff":
+        return ["C1", "C2", "C3"];        
+      default:
+        return [];
+    }
+  }
+
   return (
     <>
-      <b>{light.type} light</b>
       {BASE_PROPERTIES["triple"].map((property, index) => {
         let prop = light[property];
         return (
-          <TripleInput
-            key={index}
-            label={property}
-            x={prop[0]}
-            y={prop[1]}
-            z={prop[2]}
-            onXChange={(value) => setLightProperty(property, [value, prop[1], prop[2]])}
-            onYChange={(value) => setLightProperty(property, [prop[0], value, prop[2]])}
-            onZChange={(value) => setLightProperty(property, [prop[0], prop[1], value])}
-          />
+          <EditorSection key={index} label={property}>
+            {prop.map((value: any, index: any) => (
+              <SingleInput
+                key={index}
+                value={value}
+                label={propToLabelArray(property)[index]}
+                min={0}
+                max={1}
+                step={0.1}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  if (isNaN(value)) return;
+                  setLightProperty(property, [
+                    index === 0 ? value : prop[0],
+                    index === 1 ? value : prop[1],
+                    index === 2 ? value : prop[2],
+                  ]);
+                }}
+              />
+            ))}
+          </EditorSection>
         );
       })}
       {BASE_PROPERTIES["single"].map((property, index) => {
         return (
-          <SingleInput
-            key={index}
-            label={property}
-            value={light[property]}
-            onChange={(e) => setLightProperty(property, e.target.value)}
-          />
+          <EditorSection key={index} label={property}>
+            <SingleInput
+              label={property}
+              value={light[property]}
+              onChange={(e) => setLightProperty(property, e.target.value)}
+            />
+          </EditorSection>
         );
       })}
       {/* SPECIFIC LIGHT PROPERTIES: */}
       {LIGHT_PROPERTIES_BY_TYPE[light.type]["triple"].map((property, index) => {
         let prop = light[property];
         return (
-          <TripleInput
-            key={index}
-            label={property}
-            x={prop[0]}
-            y={prop[1]}
-            z={prop[2]}
-            onXChange={(value) => setLightProperty(property, [value, prop[1], prop[2]])}
-            onYChange={(value) => setLightProperty(property, [prop[0], value, prop[2]])}
-            onZChange={(value) => setLightProperty(property, [prop[0], prop[1], value])}
-          />
+          <EditorSection key={index} label={property}>
+            {prop.map((value: any, index: any) => (
+              <SingleInput
+                key={index}
+                value={value}
+                label={propToLabelArray(property)[index]}
+                min={0}
+                max={1}
+                step={0.1}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  if (isNaN(value)) return;
+                  setLightProperty(property, [
+                    index === 0 ? value : prop[0],
+                    index === 1 ? value : prop[1],
+                    index === 2 ? value : prop[2],
+                  ]);
+                }}
+              />
+            ))}
+          </EditorSection>
         );
       })}
       {LIGHT_PROPERTIES_BY_TYPE[light.type]["single"].map((property, index) => {
         return (
-          <SingleInput
-            key={index}
-            label={property}
-            value={light[property]}
-            onChange={(e) => setLightProperty(property, e.target.value)}
-          />
+          <EditorSection key={index} label={property}>
+            <SingleInput
+              value={light[property]}
+              onChange={(e) => setLightProperty(property, e.target.value)}
+            />
+          </EditorSection>
         );
       })}
     </>
