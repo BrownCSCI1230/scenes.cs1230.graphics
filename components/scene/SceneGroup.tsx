@@ -14,26 +14,57 @@ export default function SceneGroup({ group }: { group: Group }) {
   const rotateY = group.rotate ? ((group.rotate[1] * group.rotate[3]) / 180) * Math.PI : 0;
   const rotateZ = group.rotate ? ((group.rotate[2] * group.rotate[3]) / 180) * Math.PI : 0;
 
-  const { toggleSelect, selected } = useScenefile();
+  const { toggleSelect, selected, templateGroupMap } = useScenefile();
 
   const isSelected = selected && selected.item === group;
 
+  const isATemplateGroupUser =
+    group.name &&
+    !group.translate &&
+    !group.scale &&
+    !group.rotate &&
+    !group.groups &&
+    !group.primitives &&
+    !group.lights;
+
+  const templateGroup = templateGroupMap[group.name ?? ""];
+
   return (
     // TODO: investigate whether it's good to nest <mesh> elements
-    <mesh
-      onClick={() => toggleSelect({ type: "group", item: group })}
-      position={[translateX, translateY, translateZ]}
-      scale={[scaleX, scaleY, scaleZ]}
-      rotation={[rotateX, rotateY, rotateZ]}>
-      {group.lights?.map((light) => (
-        <SceneLight key={light.id} light={light} />
-      ))}
-      {group.primitives?.map((primitive) => (
-        <ScenePrimitive key={primitive.id} primitive={primitive} />
-      ))}
-      {group.groups?.map((child) => (
-        <SceneGroup key={child.id} group={child} />
-      ))}
-    </mesh>
+    <>
+      {isATemplateGroupUser && templateGroup ? (
+          <mesh
+          onClick={() => toggleSelect({ type: "group", item: group })}
+          position={[templateGroup.translate?.[0] ?? 0, templateGroup.translate?.[1] ?? 0, templateGroup.translate?.[2] ?? 0]}
+          scale={[templateGroup.scale?.[0] ?? 1, templateGroup.scale?.[1] ?? 1, templateGroup.scale?.[2] ?? 1]}
+          >
+          {templateGroup.lights?.map((light) => (
+            <SceneLight key={light.id} light={light} />
+          ))}
+          {templateGroup.primitives?.map((primitive) => (
+            <ScenePrimitive key={primitive.id} primitive={primitive} />
+          ))}
+          {templateGroup.groups?.map((child) => (
+            <SceneGroup key={child.id} group={child} />
+          ))}
+        </mesh>
+      ) : (
+        <mesh
+          onClick={() => toggleSelect({ type: "group", item: group })}
+          position={[translateX, translateY, translateZ]}
+          scale={[scaleX, scaleY, scaleZ]}
+          rotation={[rotateX, rotateY, rotateZ]}>
+          {group.lights?.map((light) => (
+            <SceneLight key={light.id} light={light} />
+          ))}
+          {group.primitives?.map((primitive) => (
+            <ScenePrimitive key={primitive.id} primitive={primitive} />
+          ))}
+          {group.groups?.map((child) => (
+            <SceneGroup key={child.id} group={child} />
+          ))}
+        </mesh>
+      )}
+    </>
   );
 }
