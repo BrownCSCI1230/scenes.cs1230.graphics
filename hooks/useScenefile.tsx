@@ -23,6 +23,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from "react";
@@ -32,6 +33,7 @@ type ScenefileContextType = {
   scenefilePath?: string;
   originalScenefile: Scenefile;
   lights: Light[];
+  templateGroupMap: { [name: string]: Group };
   select: (id: Selected) => void;
   toggleSelect: (id: Selected) => void;
   selected: Selected | undefined;
@@ -99,6 +101,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   selected: undefined,
   select: () => {},
   lights: [],
+  templateGroupMap: {},
   toggleSelect: () => {},
   loadFile: () => {},
   setSceneName: () => {},
@@ -136,6 +139,17 @@ export const ScenefileProvider = ({
   const { toast } = useToast();
 
   const [lights, setLights] = useState<Light[]>([]);
+
+  const templateGroupMap = useMemo(() => {
+    const map: { [name: string]: Group } = {};
+    if (scenefile.templateGroups) {
+      scenefile.templateGroups.forEach((group) => {
+        map[group.name] = group;
+      });
+    }
+    return map;
+  }
+  , [scenefile]);
 
   // TODO: use something like LightCTM in HelperTypes to colllect CTM info along recursive path?
   // .. is there a better way to collect light info than this?
@@ -472,6 +486,7 @@ export const ScenefileProvider = ({
         scenefilePath,
         originalScenefile,
         lights,
+        templateGroupMap,
         select,
         toggleSelect,
         selected,

@@ -30,6 +30,5 @@ void main() {
   vec3 resultColor = ambientCoefficient * ambientColor + diffuse + specular;
   // gl_FragColor = vec4(resultColor, 1.0);
   gl_FragColor = vec4(ambientColor,1.0);
-  
 }
 `

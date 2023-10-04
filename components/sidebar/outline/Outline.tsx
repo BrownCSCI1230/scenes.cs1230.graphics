@@ -42,6 +42,15 @@ export default function Outline() {
   );
 }
 
+const isATemplateGroupUser = (group: Group) =>
+  group.name &&
+  !group.translate &&
+  !group.scale &&
+  !group.rotate &&
+  !group.groups &&
+  !group.primitives &&
+  !group.lights;
+
 const SceneOutlineItemTemplate = ({
   fallbackTitle,
   initialOpen,
