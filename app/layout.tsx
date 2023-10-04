@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ScenefileProvider><CameraProvider>{children}</CameraProvider></ScenefileProvider>
+        <ScenefileProvider>
+          <CameraProvider>{children}</CameraProvider>
+        </ScenefileProvider>
         <Toaster />
       </body>
     </html>
