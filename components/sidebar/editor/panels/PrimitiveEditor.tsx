@@ -1,6 +1,7 @@
 import useScenefile from "@/hooks/useScenefile";
 import SingleInput from "../components/SingleInput";
 import TripleInput from "../components/TripleInput";
+import EditorSection from "../components/EditorSection";
 
 export default function PrimitiveEditor() {
   const { selected, setPrimitiveProperty } = useScenefile();
@@ -16,59 +17,71 @@ export default function PrimitiveEditor() {
 
   return (
     <>
-      <p>
-        <b>{primitive.type} primitive</b>
-      </p>
-      <TripleInput
-        label="ambient"
-        x={ambient[0]}
-        y={ambient[1]}
-        z={ambient[2]}
-        onXChange={(value) =>
-          setPrimitiveProperty("ambient", [value, ambient[1], ambient[2]])
-        }
-        onYChange={(value) =>
-          setPrimitiveProperty("ambient", [ambient[0], value, ambient[2]])
-        }
-        onZChange={(value) =>
-          setPrimitiveProperty("ambient", [ambient[0], ambient[1], value])
-        }
-      />
-      <TripleInput
-        label="diffuse"
-        x={diffuse[0]}
-        y={diffuse[1]}
-        z={diffuse[2]}
-        onXChange={(value) =>
-          setPrimitiveProperty("diffuse", [value, diffuse[1], diffuse[2]])
-        }
-        onYChange={(value) =>
-          setPrimitiveProperty("diffuse", [diffuse[0], value, diffuse[2]])
-        }
-        onZChange={(value) =>
-          setPrimitiveProperty("diffuse", [diffuse[0], diffuse[1], value])
-        }
-      />
-      <TripleInput
-        label="specular"
-        x={specular[0]}
-        y={specular[1]}
-        z={specular[2]}
-        onXChange={(value) =>
-          setPrimitiveProperty("specular", [value, specular[1], specular[2]])
-        }
-        onYChange={(value) =>
-          setPrimitiveProperty("specular", [specular[0], value, specular[2]])
-        }
-        onZChange={(value) =>
-          setPrimitiveProperty("specular", [specular[0], specular[1], value])
-        }
-      />
-      <SingleInput
-        label="shininess"
-        value={shininess}
-        onChange={(e) => setPrimitiveProperty("shininess", e.target.value)}
-      />
+      <EditorSection label="Ambient">
+        {ambient.map((value, index) => (
+          <SingleInput
+            key={index}
+            label={index === 0 ? "R" : index === 1 ? "G" : "B"}
+            value={value}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value);
+              if (isNaN(value)) return;
+              setPrimitiveProperty("ambient", [
+                index === 0 ? value : ambient[0],
+                index === 1 ? value : ambient[1],
+                index === 2 ? value : ambient[2],
+              ]);
+            }}
+          />
+        ))}
+      </EditorSection>
+      <EditorSection label="Diffuse">
+        {diffuse.map((value, index) => (
+          <SingleInput
+            key={index}
+            label={index === 0 ? "R" : index === 1 ? "G" : "B"}
+            value={value}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value);
+              if (isNaN(value)) return;
+              setPrimitiveProperty("diffuse", [
+                index === 0 ? value : diffuse[0],
+                index === 1 ? value : diffuse[1],
+                index === 2 ? value : diffuse[2],
+              ]);
+            }}
+          />
+        ))}
+      </EditorSection>
+      <EditorSection label="Specular">
+        {specular.map((value, index) => (
+          <SingleInput
+            key={index}
+            label={index === 0 ? "R" : index === 1 ? "G" : "B"}
+            value={value}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value);
+              if (isNaN(value)) return;
+              setPrimitiveProperty("specular", [
+                index === 0 ? value : specular[0],
+                index === 1 ? value : specular[1],
+                index === 2 ? value : specular[2],
+              ]);
+            }}
+          />
+        ))}
+      </EditorSection>
+      <EditorSection label="Shininess">
+        <SingleInput
+          label="Shininess"
+          value={shininess}
+          onChange={(e) => {
+            const value = parseFloat(e.target.value);
+            if (isNaN(value)) return;
+            setPrimitiveProperty("shininess", value);
+          }}
+        />
+      </EditorSection>
     </>
   );
 }

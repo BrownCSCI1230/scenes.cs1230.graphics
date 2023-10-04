@@ -42,6 +42,7 @@ type ScenefileContextType = {
   updateGlobalData: (globalData: GlobalData) => void;
   translateGroup: (translate: number[]) => void;
   setGroupTranslate: (translate: number[]) => void;
+  setGroupName: (name: string) => void;
   rotateGroup: (rotate: number[]) => void;
   setGroupRotate: (rotate: number[]) => void;
   setGroupScale: (scale: number[]) => void;
@@ -108,6 +109,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   updateGlobalData: () => {},
   translateGroup: () => {},
   setGroupTranslate: () => {},
+  setGroupName: () => {},
   rotateGroup: () => {},
   setGroupRotate: () => {},
   setGroupScale: () => {},
@@ -250,6 +252,18 @@ export const ScenefileProvider = ({
         type: "SET_GROUP_TRANSLATE",
         group: selected.item,
         translate: translate,
+      });
+    },
+    [selected]
+  );
+
+  const setGroupName = useCallback(
+    (name: string) => {
+      if (!selected || selected.type !== "group") return;
+      dispatch({
+        type: "SET_GROUP_NAME",
+        group: selected.item,
+        name: name,
       });
     },
     [selected]
@@ -495,6 +509,7 @@ export const ScenefileProvider = ({
         updateGlobalData,
         translateGroup,
         setGroupTranslate,
+        setGroupName,
         rotateGroup,
         setGroupRotate,
         setGroupScale,
@@ -554,19 +569,28 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
         ...state,
       };
     }
+    case "SET_GROUP_NAME": {
+      if (action.group && action.name) {
+        action.group.name = action.name;
+      }
+      return {
+        ...state,
+      };
+    }
     case "ROTATE_GROUP": {
-      if (action.rotate.length === 3) {
-        if (!action.group.rotate) action.group.rotate = [0, 0, 0];
+      if (action.rotate.length === 4) {
+        if (!action.group.rotate) action.group.rotate = [0, 0, 0, 1];
         action.group.rotate[0] += action.rotate[0];
         action.group.rotate[1] += action.rotate[1];
         action.group.rotate[2] += action.rotate[2];
+        action.group.rotate[3] += action.rotate[3];
       }
       return {
         ...state,
       };
     }
     case "SET_GROUP_ROTATE": {
-      if (action.group && action.rotate.length === 3) {
+      if (action.group && action.rotate.length === 4) {
         action.group.rotate = action.rotate;
       }
       return {
@@ -693,6 +717,12 @@ type SetGroupTranslateAction = {
   translate: number[];
 };
 
+type setGroupNameAction = {
+  type: "SET_GROUP_NAME";
+  group: Group;
+  name: string;
+};
+
 type RotateGroupAction = {
   type: "ROTATE_GROUP";
   group: Group;
@@ -775,6 +805,7 @@ type ScenefileAction =
   | UpdateGlobalDataAction
   | TranslateGroupAction
   | SetGroupTranslateAction
+  | setGroupNameAction
   | RotateGroupAction
   | SetGroupRotateAction
   | SetGroupScaleAction
