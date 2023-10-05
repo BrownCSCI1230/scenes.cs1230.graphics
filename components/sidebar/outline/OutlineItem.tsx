@@ -25,7 +25,12 @@ import {
 
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
-import { ChevronDownIcon, PlusIcon, Share1Icon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  ChevronDownIcon,
+  PlusIcon,
+  Share1Icon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import React, { forwardRef, useDeferredValue, useState } from "react";
 
 interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
@@ -101,17 +106,18 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
             <DropdownMenu>
               <div className="flex items-center justify-center">
                 <div className="">
-                  {selected && props.deleteAction && (
+                  {selected && props.deleteAction !== undefined && (
                     <div
-                      className="ml-2 h-6 w-6 rounded-sm flex items-center justify-center hover:bg-orange-300"
-                      onClick={props.deleteAction}>
+                      className="ml-2 flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300"
+                      onClick={props.deleteAction}
+                    >
                       <TrashIcon className="h-4 w-4" />
                     </div>
                   )}
                 </div>
                 {showTrigger && selected && (
                   <DropdownMenuTrigger className="">
-                    <div className="ml-2 h-6 w-6 rounded-sm flex items-center justify-center hover:bg-orange-300">
+                    <div className="ml-2 flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300">
                       <PlusIcon className="h-4 w-4" />
                     </div>
                   </DropdownMenuTrigger>
@@ -123,8 +129,9 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                     onSelect={() => {
                       setAddGroup();
                       select && select();
-                    }}>
-                    <Share1Icon className="h-4 w-4 mr-2 text-purple-500" />
+                    }}
+                  >
+                    <Share1Icon className="mr-2 h-4 w-4 text-purple-500" />
                     Group
                   </DropdownMenuItem>
                   {depth !== 0 && (
@@ -139,24 +146,39 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                               onClick={() => {
                                 setAddLight("point");
                                 select && select();
-                              }}>
-                              <IconSunHigh size={16} color="gold" className="mr-2" />
+                              }}
+                            >
+                              <IconSunHigh
+                                size={16}
+                                color="gold"
+                                className="mr-2"
+                              />
                               <span>Point</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddLight("directional");
                                 select && select();
-                              }}>
-                              <IconArrowsDown size={16} color="gold" className="mr-2" />
+                              }}
+                            >
+                              <IconArrowsDown
+                                size={16}
+                                color="gold"
+                                className="mr-2"
+                              />
                               <span>Directional</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddLight("spot");
                                 select && select();
-                              }}>
-                              <IconLamp2 size={16} color="gold" className="mr-2" />
+                              }}
+                            >
+                              <IconLamp2
+                                size={16}
+                                color="gold"
+                                className="mr-2"
+                              />
                               <span>Spot</span>
                             </DropdownMenuItem>
                           </DropdownMenuSubContent>
@@ -172,40 +194,65 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                               onClick={() => {
                                 setAddPrimitive("cube");
                                 select && select();
-                              }}>
-                              <IconCube size={16} color="orange" className="mr-2" />
+                              }}
+                            >
+                              <IconCube
+                                size={16}
+                                color="orange"
+                                className="mr-2"
+                              />
                               <span>Cube</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddPrimitive("sphere");
                                 select && select();
-                              }}>
-                              <IconSphere size={16} color="orange" className="mr-2" />
+                              }}
+                            >
+                              <IconSphere
+                                size={16}
+                                color="orange"
+                                className="mr-2"
+                              />
                               <span>Sphere</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddPrimitive("cone");
                                 select && select();
-                              }}>
-                              <IconCone size={16} color="orange" className="mr-2" />
+                              }}
+                            >
+                              <IconCone
+                                size={16}
+                                color="orange"
+                                className="mr-2"
+                              />
                               <span>Cone</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddPrimitive("cylinder");
                                 select && select();
-                              }}>
-                              <IconCylinder size={16} color="orange" className="mr-2" />
+                              }}
+                            >
+                              <IconCylinder
+                                size={16}
+                                color="orange"
+                                className="mr-2"
+                              />
                               <span>Cylinder</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
                                 setAddPrimitive("mesh");
                                 select && select();
-                              }}>
-                              <IconTriangles size={16} color="orange" className="mr-2" />
+                              }}
+                            >
+                              <IconTriangles
+                                size={16}
+                                color="orange"
+                                className="mr-2"
+                              />
                               <span>Mesh</span>
                             </DropdownMenuItem>
                           </DropdownMenuSubContent>

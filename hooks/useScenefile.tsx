@@ -457,7 +457,7 @@ export const ScenefileProvider = ({
             type: primitive as PrimitiveTypeNames,
             diffuse: [1, 1, 1],
             specular: [1, 1, 1],
-            ambient: [1, 0, 0],
+            ambient: [.5, .5, .5],
             shininess: 1,
             id: Math.random().toString(),
           });
@@ -509,9 +509,9 @@ export const ScenefileProvider = ({
     if (!selected) return;
     if (selected.type == "group" || selected.type == "scene") {
       if (!selected.item.groups) selected.item.groups = [];
-      selected.item.groups.push({
+      selected.item.groups.unshift({
         id: Math.random().toString(),
-        name: "Untitled Group " + selected.item.groups.length,
+        name: undefined,
         translate: [0, 0, 0],
         rotate: [0, 0, 0, 0],
         scale: [1, 1, 1],

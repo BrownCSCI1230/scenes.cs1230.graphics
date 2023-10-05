@@ -1,7 +1,6 @@
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
 import { Group } from "@/types/Scenefile";
-import { TrashIcon } from "@radix-ui/react-icons";
 import {
   IconArrowsDown,
   IconCamera,
