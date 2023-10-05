@@ -1,9 +1,7 @@
 import { Primitive } from "@/types/Scenefile";
-import { useMemo } from "react";
-import { Color } from "three";
+import { Vector3 } from "three";
 
-import useScenefile from "@/hooks/useScenefile";
-import { phongFragShader } from "@/shaders/phongFragmentShader";
+import { phongFragmentShader } from "@/shaders/phongFragmentShader";
 import { phongVertexShader } from "@/shaders/phongVertexShader";
 
 const primitiveComponent = (primitive: Primitive) => {
@@ -25,51 +23,36 @@ export default function ScenePrimitive({
 }: {
   primitive: Primitive;
 }) {
-  const { scenefile, lights } = useScenefile();
-
-  // the uniform does not update with the primitive controls...
-  // TODO: find some way to hook on dispatch of the primitive update?
-  const uniforms = useMemo(() => {
-    // console.log("UNIFORM UPDATE");
-    // console.log("LIGHTS", lights)
-    let ambient = primitive.ambient ?? [0, 0, 0];
-    let diffuse = primitive.diffuse ?? [0, 0, 0];
-    let specular = primitive.specular ?? [0, 0, 0];
-    let shininess = primitive.shininess ?? 1.0;
-    let ambientCoefficient = scenefile.globalData.ambientCoeff ?? 1.0;
-    let diffuseCoefficient = scenefile.globalData.diffuseCoeff ?? 1.0;
-    let specularCoefficient = scenefile.globalData.specularCoeff ?? 1.0;
-    let transparentCoefficient = scenefile.globalData.transparentCoeff ?? 1.0;
-    let sceneLights = lights ?? [];
-    let lightCount = sceneLights.length;
-
-    return {
-      ambientColor: { value: new Color(ambient[0], ambient[1], ambient[2]) },
-      diffuseColor: { value: new Color(diffuse[0], diffuse[1], diffuse[2]) },
-      specularColor: {
-        value: new Color(specular[0], specular[1], specular[2]),
-      },
-      shininess: { value: shininess },
-      ambientCoefficient: { value: ambientCoefficient },
-      diffuseCoefficient: { value: diffuseCoefficient },
-      specularCoefficient: { value: specularCoefficient },
-      transparentCoefficient: { value: transparentCoefficient },
-      lightCount: { value: lightCount },
-      // TODO: ingest lightPosition, direction, addit. information from various types of lights (point, directional, spot)
-    };
-  }, [scenefile, primitive, lights]);
-
   return (
     <mesh
     // TODO: how to incorportate onClick stacked on top of group onClick?? (will need custom logic.)
     // onClick={() => toggleSelect({ type: "primitive", item: primitive })}
     >
       <shaderMaterial
-        uniforms={uniforms}
+        uniforms={exampleUniform}
         vertexShader={phongVertexShader}
-        fragmentShader={phongFragShader}
+        fragmentShader={phongFragmentShader}
+        glslVersion="300 es"
       />
       {primitiveComponent(primitive)}
     </mesh>
   );
 }
+
+const exampleUniform = {
+  ka: { value: 0 },
+  kd: { value: 1 },
+  ks: { value: 0 },
+  ambientColor: { value: new Vector3(0.5, 0, 0) },
+  diffuseColor: { value: new Vector3(1, 0.5, 0) },
+  specularColor: { value: new Vector3(0, 0, 0) },
+  shininess: { value: 1 },
+  lightTypes: { value: [0] },
+  lightColors: { value: [new Vector3(100, 1, 1)] },
+  lightFunctions: { value: [new Vector3(1, 0, 0)] },
+  worldSpaceLightPositions: { value: [new Vector3(1, 1, 2)] },
+  worldSpaceLightDirections: { value: [new Vector3(1, 0, 0)] },
+  angles: { value: [1] },
+  penumbras: { value: [1] },
+  numLights: { value: 1 },
+};
