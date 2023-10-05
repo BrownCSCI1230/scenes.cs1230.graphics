@@ -25,7 +25,7 @@ import {
 
 import useScenefile from "@/hooks/useScenefile";
 import { cn } from "@/lib/cn";
-import { ChevronDownIcon, PlusIcon, Share1Icon } from "@radix-ui/react-icons";
+import { ChevronDownIcon, PlusIcon, Share1Icon, TrashIcon } from "@radix-ui/react-icons";
 import React, { forwardRef, useDeferredValue, useState } from "react";
 
 interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
