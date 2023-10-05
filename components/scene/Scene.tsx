@@ -6,15 +6,50 @@ import {
   GizmoHelper,
   GizmoViewport,
   OrbitControls,
+  OrbitControlsChangeEvent,
   PerspectiveCamera,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { Vector3 } from "three";
 import SceneCamera from "./SceneCamera";
 import SceneGroup from "./SceneGroup";
 
+
+function listToVector3(list: number[]): Vector3 {
+  return new Vector3(list[0], list[1], list[2]);
+}
+
+function listMagnitude(list: number[]): number {
+  let acc = 0
+  for (let i = 0; i < list.length; i++) {
+    acc += list[i] * list[i]
+  }
+  return Math.sqrt(acc)
+}
+
 export default function Scene() {
   const { scenefile } = useScenefile();
-  const { setViewport, perspectiveCamera } = useCamera();
+  const { setViewport, perspectiveCamera, orbitControls, setOrbitTarget } = useCamera();
+
+  const updateViewportInfo = (e: OrbitControlsChangeEvent |  undefined) => {
+    const pos = e?.target?.object?.position;
+    const rot = e?.target?.object?.rotation;
+  
+    const scenecam_pos = scenefile.cameraData.position;
+  
+    let focus = scenefile.cameraData.focus
+    let look = scenefile.cameraData.look
+  
+    let FOCAL_DISTANCE = 2;
+    const target = (focus) ?  listToVector3(focus) :
+                  (look && listMagnitude(look) !== 0) ? listToVector3(scenecam_pos).add(listToVector3(look).multiplyScalar(-FOCAL_DISTANCE))  : new Vector3(0,0,0);
+    
+    setOrbitTarget(target)
+  
+    if (pos && rot) {
+      setViewport({ position: pos, rotation: rot});
+    }
+  }
 
   return (
     // TODO: consider adding `frameloop="demand"` to Canvas: https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#on-demand-rendering
@@ -28,16 +63,13 @@ export default function Scene() {
         makeDefault
       />
       <OrbitControls
+        ref={orbitControls}
         enableDamping
         enablePan
         target={[0, 0, 0]}
         makeDefault
         onChange={(e) => {
-          const pos = e?.target?.object?.position;
-          const rot = e?.target?.object?.rotation;
-          if (pos && rot) {
-            setViewport({ position: pos, rotation: rot });
-          }
+          updateViewportInfo(e)
         }}
       />
       <GizmoHelper alignment="bottom-right">
