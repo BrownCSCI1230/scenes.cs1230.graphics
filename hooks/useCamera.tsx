@@ -2,14 +2,14 @@
 
 import { createContext, useContext, useRef, useState } from "react";
 import { Euler, Vector3 } from "three";
-import { OrbitControls } from 'three-stdlib';
+import { OrbitControls } from "three-stdlib";
 
 // global context of the Three viewport camera
 
 type ViewportInfo = {
   position: Vector3;
   rotation: Euler;
-  up: Vector3
+  up: Vector3;
 };
 
 type CameraContextType = {
@@ -37,7 +37,6 @@ const CameraContext = createContext<CameraContextType>({
 });
 
 export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
-
   const [viewport, setViewport] = useState<ViewportInfo>({
     position: new Vector3(5, 2, 5),
     rotation: new Euler(),
@@ -69,7 +68,7 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
       viewportInfo.up.x,
       viewportInfo.up.y,
       viewportInfo.up.z,
-    )
+    );
 
     // console.log(perspectiveCamera.current?.rotation);
     // console.log(orbitTarget)

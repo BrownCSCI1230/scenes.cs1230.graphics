@@ -77,7 +77,6 @@ type SelectedMap = {
 };
 
 type Deletable = Group | Light | Primitive;
-  
 
 export type Selected = {
   [K in keyof SelectedMap]: {
@@ -257,8 +256,9 @@ export const ScenefileProvider = ({
       deleteItemRecursive(scenefile);
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });
       setSelected(undefined);
-    }
-    , [scenefile]);
+    },
+    [scenefile],
+  );
 
   const translateGroup = useCallback(
     (translate: number[]) => {
@@ -457,7 +457,7 @@ export const ScenefileProvider = ({
             type: primitive as PrimitiveTypeNames,
             diffuse: [1, 1, 1],
             specular: [1, 1, 1],
-            ambient: [.5, .5, .5],
+            ambient: [0.5, 0.5, 0.5],
             shininess: 1,
             id: Math.random().toString(),
           });

@@ -13,7 +13,10 @@ import {
   IconSunHigh,
   IconTriangles,
 } from "@tabler/icons-react";
-import OutlineItem, { OutlineItemContent, OutlineItemHeader } from "./OutlineItem";
+import OutlineItem, {
+  OutlineItemContent,
+  OutlineItemHeader,
+} from "./OutlineItem";
 
 export default function Outline() {
   const { select, selected, scenefile } = useScenefile();
@@ -81,10 +84,13 @@ const SceneOutlineItemTemplate = ({
         selected={selected}
         initialOpen={initialOpen}
         deleteAction={deleteAction}
-        depth={depth}>
+        depth={depth}
+      >
         <OutlineItemHeader>
           {icon && <span>{icon}</span>}
-          <span className={cn(title ? "" : "opacity-50")}>{title || fallbackTitle}</span>
+          <span className={cn(title ? "" : "opacity-50")}>
+            {title || fallbackTitle}
+          </span>
         </OutlineItemHeader>
         <OutlineItemContent>{children}</OutlineItemContent>
       </OutlineItem>
@@ -106,7 +112,12 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
       selected={selected?.item === group}
       depth={depth}
       deleteAction={() => deleteItem(group)}
-      icon={isTemplateGroupUser ? <IconRubberStamp size={16} color="#15a334" /> : undefined}>
+      icon={
+        isTemplateGroupUser ? (
+          <IconRubberStamp size={16} color="#15a334" />
+        ) : undefined
+      }
+    >
       {group.lights?.map((light) => (
         <OutlineLight
           key={light.id}
@@ -129,7 +140,9 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
           depth={(depth ?? 0) + 1}
         />
       ))}
-      {group.groups?.map((group) => OutlineGroup({ group, depth: (depth ?? 0) + 1 }))}
+      {group.groups?.map((group) =>
+        OutlineGroup({ group, depth: (depth ?? 0) + 1 }),
+      )}
     </GroupTemplate>
   );
 };
