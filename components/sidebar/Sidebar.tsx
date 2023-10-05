@@ -22,11 +22,11 @@ export default function Sidebar() {
   const { scenefile } = useScenefile();
 
   return (
-    <aside className="flex flex-col basis-80 flex-shrink-0 overflow-hidden h-full">
+    <aside className="flex h-full flex-shrink-0 basis-80 flex-col overflow-hidden">
       <Accordion
         key={scenefile.id}
         type="multiple"
-        className="flex flex-col flex-auto gap-2 h-full"
+        className="flex h-full flex-auto flex-col gap-2"
         defaultValue={["outline", "editor"]}
       >
         <AccordionItem value="outline" className={cn(itemStyle, "basis-1/2")}>

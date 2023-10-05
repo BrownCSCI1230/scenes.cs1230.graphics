@@ -25,11 +25,11 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
       (value: string) => {
         var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
           window.HTMLInputElement.prototype,
-          "value"
+          "value",
         )?.set;
         nativeInputValueSetter?.call(input, String(value));
       },
-      [input]
+      [input],
     );
 
     const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -54,7 +54,7 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
           }
         }
       },
-      [initialY, isMouseDown, input, emitChange, prevX]
+      [initialY, isMouseDown, input, emitChange, prevX],
     );
 
     const onMouseUp = () => {
@@ -77,7 +77,7 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
     }, [isMouseDown, onMouseMove]);
 
     return (
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Button
           className="rounded-r-none border-r-0"
           variant="outline"
@@ -96,10 +96,10 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
           {...props}
           type="number"
           className={cn(
-            "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+            "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
             "rounded-none",
             "cursor-ew-resize focus-visible:ring-0",
-            className
+            className,
           )}
           onMouseDown={onMouseDown}
           onKeyDown={(e) => {
@@ -142,7 +142,7 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
                     const newCaretPosition = selectionStart + pastedData.length;
                     input?.setSelectionRange(
                       newCaretPosition,
-                      newCaretPosition
+                      newCaretPosition,
                     );
                   });
                   return; // Exit early after handling paste
@@ -243,7 +243,7 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
             requestAnimationFrame(() => {
               inputRef.current?.setSelectionRange(
                 newCaretPosition,
-                newCaretPosition
+                newCaretPosition,
               );
             });
           }}
@@ -283,7 +283,7 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
         </Button>
       </div>
     );
-  }
+  },
 );
 
 DraggableInput.displayName = "DraggableInput";

@@ -94,7 +94,7 @@ export function assignIDs(scenefile: _Scenefile): Scenefile {
   };
   const groups = scenefile.groups?.map((group) => assignGroupIDs(group));
   const templateGroups = scenefile.templateGroups?.map((group) =>
-    assignTemplateIDs(group)
+    assignTemplateIDs(group),
   );
   return {
     id: uuidv4(),

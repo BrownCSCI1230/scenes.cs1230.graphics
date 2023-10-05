@@ -15,7 +15,10 @@ export type PointLight = z.infer<typeof PointLightSchema>;
 export type DirectionalLight = z.infer<typeof DirectionalLightSchema>;
 export type SpotLight = z.infer<typeof SpotLightSchema>;
 export type _Light = z.infer<typeof LightSchema>;
-export type LightProperty = keyof SpotLight | keyof DirectionalLight | keyof PointLight;
+export type LightProperty =
+  | keyof SpotLight
+  | keyof DirectionalLight
+  | keyof PointLight;
 export type _Group = z.infer<typeof BaseGroupSchema> & {
   groups?: _Group[];
 };
@@ -69,17 +72,20 @@ export const ShapePrimitiveSchema = PrimitiveBaseSchema.and(
       z.literal("cylinder"),
       z.literal("cone"),
     ]),
-  })
+  }),
 );
 
 export const MeshPrimitiveSchema = PrimitiveBaseSchema.and(
   z.object({
     type: z.literal("mesh"),
     meshFile: z.string(),
-  })
+  }),
 );
 
-export const PrimitiveSchema = z.union([ShapePrimitiveSchema, MeshPrimitiveSchema]);
+export const PrimitiveSchema = z.union([
+  ShapePrimitiveSchema,
+  MeshPrimitiveSchema,
+]);
 
 export const BaseLightSchema = z.object({
   name: z.string().optional(),
@@ -90,14 +96,14 @@ export const PointLightSchema = BaseLightSchema.and(
   z.object({
     type: z.literal("point"),
     attenuationCoeff: Vec3Schema,
-  })
+  }),
 );
 
 export const DirectionalLightSchema = BaseLightSchema.and(
   z.object({
     type: z.literal("directional"),
     direction: Vec3Schema,
-  })
+  }),
 );
 
 export const SpotLightSchema = BaseLightSchema.and(
@@ -107,10 +113,14 @@ export const SpotLightSchema = BaseLightSchema.and(
     penumbra: z.number(),
     angle: z.number(),
     attenuationCoeff: Vec3Schema,
-  })
+  }),
 );
 
-export const LightSchema = z.union([PointLightSchema, DirectionalLightSchema, SpotLightSchema]);
+export const LightSchema = z.union([
+  PointLightSchema,
+  DirectionalLightSchema,
+  SpotLightSchema,
+]);
 
 export const GroupTranformSchema = z.union([
   z.object({
@@ -138,10 +148,12 @@ export const BaseGroupSchema = z
 export const GroupSchema: z.ZodType<_Group> = BaseGroupSchema.and(
   z.object({
     groups: z.lazy(() => GroupSchema.array().optional()),
-  })
+  }),
 );
 
-export const TemplateGroupSchema = GroupSchema.and(z.object({ name: z.string() }));
+export const TemplateGroupSchema = GroupSchema.and(
+  z.object({ name: z.string() }),
+);
 
 export const GlobalDataSchema = z.object({
   ambientCoeff: z.number().nonnegative().max(1),
@@ -168,7 +180,7 @@ export const CameraDataSchema = z
         focus: Vec3Schema,
         look: z.never().optional(),
       }),
-    ])
+    ]),
   );
 
 export const ScenefileSchema = z
@@ -182,7 +194,9 @@ export const ScenefileSchema = z
   .strict();
 
 // Add ids to Group, Primitive, and Light schemas for internal use only - not part of the scenefile spec
-export const PrimitiveSchemaWithID = PrimitiveSchema.and(z.object({ id: z.string() }));
+export const PrimitiveSchemaWithID = PrimitiveSchema.and(
+  z.object({ id: z.string() }),
+);
 export const LightSchemaWithID = LightSchema.and(z.object({ id: z.string() }));
 export const BaseGroupSchemaWithID = z
   .object({
@@ -195,9 +209,11 @@ export const BaseGroupSchemaWithID = z
 export const GroupSchemaWithID: z.ZodType<Group> = BaseGroupSchemaWithID.and(
   z.object({
     groups: z.lazy(() => GroupSchemaWithID.array().optional()),
-  })
+  }),
 );
-export const TemplateGroupSchemaWithID = GroupSchemaWithID.and(z.object({ name: z.string() }));
+export const TemplateGroupSchemaWithID = GroupSchemaWithID.and(
+  z.object({ name: z.string() }),
+);
 export const ScenefileSchemaWithIDs = z.object({
   id: z.string(),
   name: z.string().optional(),

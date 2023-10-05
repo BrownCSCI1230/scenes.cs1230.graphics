@@ -35,7 +35,7 @@ function eulerFromLookUp(look: number[], up: number[]): Euler {
   matrix.makeBasis(
     new Vector3(look[0], look[1], look[2]),
     new Vector3(up[0], up[1], up[2]),
-    new Vector3(0, 0, 1)
+    new Vector3(0, 0, 1),
   );
 
   const euler = new Euler();
@@ -71,7 +71,7 @@ export default function CameraEditor() {
       ? selected.item.look !== undefined
         ? "look"
         : "focus"
-      : "look"
+      : "look",
   );
   const [look, setLook] = useState(camera?.look ?? [0, 0, 0]);
   const [focus, setFocus] = useState(camera?.focus ?? [0, 0, 0]);
@@ -103,7 +103,7 @@ export default function CameraEditor() {
                     position: new Vector3(
                       camera.position[0],
                       camera.position[1],
-                      camera.position[2]
+                      camera.position[2],
                     ),
                     rotation:
                       orientationMode === "look"
@@ -183,7 +183,7 @@ export default function CameraEditor() {
           value={orientationMode}
           onValueChange={(value) =>
             setOrientationMode(
-              value === "look" || value === "focus" ? value : "look"
+              value === "look" || value === "focus" ? value : "look",
             )
           }
         >

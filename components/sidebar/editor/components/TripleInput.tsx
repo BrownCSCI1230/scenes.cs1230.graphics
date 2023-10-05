@@ -54,14 +54,14 @@ const TripleInput: React.FC<TripleInputProps> = ({
         <i>{label}:</i>
       </label>
       <input
-        className="w-16 mr-2"
+        className="mr-2 w-16"
         type="number"
         value={x}
         onChange={handleXChange}
         onWheel={handleWheelX}
       />
       <input
-        className="w-16 mr-2"
+        className="mr-2 w-16"
         type="number"
         value={y}
         onChange={handleYChange}

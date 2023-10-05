@@ -53,7 +53,9 @@ export default function SceneLight({ light }: { light: Light }) {
       );
     case "directional":
       const norm = Math.sqrt(
-        light.direction[0] ** 2 + light.direction[1] ** 2 + light.direction[2] ** 2
+        light.direction[0] ** 2 +
+          light.direction[1] ** 2 +
+          light.direction[2] ** 2,
       );
       const normalizedDirection = light.direction.map((x) => x / norm);
       return (

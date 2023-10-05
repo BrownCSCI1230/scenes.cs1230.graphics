@@ -29,8 +29,14 @@ const BASE_PROPERTIES: LightProperties = {
 const ALL_PROPERTIES: LightProperties = { single: [], triple: [] };
 for (const lightType in LIGHT_PROPERTIES_BY_TYPE) {
   const lightProps = LIGHT_PROPERTIES_BY_TYPE[lightType];
-  ALL_PROPERTIES["single"] = [...ALL_PROPERTIES["single"], ...lightProps["single"]];
-  ALL_PROPERTIES["triple"] = [...ALL_PROPERTIES["triple"], ...lightProps["triple"]];
+  ALL_PROPERTIES["single"] = [
+    ...ALL_PROPERTIES["single"],
+    ...lightProps["single"],
+  ];
+  ALL_PROPERTIES["triple"] = [
+    ...ALL_PROPERTIES["triple"],
+    ...lightProps["triple"],
+  ];
 }
 
 export default function LightEditor() {
@@ -58,11 +64,11 @@ export default function LightEditor() {
       case "color":
         return ["R", "G", "B"];
       case "attenuationCoeff":
-        return ["C1", "C2", "C3"];        
+        return ["C1", "C2", "C3"];
       default:
         return [];
     }
-  }
+  };
 
   return (
     <>

@@ -39,13 +39,13 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
     perspectiveCamera.current?.position.set(
       viewportInfo.position.x,
       viewportInfo.position.y,
-      viewportInfo.position.z
+      viewportInfo.position.z,
     );
     console.log(perspectiveCamera.current?.rotation);
     perspectiveCamera.current?.rotation.set(
       viewportInfo.rotation.x,
       viewportInfo.rotation.y,
-      viewportInfo.rotation.z
+      viewportInfo.rotation.z,
     );
     console.log(perspectiveCamera.current?.rotation);
   };

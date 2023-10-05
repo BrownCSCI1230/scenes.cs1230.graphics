@@ -10,7 +10,7 @@ export default function Upload() {
   const downloadScene = () => {
     const jsonContent = JSON.stringify(scenefile, null, 2).replace(
       /"id": "[^"]*",?/g,
-      ""
+      "",
     );
 
     const blob = new Blob([jsonContent], { type: "application/json" });

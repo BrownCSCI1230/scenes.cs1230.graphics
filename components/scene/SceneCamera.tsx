@@ -36,7 +36,7 @@ export default function SceneLight({ camera }: { camera: CameraData }) {
     : new Vector3(
         camera.position[0] - camera.focus[0],
         camera.position[1] - camera.focus[1],
-        camera.position[2] - camera.focus[2]
+        camera.position[2] - camera.focus[2],
       );
 
   const up = new Vector3(camera.up[0], camera.up[1], camera.up[2]);

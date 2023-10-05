@@ -12,7 +12,7 @@ export default function SceneEditor() {
 
   const globalData = scenefile.globalData;
   const globalDataProperties: GlobalDataProperty[] = Object.keys(
-    globalData
+    globalData,
   ) as GlobalDataProperty[];
 
   return (
