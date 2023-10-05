@@ -23,7 +23,7 @@ export default function SingleInput({
       <DraggableInput
         {...props}
         id={id}
-        className={cn("max-w-[4rem] w-auto", className)}
+        className={cn("max-w-[4rem] w-auto bg-white", className)}
       />
     </div>
   );

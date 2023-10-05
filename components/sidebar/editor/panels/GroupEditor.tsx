@@ -4,8 +4,14 @@ import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
 
 export default function GroupEditor() {
-  const { selected, setGroupTranslate, setGroupRotate, setGroupScale, setGroupName, rotateGroup } =
-    useScenefile();
+  const {
+    selected,
+    setGroupTranslate,
+    setGroupRotate,
+    setGroupScale,
+    setGroupName,
+    rotateGroup,
+  } = useScenefile();
 
   if (selected?.type !== "group") return null;
 
@@ -18,6 +24,7 @@ export default function GroupEditor() {
     <>
       <EditorSection label="Group name">
         <Input
+          className="bg-white"
           type="text"
           autoComplete="off"
           id={`group-name` + group.id}
@@ -25,7 +32,8 @@ export default function GroupEditor() {
           value={group.name ?? ""}
           onChange={(e) => {
             setGroupName(e.target.value);
-          }}></Input>
+          }}
+        ></Input>
       </EditorSection>
       <EditorSection label="Transform">
         {translate.map((value, index) => (
@@ -50,7 +58,15 @@ export default function GroupEditor() {
         {rotation.map((value, index) => (
           <SingleInput
             key={index}
-            label={index === 0 ? "X" : index === 1 ? "Y" : index === 2 ? "Z" : "Angle"}
+            label={
+              index === 0
+                ? "X"
+                : index === 1
+                ? "Y"
+                : index === 2
+                ? "Z"
+                : "Angle"
+            }
             value={value}
             step={1}
             onChange={(e) => {
