@@ -1,4 +1,3 @@
-
 export const phongFragShader = `
 
 uniform vec3 ambientColor;
@@ -31,4 +30,4 @@ void main() {
   // gl_FragColor = vec4(resultColor, 1.0);
   gl_FragColor = vec4(resultColor,1.0);
 }
-`
+`;

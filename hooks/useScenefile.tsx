@@ -48,12 +48,12 @@ type ScenefileContextType = {
   setGroupScale: (scale: number[]) => void;
   setPrimitiveProperty: (
     property: PrimitiveProperty,
-    value: GenericProperty
+    value: GenericProperty,
   ) => void;
   setLightProperty: (property: LightProperty, value: GenericProperty) => void;
   setGlobalDataProperty: (
     property: GlobalDataProperty,
-    value: GenericProperty
+    value: GenericProperty,
   ) => void;
   setCameraPosition: (translate: number[]) => void;
   setCameraLook: (look?: number[]) => void;
@@ -150,8 +150,7 @@ export const ScenefileProvider = ({
       });
     }
     return map;
-  }
-  , [scenefile]);
+  }, [scenefile]);
 
   // TODO: use something like LightCTM in HelperTypes to colllect CTM info along recursive path?
   // .. is there a better way to collect light info than this?
@@ -197,7 +196,7 @@ export const ScenefileProvider = ({
         setSelected(newSelected);
       }
     },
-    [selected]
+    [selected],
   );
 
   const loadFile = useCallback(
@@ -222,7 +221,7 @@ export const ScenefileProvider = ({
         });
       }
     },
-    [toast]
+    [toast],
   );
 
   const setSceneName = useCallback((name: string) => {
@@ -242,7 +241,7 @@ export const ScenefileProvider = ({
         translate: translate,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setGroupTranslate = useCallback(
@@ -254,7 +253,7 @@ export const ScenefileProvider = ({
         translate: translate,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setGroupName = useCallback(
@@ -266,7 +265,7 @@ export const ScenefileProvider = ({
         name: name,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraPosition = useCallback(
@@ -278,7 +277,7 @@ export const ScenefileProvider = ({
         translate: translate,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraLook = useCallback(
@@ -290,7 +289,7 @@ export const ScenefileProvider = ({
         look: look,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraFocus = useCallback(
@@ -302,7 +301,7 @@ export const ScenefileProvider = ({
         focus: focus,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraUp = useCallback(
@@ -314,7 +313,7 @@ export const ScenefileProvider = ({
         up: up,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraHeightAngle = useCallback(
@@ -326,7 +325,7 @@ export const ScenefileProvider = ({
         value: value,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setCameraProperty = useCallback(
@@ -339,7 +338,7 @@ export const ScenefileProvider = ({
         value: value,
       });
     },
-    [selected]
+    [selected],
   );
 
   const rotateGroup = useCallback(
@@ -347,7 +346,7 @@ export const ScenefileProvider = ({
       if (!selected || selected.type !== "group") return;
       dispatch({ type: "ROTATE_GROUP", group: selected.item, rotate: rotate });
     },
-    [selected]
+    [selected],
   );
 
   const setGroupRotate = useCallback(
@@ -359,7 +358,7 @@ export const ScenefileProvider = ({
         rotate: rotate,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setGroupScale = useCallback(
@@ -371,7 +370,7 @@ export const ScenefileProvider = ({
         scale: scale,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setPrimitiveProperty = useCallback(
@@ -384,7 +383,7 @@ export const ScenefileProvider = ({
         value: value,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setLightProperty = useCallback(
@@ -397,7 +396,7 @@ export const ScenefileProvider = ({
         value: value,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setGlobalDataProperty = useCallback(
@@ -410,7 +409,7 @@ export const ScenefileProvider = ({
         value: value,
       });
     },
-    [selected]
+    [selected],
   );
 
   const setAddPrimitive = useCallback(
@@ -437,7 +436,7 @@ export const ScenefileProvider = ({
       }
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });
     },
-    [selected, scenefile]
+    [selected, scenefile],
   );
 
   const setAddLight = useCallback(
@@ -475,7 +474,7 @@ export const ScenefileProvider = ({
       }
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });
     },
-    [selected, scenefile]
+    [selected, scenefile],
   );
 
   const setAddGroup = useCallback(() => {

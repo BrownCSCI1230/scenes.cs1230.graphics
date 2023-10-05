@@ -11,13 +11,12 @@ import {
   IconSphere,
   IconSunHigh,
   IconTriangles,
-  IconRubberStamp
+  IconRubberStamp,
 } from "@tabler/icons-react";
 import OutlineItem, {
   OutlineItemContent,
   OutlineItemHeader,
 } from "./OutlineItem";
-
 
 export default function Outline() {
   const { select, selected, scenefile } = useScenefile();
@@ -29,7 +28,7 @@ export default function Outline() {
       selected={selected?.item === scenefile}
       depth={0}
     >
-      <OutlineCamera 
+      <OutlineCamera
         title={"Camera"}
         icon={cameraIcon}
         select={() => select({ type: "camera", item: scenefile.cameraData })}
@@ -98,7 +97,9 @@ const SceneOutlineItemTemplate = ({
 const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
   const { select, selected } = useScenefile();
   const isTemplateGroupUser = isATemplateGroupUser(group);
-  const GroupTemplate = isTemplateGroupUser ? OutlineTemplateGroupTemplate : OutlineGroupTemplate;
+  const GroupTemplate = isTemplateGroupUser
+    ? OutlineTemplateGroupTemplate
+    : OutlineGroupTemplate;
 
   return (
     <GroupTemplate
@@ -107,7 +108,11 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
       select={() => select({ type: "group", item: group })}
       selected={selected?.item === group}
       depth={depth}
-      icon={isTemplateGroupUser ? <IconRubberStamp size={16} color="#15a334" /> : undefined}
+      icon={
+        isTemplateGroupUser ? (
+          <IconRubberStamp size={16} color="#15a334" />
+        ) : undefined
+      }
     >
       {group.lights?.map((light) => (
         <OutlineLight
@@ -130,7 +135,7 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
         />
       ))}
       {group.groups?.map((group) =>
-        OutlineGroup({ group, depth: (depth ?? 0) + 1 })
+        OutlineGroup({ group, depth: (depth ?? 0) + 1 }),
       )}
     </GroupTemplate>
   );
@@ -145,7 +150,7 @@ const OutlineScene = SceneOutlineItemTemplate({
 const OutlineCamera = SceneOutlineItemTemplate({
   fallbackTitle: "Camera",
   showTrigger: false,
-})
+});
 
 const OutlineGroupTemplate = SceneOutlineItemTemplate({
   fallbackTitle: "Untitled Group",
@@ -183,7 +188,7 @@ const primitiveIcons = {
   mesh: <IconTriangles size={16} color="orange" />,
 };
 
-const cameraIcon =  <IconCamera size={16} color="#4079bf" />
+const cameraIcon = <IconCamera size={16} color="#4079bf" />;
 
 const displayNames = {
   cube: "Cube",

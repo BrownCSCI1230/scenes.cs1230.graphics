@@ -9,10 +9,10 @@ import { useExitWarning } from "@/hooks/useExitWarning";
 export default function Home() {
   useExitWarning();
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden">
+    <div className="flex h-screen max-h-screen flex-col overflow-hidden">
       <Header />
       <Separator />
-      <main className="flex flex-grow p-8 gap-4 overflow-auto text-slate-700">
+      <main className="flex flex-grow gap-4 overflow-auto p-8 text-slate-700">
         <Scene />
         <Sidebar />
       </main>

@@ -14,7 +14,7 @@ export default function SingleInput({
 }: SingleInputProps) {
   const id = useId();
   return (
-    <div className="flex justify-end items-center">
+    <div className="flex items-center justify-end">
       {label !== undefined && (
         <Label className="mr-2" htmlFor={id}>
           {label}
@@ -23,7 +23,7 @@ export default function SingleInput({
       <DraggableInput
         {...props}
         id={id}
-        className={cn("max-w-[4rem] w-auto", className)}
+        className={cn("w-auto max-w-[4rem] bg-white", className)}
       />
     </div>
   );

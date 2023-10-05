@@ -9,7 +9,7 @@ const before = " before:translate-y-[-100%] after:translate-y-0";
 const after = " before:translate-y-0 after:translate-y-[100%]";
 const logoCharClassName = cn(
   "relative flex-1 h-full before:absolute before:inset-y-[7px] before:ml-[4.7px] after:absolute after:inset-y-[7px] after:ml-[4.7px] before:duration-500 after:duration-500 before:ease-in-out after:ease-in-out before:transition-transform after:transition-transform",
-  before
+  before,
 );
 const logoFont = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
 
@@ -32,13 +32,16 @@ export default function LogoNew() {
       if (hoveredIndex.current === undefined) {
         hoveredIndex.current = index;
         refs.forEach((ref, i) => {
-          setTimeout(() => {
-            if (!ref.current) return;
-            ref.current.className = ref.current.className.replace(
-              before,
-              after
-            );
-          }, Math.abs(i - index) * 50);
+          setTimeout(
+            () => {
+              if (!ref.current) return;
+              ref.current.className = ref.current.className.replace(
+                before,
+                after,
+              );
+            },
+            Math.abs(i - index) * 50,
+          );
         });
       }
     };
@@ -48,13 +51,16 @@ export default function LogoNew() {
     if (hoveredIndex.current !== undefined) {
       leaveTimeout.current = setTimeout(() => {
         refs.forEach((ref, i) => {
-          setTimeout(() => {
-            if (!ref.current) return;
-            ref.current.className = ref.current.className.replace(
-              after,
-              before
-            );
-          }, Math.abs(i - hoveredIndex.current!) * 50);
+          setTimeout(
+            () => {
+              if (!ref.current) return;
+              ref.current.className = ref.current.className.replace(
+                after,
+                before,
+              );
+            },
+            Math.abs(i - hoveredIndex.current!) * 50,
+          );
         });
         hoveredIndex.current = undefined;
       }, 200);
@@ -64,7 +70,7 @@ export default function LogoNew() {
   return (
     <Link
       className={
-        logoFont.className + " flex h-full w-[138px] text-white text-[34.6px]"
+        logoFont.className + " flex h-full w-[138px] text-[34.6px] text-white"
       }
       href="https://cs1230.graphics"
       target="_blank"

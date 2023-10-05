@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export default function useEvent<T extends HTMLElement>(
   ref: React.RefObject<T>,
   name: string,
-  callback: (e: Event) => any
+  callback: (e: Event) => any,
 ): () => void {
   useEffect(() => {
     const refCurrent = ref.current;

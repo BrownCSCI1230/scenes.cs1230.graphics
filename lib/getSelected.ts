@@ -3,7 +3,7 @@ import { Group, Light, Primitive, Scenefile } from "@/types/Scenefile";
 
 const searchGroups = <T>(
   scenefile: Scenefile,
-  predicate: (group: Group) => T | undefined
+  predicate: (group: Group) => T | undefined,
 ): T | undefined => {
   const search = (groups?: Group[]): T | undefined => {
     if (!groups) return;
@@ -18,7 +18,7 @@ const searchGroups = <T>(
 
 export const getSelectedGroup = (
   scenefile: Scenefile,
-  selected: SelectedWithID
+  selected: SelectedWithID,
 ): Group | undefined => {
   const predicate = (group: Group): Group | undefined => {
     if (group.id === selected.id) {
@@ -30,7 +30,7 @@ export const getSelectedGroup = (
 
 export const getSelectedLight = (
   scenefile: Scenefile,
-  selected: SelectedWithID
+  selected: SelectedWithID,
 ): Light | undefined => {
   const predicate = (group: Group): Light | undefined => {
     if (group.lights) {
@@ -46,7 +46,7 @@ export const getSelectedLight = (
 
 export const getSelectedPrimitive = (
   scenefile: Scenefile,
-  selected: SelectedWithID
+  selected: SelectedWithID,
 ): Primitive | undefined => {
   const predicate = (group: Group): Primitive | undefined => {
     if (group.primitives) {

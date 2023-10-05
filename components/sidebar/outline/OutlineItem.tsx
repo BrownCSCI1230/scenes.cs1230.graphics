@@ -48,7 +48,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const selected = useDeferredValue(selectedRaw);
     const [isOpen, setIsOpen] = useState(initialOpen ?? false);
@@ -70,14 +70,14 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col select-none", className)}
+        className={cn("flex select-none flex-col", className)}
         {...props}
       >
         <div
           className={cn(
             "header",
-            "flex items-center justify-between gap-2 cursor-pointer px-2 hover:bg-orange-50",
-            selected ? "bg-orange-200 hover:bg-orange-200" : "bg-transparent"
+            "flex cursor-pointer items-center justify-between gap-2 px-2 hover:bg-orange-50",
+            selected ? "bg-orange-200 hover:bg-orange-200" : "bg-transparent",
           )}
           style={{ paddingLeft: `${(depth ?? 0) + 0.5}rem` }}
           onClick={handleHeaderClick}
@@ -86,7 +86,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
             <ChevronDownIcon
               className={cn(
                 "h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 dark:text-slate-400",
-                isOpen ? "rotate-0" : "-rotate-90"
+                isOpen ? "rotate-0" : "-rotate-90",
               )}
             />
           )}
@@ -99,7 +99,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
           {showTrigger && selected && (
             <div onClick={(e) => e.stopPropagation()}>
               <DropdownMenu>
-                <DropdownMenuTrigger className="h-6 w-6 rounded-sm flex items-center justify-center hover:bg-orange-300">
+                <DropdownMenuTrigger className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300">
                   <PlusIcon className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={5}>
@@ -110,7 +110,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                         select && select();
                       }}
                     >
-                      <Share1Icon className="h-4 w-4 mr-2 text-purple-500" />
+                      <Share1Icon className="mr-2 h-4 w-4 text-purple-500" />
                       Group
                     </DropdownMenuItem>
                     {depth !== 0 && (
@@ -248,7 +248,7 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
         {content && isOpen && <div className={cn("flex-1")}>{content}</div>}
       </div>
     );
-  }
+  },
 );
 OutlineItem.displayName = "OutlineItem";
 

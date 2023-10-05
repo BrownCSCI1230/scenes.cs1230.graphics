@@ -28,7 +28,7 @@ export default function Editor() {
 
   if (!selectedEditor)
     return (
-      <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-400 p-8 text-center">
+      <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-400 dark:text-slate-400">
         Select something in the outline to see and edit its properties here
       </div>
     );
