@@ -9,6 +9,7 @@ import { OrbitControls } from 'three-stdlib';
 type ViewportInfo = {
   position: Vector3;
   rotation: Euler;
+  up: Vector3
 };
 
 type CameraContextType = {
@@ -25,6 +26,7 @@ const CameraContext = createContext<CameraContextType>({
   viewport: {
     position: new Vector3(),
     rotation: new Euler(),
+    up: new Vector3(),
   },
   setViewport: () => {},
   perspectiveCamera: undefined,
@@ -35,9 +37,11 @@ const CameraContext = createContext<CameraContextType>({
 });
 
 export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
+
   const [viewport, setViewport] = useState<ViewportInfo>({
     position: new Vector3(5, 2, 5),
     rotation: new Euler(),
+    up: new Vector3(0, 1, 0),
   });
 
   const [orbitTarget, setOrbitTarget] = useState<Vector3>(new Vector3(0, 0, 0));
@@ -60,8 +64,15 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
       viewportInfo.rotation.y,
       viewportInfo.rotation.z,
     );
+
+    perspectiveCamera.current?.up.set(
+      viewportInfo.up.x,
+      viewportInfo.up.y,
+      viewportInfo.up.z,
+    )
+
     // console.log(perspectiveCamera.current?.rotation);
-    console.log(orbitTarget)
+    // console.log(orbitTarget)
     orbitControls.current.target.set(
       orbitTarget.x,
       orbitTarget.y,

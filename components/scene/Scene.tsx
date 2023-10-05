@@ -46,8 +46,9 @@ export default function Scene() {
     
     setOrbitTarget(target)
   
-    if (pos && rot) {
-      setViewport({ position: pos, rotation: rot});
+    let up = listToVector3(scenefile.cameraData.up)
+    if (pos && rot && up) {
+      setViewport({ position: pos, rotation: rot, up: up});
     }
   }
 

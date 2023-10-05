@@ -109,6 +109,7 @@ export default function CameraEditor() {
                       orientationMode === "look"
                         ? eulerFromLookUp(look, camera.up)
                         : eulerFromFocusUp(focus, camera.up),
+                    up: new Vector3(camera.up[0], camera.up[1], camera.up[2]),
                   });
                 }}
               >
