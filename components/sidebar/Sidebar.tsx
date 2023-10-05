@@ -22,7 +22,7 @@ export default function Sidebar() {
   const { scenefile } = useScenefile();
 
   return (
-    <aside className="flex flex-col basis-96 overflow-hidden w-96 h-full">
+    <aside className="flex flex-col basis-80 flex-shrink-0 overflow-hidden h-full">
       <Accordion
         key={scenefile.id}
         type="multiple"
