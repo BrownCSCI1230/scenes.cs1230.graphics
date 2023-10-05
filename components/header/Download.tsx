@@ -13,7 +13,10 @@ export default function Upload() {
       "",
     );
 
-    const blob = new Blob([jsonContent], { type: "application/json" });
+    const regex = /,\s*([\]}])/g;
+    const nonCommaResult = jsonContent.replace(regex, "$1");
+
+    const blob = new Blob([nonCommaResult], { type: "application/json" });
     const downloadUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = downloadUrl;
