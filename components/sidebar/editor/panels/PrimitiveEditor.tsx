@@ -1,7 +1,6 @@
 import useScenefile from "@/hooks/useScenefile";
-import SingleInput from "../components/SingleInput";
-import TripleInput from "../components/TripleInput";
 import EditorSection from "../components/EditorSection";
+import SingleInput from "../components/SingleInput";
 
 export default function PrimitiveEditor() {
   const { selected, setPrimitiveProperty } = useScenefile();
@@ -25,7 +24,7 @@ export default function PrimitiveEditor() {
             value={value}
             min={0}
             max={1}
-            step={0.1}
+            step={0.01}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;
@@ -46,7 +45,7 @@ export default function PrimitiveEditor() {
             value={value}
             min={0}
             max={1}
-            step={0.1}
+            step={0.01}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;
@@ -67,7 +66,7 @@ export default function PrimitiveEditor() {
             value={value}
             min={0}
             max={1}
-            step={0.1}
+            step={0.01}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;

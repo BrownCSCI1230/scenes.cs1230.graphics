@@ -41,7 +41,7 @@ export default function GroupEditor() {
             key={index}
             label={index === 0 ? "X" : index === 1 ? "Y" : "Z"}
             value={value}
-            step={0.1}
+            step={0.01}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;
@@ -88,7 +88,7 @@ export default function GroupEditor() {
             key={index}
             label={index === 0 ? "X" : index === 1 ? "Y" : "Z"}
             value={value}
-            step={0.1}
+            step={0.01}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
               if (isNaN(value)) return;

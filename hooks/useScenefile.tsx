@@ -18,6 +18,7 @@ import {
   Scenefile,
   ScenefileSchema,
 } from "@/types/Scenefile";
+import { it } from "node:test";
 import {
   createContext,
   useCallback,
@@ -40,6 +41,7 @@ type ScenefileContextType = {
   loadFile: (file: File) => void;
   setSceneName: (name: string) => void;
   updateGlobalData: (globalData: GlobalData) => void;
+  deleteItem: (item: Deletable) => void;
   translateGroup: (translate: number[]) => void;
   setGroupTranslate: (translate: number[]) => void;
   setGroupName: (name: string) => void;
@@ -74,6 +76,9 @@ type SelectedMap = {
   light: Light;
 };
 
+type Deletable = Group | Light | Primitive;
+  
+
 export type Selected = {
   [K in keyof SelectedMap]: {
     type: K;
@@ -107,6 +112,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   loadFile: () => {},
   setSceneName: () => {},
   updateGlobalData: () => {},
+  deleteItem: () => {},
   translateGroup: () => {},
   setGroupTranslate: () => {},
   setGroupName: () => {},
@@ -231,6 +237,28 @@ export const ScenefileProvider = ({
   const updateGlobalData = useCallback((globalData: GlobalData) => {
     dispatch({ type: "UPDATE_GLOBAL_DATA", globalData: globalData });
   }, []);
+
+  const deleteItem = useCallback(
+    (item: Deletable) => {
+      const deleteItemRecursive = (group: Group) => {
+        if (group.groups) {
+          group.groups = group.groups.filter((g) => g !== item);
+          group.groups.forEach((g) => {
+            deleteItemRecursive(g);
+          });
+        }
+        if (group.primitives) {
+          group.primitives = group.primitives.filter((p) => p !== item);
+        }
+        if (group.lights) {
+          group.lights = group.lights.filter((l) => l !== item);
+        }
+      };
+      deleteItemRecursive(scenefile);
+      dispatch({ type: "LOAD_FILE", scenefile: scenefile });
+      setSelected(undefined);
+    }
+    , [scenefile]);
 
   const translateGroup = useCallback(
     (translate: number[]) => {
@@ -506,6 +534,7 @@ export const ScenefileProvider = ({
         loadFile,
         setSceneName,
         updateGlobalData,
+        deleteItem,
         translateGroup,
         setGroupTranslate,
         setGroupName,
