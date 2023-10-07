@@ -1,6 +1,6 @@
 {
   
-  "name": "root",
+  "name": "cornell_box",
   "globalData": {
     "ambientCoeff": 0.2,
     "diffuseCoeff": 0.5,

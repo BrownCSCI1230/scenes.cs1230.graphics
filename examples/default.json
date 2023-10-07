@@ -1,4 +1,5 @@
 {
+  "name": "default",
   "globalData": {
     "ambientCoeff": 1,
     "diffuseCoeff": 1,
