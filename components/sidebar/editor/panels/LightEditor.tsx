@@ -103,7 +103,7 @@ export default function LightEditor() {
                 label={propToLabelArray(property)[index]}
                 min={0}
                 max={1}
-                step={0.1}
+                step={0.01}
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
                   if (isNaN(value)) return;
@@ -141,7 +141,7 @@ export default function LightEditor() {
                 label={propToLabelArray(property)[index]}
                 min={0}
                 max={1}
-                step={0.1}
+                step={0.01}
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
                   if (isNaN(value)) return;
