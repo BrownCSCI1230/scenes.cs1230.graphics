@@ -52,6 +52,7 @@ type ScenefileContextType = {
     property: PrimitiveProperty,
     value: GenericProperty,
   ) => void;
+  setLightName: (name: string) => void;
   setLightProperty: (property: LightProperty, value: GenericProperty) => void;
   setGlobalDataProperty: (
     property: GlobalDataProperty,
@@ -120,6 +121,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   setGroupRotate: () => {},
   setGroupScale: () => {},
   setPrimitiveProperty: () => {},
+  setLightName: () => {},
   setLightProperty: () => {},
   setGlobalDataProperty: () => {},
   setCameraPosition: () => {},
@@ -416,6 +418,18 @@ export const ScenefileProvider = ({
     [selected],
   );
 
+  const setLightName = useCallback(
+    (name: string) => {
+      if (!selected || selected.type !== "light") return;
+      dispatch({
+        type: "SET_LIGHT_NAME",
+        light: selected.item,
+        name: name,
+      });
+    },
+    [selected],
+  );
+
   const setLightProperty = useCallback(
     (property: LightProperty, value: GenericProperty) => {
       if (!selected || selected.type !== "light") return;
@@ -545,6 +559,7 @@ export const ScenefileProvider = ({
         setGroupRotate,
         setGroupScale,
         setPrimitiveProperty,
+        setLightName,
         setLightProperty,
         setGlobalDataProperty,
         setCameraPosition,
@@ -694,6 +709,15 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
         ...state,
       };
     }
+    case "SET_LIGHT_NAME": {
+      if (action.light) {
+        console.log("setting light name", action.name);
+        action.light.name = action.name;
+      }
+      return {
+        ...state,
+      };
+    }
     case "SET_LIGHT_PROPERTY": {
       if (action.light && action.property in action.light) {
         (action.light as any)[action.property] = action.value;
@@ -816,6 +840,12 @@ type SetPrimitivePropertyAction = {
   value: GenericProperty;
 };
 
+type SetLightNameAction = {
+  type: "SET_LIGHT_NAME";
+  light: Light;
+  name: string;
+};
+
 type SetLightPropertyAction = {
   type: "SET_LIGHT_PROPERTY";
   light: Light;
@@ -847,6 +877,7 @@ type ScenefileAction =
   | SetCameraHeightAngleAction
   | SetCameraPropertyAction
   | SetPrimitivePropertyAction
+  | SetLightNameAction
   | SetLightPropertyAction
   | SetGlobalDataPropertyAction;
 

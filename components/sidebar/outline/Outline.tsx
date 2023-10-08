@@ -121,7 +121,7 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
       {group.lights?.map((light) => (
         <OutlineLight
           key={light.id}
-          title={displayNames[light.type]}
+          title={light.name || displayNames[light.type]}
           icon={lightIcons[light.type]}
           select={() => select({ type: "light", item: light })}
           selected={selected?.item === light}

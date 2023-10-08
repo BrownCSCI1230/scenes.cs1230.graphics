@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import useScenefile from "@/hooks/useScenefile";
 import { LightProperty } from "@/types/Scenefile";
 import EditorSection from "../components/EditorSection";
@@ -24,6 +25,23 @@ const BASE_PROPERTIES: LightProperties = {
   single: [],
   triple: ["color"],
 };
+const propToLabelArray = (prop: string) => {
+  switch (prop) {
+    case "direction":
+      return ["X", "Y", "Z"];
+    case "color":
+      return ["R", "G", "B"];
+    case "attenuationCoeff":
+      return ["C1", "C2", "C3"];
+    default:
+      return [];
+  }
+};
+const lightTypeToDisplayName = {
+  point: "Point light",
+  directional: "Directional light",
+  spot: "Spot light",
+};
 
 const ALL_PROPERTIES: LightProperties = { single: [], triple: [] };
 for (const lightType in LIGHT_PROPERTIES_BY_TYPE) {
@@ -39,7 +57,7 @@ for (const lightType in LIGHT_PROPERTIES_BY_TYPE) {
 }
 
 export default function LightEditor() {
-  const { selected, setLightProperty } = useScenefile();
+  const { selected, setLightProperty, setLightName } = useScenefile();
 
   if (selected?.type !== "light") return null;
 
@@ -56,21 +74,24 @@ export default function LightEditor() {
     }
   }
 
-  const propToLabelArray = (prop: string) => {
-    switch (prop) {
-      case "direction":
-        return ["X", "Y", "Z"];
-      case "color":
-        return ["R", "G", "B"];
-      case "attenuationCoeff":
-        return ["C1", "C2", "C3"];
-      default:
-        return [];
-    }
-  };
-
   return (
     <>
+      <EditorSection label="Light name">
+        <Input
+          className="bg-white"
+          type="text"
+          autoComplete="off"
+          placeholder={
+            lightTypeToDisplayName[
+              light.type as keyof typeof lightTypeToDisplayName
+            ]
+          }
+          value={light.name ?? ""}
+          onChange={(e) => {
+            setLightName(e.target.value);
+          }}
+        ></Input>
+      </EditorSection>
       {BASE_PROPERTIES["triple"].map((property, index) => {
         const prop = light[property];
         return (
