@@ -49,7 +49,6 @@ const exampleUniform = (primitive: Primitive, scenefile: Scenefile, scene: any) 
 
   const [pointLights, directionalLights, spotLights] = getLights(scene);
   const lights = [...pointLights, ...directionalLights, ...spotLights];
-  console.log(lights);
 
   const lightTypes = lights.map((light) => light.type);
   const lightColors = lights.map((light) => light.color); 
@@ -66,8 +65,6 @@ const exampleUniform = (primitive: Primitive, scenefile: Scenefile, scene: any) 
   const length8Directions = Array(8 - lights.length).fill(new Vector3(0, 0, 0));
   const length8Angles = Array(8 - lights.length).fill(new Vector3(0, 0, 0));
   const length8Penumbras = Array(8 - lights.length).fill(new Vector3(0, 0, 0));
-
-
 
   return {
     ka: { value: scenefile.globalData.ambientCoeff },
