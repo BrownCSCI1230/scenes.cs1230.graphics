@@ -529,7 +529,7 @@ export const ScenefileProvider = ({
         id: Math.random().toString(),
         name: undefined,
         translate: [0, 0, 0],
-        rotate: [0, 0, 0, 0],
+        rotate: [0, 1, 0, 0],
         scale: [1, 1, 1],
       });
       dispatch({ type: "LOAD_FILE", scenefile: scenefile });

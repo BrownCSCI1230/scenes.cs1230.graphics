@@ -17,7 +17,7 @@ export default function GroupEditor() {
 
   const group = selected.item;
   const translate = group.translate ? group.translate : [0, 0, 0];
-  const rotation = group.rotate ? group.rotate : [0, 0, 0, 0];
+  const rotation = group.rotate ? group.rotate : [0, 1, 0, 0];
   const scale = group.scale ? group.scale : [1, 1, 1];
 
   return (
