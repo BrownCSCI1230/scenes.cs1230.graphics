@@ -22,7 +22,7 @@ export default function Upload() {
   };
 
   return (
-    <div className="p-1">
+    <>
       <Button onClick={handleClick}>Upload</Button>
       <input
         ref={inputRef}
@@ -31,6 +31,6 @@ export default function Upload() {
         hidden
         onInput={handleInputChange}
       />
-    </div>
+    </>
   );
 }

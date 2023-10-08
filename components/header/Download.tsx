@@ -30,10 +30,8 @@ export default function Upload() {
   };
 
   return (
-    <div className="p-1">
-      <Button onClick={downloadScene} variant="outline">
-        Download
-      </Button>
-    </div>
+    <Button onClick={downloadScene} variant="outline">
+      Download
+    </Button>
   );
 }

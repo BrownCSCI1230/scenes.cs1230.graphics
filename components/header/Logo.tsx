@@ -70,7 +70,8 @@ export default function LogoNew() {
   return (
     <Link
       className={
-        logoFont.className + " flex h-full w-[138px] text-[34.6px] text-white"
+        logoFont.className +
+        " flex h-full w-[138px] shrink-0 text-[34.6px] text-white"
       }
       href="https://cs1230.graphics"
       target="_blank"
