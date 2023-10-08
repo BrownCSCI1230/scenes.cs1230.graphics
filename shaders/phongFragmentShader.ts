@@ -19,13 +19,13 @@ uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform float shininess;
 
-uniform int lightTypes[1];
-uniform vec3 lightColors[1];
-uniform vec3 lightFunctions[1];
-uniform vec3 worldSpaceLightPositions[1];
-uniform vec3 worldSpaceLightDirections[1];
-uniform float angles[1];
-uniform float penumbras[1];
+uniform int lightTypes[8];
+uniform vec3 lightColors[8];
+uniform vec3 lightFunctions[8];
+uniform vec3 worldSpaceLightPositions[8];
+uniform vec3 worldSpaceLightDirections[8];
+uniform float angles[8];
+uniform float penumbras[8];
 uniform int numLights;
 
 // Output color
