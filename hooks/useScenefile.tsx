@@ -711,7 +711,6 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
     }
     case "SET_LIGHT_NAME": {
       if (action.light) {
-        console.log("setting light name", action.name);
         action.light.name = action.name;
       }
       return {
