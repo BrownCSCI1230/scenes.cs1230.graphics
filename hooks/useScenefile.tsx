@@ -694,7 +694,7 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
       };
     }
     case "SET_CAMERA_PROPERTY": {
-      if (action.camera && action.property in action.camera) {
+      if (action.camera) {
         (action.camera as any)[action.property] = action.value;
       }
       return {
@@ -702,7 +702,7 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
       };
     }
     case "SET_PRIMITIVE_PROPERTY": {
-      if (action.primitive && action.property in action.primitive) {
+      if (action.primitive) {
         (action.primitive as any)[action.property] = action.value;
       }
       return {
@@ -718,7 +718,7 @@ const reducer = (state: Scenefile, action: ScenefileAction) => {
       };
     }
     case "SET_LIGHT_PROPERTY": {
-      if (action.light && action.property in action.light) {
+      if (action.light) {
         (action.light as any)[action.property] = action.value;
       }
       return {
