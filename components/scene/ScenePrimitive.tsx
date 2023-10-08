@@ -32,16 +32,16 @@ export default function ScenePrimitive({
   const uniforms = useMemo(() => {
     // console.log("UNIFORM UPDATE");
     // console.log("LIGHTS", lights)
-    let ambient = primitive.ambient ?? [0, 0, 0];
-    let diffuse = primitive.diffuse ?? [0, 0, 0];
-    let specular = primitive.specular ?? [0, 0, 0];
-    let shininess = primitive.shininess ?? 1.0;
-    let ambientCoefficient = scenefile.globalData.ambientCoeff ?? 1.0;
-    let diffuseCoefficient = scenefile.globalData.diffuseCoeff ?? 1.0;
-    let specularCoefficient = scenefile.globalData.specularCoeff ?? 1.0;
-    let transparentCoefficient = scenefile.globalData.transparentCoeff ?? 1.0;
-    let sceneLights = lights ?? [];
-    let lightCount = sceneLights.length;
+    const ambient = primitive.ambient ?? [0, 0, 0];
+    const diffuse = primitive.diffuse ?? [0, 0, 0];
+    const specular = primitive.specular ?? [0, 0, 0];
+    const shininess = primitive.shininess ?? 1.0;
+    const ambientCoefficient = scenefile.globalData.ambientCoeff ?? 1.0;
+    const diffuseCoefficient = scenefile.globalData.diffuseCoeff ?? 1.0;
+    const specularCoefficient = scenefile.globalData.specularCoeff ?? 1.0;
+    const transparentCoefficient = scenefile.globalData.transparentCoeff ?? 1.0;
+    const sceneLights = lights ?? [];
+    const lightCount = sceneLights.length;
 
     return {
       ambientColor: { value: new Color(ambient[0], ambient[1], ambient[2]) },

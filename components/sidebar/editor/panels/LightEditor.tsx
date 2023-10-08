@@ -1,8 +1,7 @@
 import useScenefile from "@/hooks/useScenefile";
 import { LightProperty } from "@/types/Scenefile";
-import SingleInput from "../components/SingleInput";
-import TripleInput from "../components/TripleInput";
 import EditorSection from "../components/EditorSection";
+import SingleInput from "../components/SingleInput";
 
 // TODO: find better way to infer this from actual Zod types??
 type SingleTripleProp = "single" | "triple";
@@ -44,7 +43,7 @@ export default function LightEditor() {
 
   if (selected?.type !== "light") return null;
 
-  let light: any = selected.item;
+  const light: any = selected.item;
 
   for (const prop of ALL_PROPERTIES["single"]) {
     if (!(prop in light)) {
@@ -73,7 +72,7 @@ export default function LightEditor() {
   return (
     <>
       {BASE_PROPERTIES["triple"].map((property, index) => {
-        let prop = light[property];
+        const prop = light[property];
         return (
           <EditorSection key={index} label={property}>
             {prop.map((value: any, index: any) => (

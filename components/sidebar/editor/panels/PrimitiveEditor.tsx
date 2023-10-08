@@ -7,12 +7,12 @@ export default function PrimitiveEditor() {
 
   if (selected?.type !== "primitive") return null;
 
-  let primitive = selected.item;
+  const primitive = selected.item;
 
-  let ambient = primitive.ambient ? primitive.ambient : [0, 0, 0];
-  let diffuse = primitive.diffuse ? primitive.diffuse : [0, 0, 0];
-  let specular = primitive.specular ? primitive.specular : [0, 0, 0];
-  let shininess = primitive.shininess ? primitive.shininess : 10;
+  const ambient = primitive.ambient ? primitive.ambient : [0, 0, 0];
+  const diffuse = primitive.diffuse ? primitive.diffuse : [0, 0, 0];
+  const specular = primitive.specular ? primitive.specular : [0, 0, 0];
+  const shininess = primitive.shininess ? primitive.shininess : 10;
 
   return (
     <>
