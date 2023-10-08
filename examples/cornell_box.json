@@ -1,5 +1,4 @@
 {
-  
   "name": "cornell_box",
   "globalData": {
     "ambientCoeff": 0.2,
@@ -8,288 +7,129 @@
     "transparentCoeff": 0
   },
   "cameraData": {
-    "position": [
-      0,
-      0.1,
-      5
-    ],
-    "up": [
-      0,
-      1,
-      0
-    ],
+    "position": [0, 0.1, 5],
+    "up": [0, 1, 0],
     "heightAngle": 49.5,
-    "look": [
-      0,
-      0,
-      -1
-    ]
+    "look": [0, 0, -1]
   },
   "groups": [
     {
-      
       "name": "The Rectangle",
-      "translate": [
-        0.76,
-        -0.8,
-        -1.96
-      ],
-      "rotate": [
-        0,
-        2,
-        0,
-        32
-      ],
-      "scale": [
-        1.08,
-        2.36,
-        1
-      ],
+      "translate": [0.76, -0.8, -1.96],
+      "rotate": [0, 2, 0, 32],
+      "scale": [1.08, 2.36, 1],
       "primitives": [
         {
           "type": "cube",
-          "diffuse": [
-            0.57,
-            0.3,
-            0.22
-          ],
-          "specular": [
-            1,
-            1,
-            1
-          ],
-          "ambient": [
-            0.5,
-            0.29,
-            0.07
-          ],
-          "shininess": 1}
+          "diffuse": [0.57, 0.3, 0.22],
+          "specular": [1, 1, 1],
+          "ambient": [0.5, 0.29, 0.07],
+          "shininess": 1
+        }
       ]
     },
     {
       "name": "The Sphere",
       "primitives": [
         {
-          "ambient": [
-            0.93,
-            0.91,
-            1
-          ],
-          "diffuse": [
-            0.89,
-            0.86,
-            1
-          ],
-          "specular": [
-            0.9,
-            0.87,
-            0.95
-          ],
+          "ambient": [0.93, 0.91, 1],
+          "diffuse": [0.89, 0.86, 1],
+          "specular": [0.9, 0.87, 0.95],
           "shininess": 30,
-          "type": "sphere"}
+          "type": "sphere"
+        }
       ],
-      "translate": [
-        -1.1,
-        -1.41,
-        -2.93
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
+      "translate": [-1.1, -1.41, -2.93],
+      "scale": [1, 1, 1],
       "groups": [
         {
           "name": "Light Above Sphere",
           "lights": [
             {
-              "color": [
-                1,
-                1,
-                1
-              ],
+              "color": [1, 1, 1],
               "type": "point",
-              "attenuationCoeff": [
-                1,
-                0,
-                0
-              ]}
+              "attenuationCoeff": [1, 0, 0]
+            }
           ],
-          "translate": [
-            0,
-            2.18,
-            2.22
-          ],
-          "scale": [
-            1,
-            1,
-            1
-          ],
-          "groups": []}
-      ]},
+          "translate": [0, 2.18, 2.22],
+          "scale": [1, 1, 1],
+          "groups": []
+        }
+      ]
+    },
     {
       "name": "Left Wall",
       "primitives": [
         {
-          "ambient": [
-            1,
-            0.1,
-            0.13
-          ],
-          "diffuse": [
-            1,
-            0,
-            0
-          ],
-          "specular": [
-            1,
-            1,
-            1
-          ],
+          "ambient": [1, 0.1, 0.13],
+          "diffuse": [1, 0, 0],
+          "specular": [1, 1, 1],
           "shininess": 1,
-          "type": "cube"}
+          "type": "cube"
+        }
       ],
-      "translate": [
-        -2.39,
-        0.13,
-        -2.57
-      ],
-      "scale": [
-        0.1,
-        4.17,
-        5
-      ],
+      "translate": [-2.39, 0.13, -2.57],
+      "scale": [0.1, 4.17, 5],
       "groups": [
         {
           "name": "Right Wall",
           "primitives": [
             {
-              "ambient": [
-                0.02,
-                1,
-                0.1
-              ],
-              "diffuse": [
-                0.08,
-                1,
-                0.05
-              ],
-              "specular": [
-                1,
-                1,
-                1
-              ],
+              "ambient": [0.02, 1, 0.1],
+              "diffuse": [0.08, 1, 0.05],
+              "specular": [1, 1, 1],
               "shininess": 1,
-              "type": "cube"}
+              "type": "cube"
+            }
           ],
-          "translate": [
-            47.96,
-            0,
-            0
-          ],
-          "scale": [
-            1,
-            1,
-            1
-          ]}
-      ]},
+          "translate": [47.96, 0, 0],
+          "scale": [1, 1, 1]
+        }
+      ]
+    },
     {
       "name": "Back wall",
       "primitives": [
         {
-          "ambient": [
-            1,
-            0.89,
-            0.85
-          ],
-          "diffuse": [
-            1,
-            0.9,
-            0.92
-          ],
-          "specular": [
-            1,
-            1,
-            1
-          ],
+          "ambient": [1, 0.89, 0.85],
+          "diffuse": [1, 0.9, 0.92],
+          "specular": [1, 1, 1],
           "shininess": 1,
-          "type": "cube"}
+          "type": "cube"
+        }
       ],
-      "translate": [
-        0,
-        0,
-        -5.3
-      ],
-      "scale": [
-        5.85,
-        5,
-        1
-      ]},
+      "translate": [0, 0, -5.3],
+      "scale": [5.85, 5, 1]
+    },
     {
       "name": "Floor",
       "primitives": [
         {
-          "ambient": [
-            1,
-            0.9,
-            0.94
-          ],
-          "diffuse": [
-            1,
-            0.92,
-            0.89
-          ],
-          "specular": [
-            1,
-            1,
-            1
-          ],
+          "ambient": [1, 0.9, 0.94],
+          "diffuse": [1, 0.92, 0.89],
+          "specular": [1, 1, 1],
           "shininess": 1,
-          "type": "cube"}
+          "type": "cube"
+        }
       ],
-      "translate": [
-        0.01,
-        -2,
-        -2.66
-      ],
-      "scale": [
-        5,
-        0.1,
-        5
-      ],
+      "translate": [0.01, -2, -2.66],
+      "scale": [5, 0.1, 5],
       "groups": [
         {
           "name": "Ceiling",
           "primitives": [
             {
-              "ambient": [
-                0.5,
-                0.5,
-                0.5
-              ],
-              "diffuse": [
-                1,
-                1,
-                1
-              ],
-              "specular": [
-                1,
-                1,
-                1
-              ],
+              "ambient": [0.5, 0.5, 0.5],
+              "diffuse": [1, 1, 1],
+              "specular": [1, 1, 1],
               "shininess": 1,
-              "type": "cube"}
+              "type": "cube"
+            }
           ],
-          "translate": [
-            0,
-            42.52,
-            0
-          ],
-          "scale": [
-            1,
-            1,
-            1
-          ]}
-      ]}
+          "translate": [0, 42.52, 0],
+          "scale": [1, 1, 1]
+        }
+      ]
+    }
   ]
 }

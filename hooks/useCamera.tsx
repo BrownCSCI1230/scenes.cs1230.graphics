@@ -1,94 +1,74 @@
 "use client";
 
+import { eulerToLookUp, lookUpToEuler } from "@/lib/cameraUtils";
 import { createContext, useContext, useRef, useState } from "react";
-import { Euler, Vector3 } from "three";
+import { Vector3 } from "three";
 import { OrbitControls } from "three-stdlib";
 
-// global context of the Three viewport camera
-
-type ViewportInfo = {
-  position: Vector3;
-  rotation: Euler;
-  up: Vector3;
-};
-
 type CameraContextType = {
-  viewport: ViewportInfo;
-  setViewport: (viewport: ViewportInfo) => void;
   perspectiveCamera?: React.RefObject<THREE.PerspectiveCamera>;
   orbitTarget: Vector3;
   setOrbitTarget: (target: Vector3) => void;
   orbitControls?: React.RefObject<OrbitControls>;
-  updateViewport: (viewportInfo: ViewportInfo) => void;
+  updateViewport: (position: number[], look: number[], up: number[]) => void;
+  lookUpFromViewport: () => [number[], number[]];
 };
 
-const CameraContext = createContext<CameraContextType>({
-  viewport: {
-    position: new Vector3(),
-    rotation: new Euler(),
-    up: new Vector3(),
-  },
-  setViewport: () => {},
+const initialContext: CameraContextType = {
   perspectiveCamera: undefined,
-  orbitTarget: new Vector3(),
+  orbitTarget: new Vector3(0, 0, 0),
   setOrbitTarget: () => {},
   orbitControls: undefined,
   updateViewport: () => {},
-});
+  lookUpFromViewport: () => [
+    [0, 0, -1],
+    [0, 1, 0],
+  ],
+};
+
+const CameraContext = createContext<CameraContextType>(initialContext);
 
 export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
-  const [viewport, setViewport] = useState<ViewportInfo>({
-    position: new Vector3(5, 2, 5),
-    rotation: new Euler(),
-    up: new Vector3(0, 1, 0),
-  });
-
   const [orbitTarget, setOrbitTarget] = useState<Vector3>(new Vector3(0, 0, 0));
-
   const perspectiveCamera = useRef<THREE.PerspectiveCamera>(null);
   const orbitControls = useRef<OrbitControls>(null);
 
-  const updateViewport = (viewportInfo: ViewportInfo) => {
-    // console.log
-    if (!perspectiveCamera.current?.position) return;
-    if (!orbitControls.current?.target) return;
-    perspectiveCamera.current?.position.set(
-      viewportInfo.position.x,
-      viewportInfo.position.y,
-      viewportInfo.position.z,
+  const updateViewport = (position: number[], look: number[], up: number[]) => {
+    if (!perspectiveCamera.current || !orbitControls.current) return;
+    perspectiveCamera.current.position.set(
+      position[0],
+      position[1],
+      position[2],
     );
-    // console.log(perspectiveCamera.current?.rotation);
-    perspectiveCamera.current?.rotation.set(
-      viewportInfo.rotation.x,
-      viewportInfo.rotation.y,
-      viewportInfo.rotation.z,
-    );
-
-    perspectiveCamera.current?.up.set(
-      viewportInfo.up.x,
-      viewportInfo.up.y,
-      viewportInfo.up.z,
-    );
-
-    // console.log(perspectiveCamera.current?.rotation);
-    // console.log(orbitTarget)
+    const rotation = lookUpToEuler(look, up);
+    perspectiveCamera.current.rotation.set(rotation.x, rotation.y, rotation.z);
+    perspectiveCamera.current.up.set(up[0], up[1], up[2]);
+    // new target is camera position + some distance in the direction of the camera
     orbitControls.current.target.set(
-      orbitTarget.x,
-      orbitTarget.y,
-      orbitTarget.z,
+      position[0] + look[0],
+      position[1] + look[1],
+      position[2] + look[2],
     );
+  };
+
+  const lookUpFromViewport = (): [number[], number[]] => {
+    if (!perspectiveCamera.current)
+      return [
+        [0, 0, -1],
+        [0, 1, 0],
+      ];
+    return eulerToLookUp(perspectiveCamera.current.rotation);
   };
 
   return (
     <CameraContext.Provider
       value={{
-        viewport,
-        setViewport,
         perspectiveCamera,
         orbitTarget,
         setOrbitTarget,
         orbitControls,
         updateViewport,
+        lookUpFromViewport,
       }}
     >
       {children}

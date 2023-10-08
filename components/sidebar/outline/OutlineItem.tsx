@@ -64,7 +64,6 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
     const content = childrenArray.length >= 2 ? childrenArray[1] : null;
 
     const handleHeaderClick = () => {
-      console.log(depth);
       if (selected) {
         setIsOpen(!isOpen);
       }

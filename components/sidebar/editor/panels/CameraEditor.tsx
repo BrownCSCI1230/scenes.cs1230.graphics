@@ -9,46 +9,10 @@ import {
 } from "@/components/ui/tooltip";
 import useCamera from "@/hooks/useCamera";
 import useScenefile from "@/hooks/useScenefile";
+import { focusToLook } from "@/lib/cameraUtils";
 import { useEffect, useState } from "react";
-import { Euler, Matrix4, Vector3 } from "three";
 import EditorSection from "../components/EditorSection";
 import SingleInput from "../components/SingleInput";
-
-function lookUpFromEuler(euler: Euler): [number[], number[]] {
-  const matrix = new Matrix4();
-  matrix.makeRotationFromEuler(euler);
-
-  const lookVector = new Vector3(0, 0, 1); // Default look direction
-  const upVector = new Vector3(0, 1, 0); // Default up direction
-
-  lookVector.applyMatrix4(matrix);
-  upVector.applyMatrix4(matrix);
-
-  return [
-    [lookVector.x, lookVector.y, lookVector.z],
-    [upVector.x, upVector.y, upVector.z],
-  ];
-}
-
-function eulerFromLookUp(look: number[], up: number[]): Euler {
-  const matrix = new Matrix4();
-  matrix.makeBasis(
-    new Vector3(look[0], look[1], look[2]),
-    new Vector3(up[0], up[1], up[2]),
-    new Vector3(0, 0, 1),
-  );
-
-  const euler = new Euler();
-  euler.setFromRotationMatrix(matrix);
-
-  return euler;
-}
-
-function eulerFromFocusUp(focus: number[], up: number[]): Euler {
-  const look = [-focus[0], -focus[1], -focus[2]];
-
-  return eulerFromLookUp(look, up);
-}
 
 export default function CameraEditor() {
   const {
@@ -60,9 +24,7 @@ export default function CameraEditor() {
     setCameraHeightAngle,
   } = useScenefile();
 
-  const { viewport, updateViewport } = useCamera();
-
-  // console.log(viewport.position);
+  const { updateViewport, lookUpFromViewport, perspectiveCamera } = useCamera();
 
   const camera = selected?.type === "camera" ? selected?.item : undefined;
 
@@ -99,18 +61,11 @@ export default function CameraEditor() {
                 className="flex-1"
                 variant="outline"
                 onClick={() => {
-                  updateViewport({
-                    position: new Vector3(
-                      camera.position[0],
-                      camera.position[1],
-                      camera.position[2],
-                    ),
-                    rotation:
-                      orientationMode === "look"
-                        ? eulerFromLookUp(look, camera.up)
-                        : eulerFromFocusUp(focus, camera.up),
-                    up: new Vector3(camera.up[0], camera.up[1], camera.up[2]),
-                  });
+                  updateViewport(
+                    camera.position,
+                    camera.look ?? focusToLook(camera.focus, camera.position),
+                    camera.up,
+                  );
                 }}
               >
                 Reset viewport
@@ -128,13 +83,12 @@ export default function CameraEditor() {
                 className="flex-1"
                 variant="default"
                 onClick={() => {
-                  const [look, up] = lookUpFromEuler(viewport.rotation);
-                  setCameraPosition([
-                    viewport.position.x,
-                    viewport.position.y,
-                    viewport.position.z,
-                  ]);
-                  setCameraLook(look);
+                  const [look, up] = lookUpFromViewport();
+                  setCameraPosition(
+                    perspectiveCamera?.current?.position.toArray() ?? [0, 0, 0],
+                  );
+                  setOrientationMode("look");
+                  setLook(look);
                   setCameraUp(up);
                 }}
               >
