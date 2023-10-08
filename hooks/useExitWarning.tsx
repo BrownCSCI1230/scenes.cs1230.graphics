@@ -2,17 +2,15 @@ import { useEffect } from "react";
 import useScenefile from "./useScenefile";
 
 export const useExitWarning = () => {
-  const { scenefile, originalScenefile } = useScenefile();
-  // if scenefile not the same as originalScenefile, warn before closing tab
+  const { scenefileHasChanged } = useScenefile();
   useEffect(() => {
     const callback = (e: BeforeUnloadEvent) => {
-      if (scenefile !== originalScenefile) {
-        e.preventDefault();
-        e.returnValue = "";
-        return "";
-      }
+      if (!scenefileHasChanged) return;
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
     };
     window.addEventListener("beforeunload", callback);
     return () => window.removeEventListener("beforeunload", callback);
-  }, [scenefile, originalScenefile]);
+  }, [scenefileHasChanged]);
 };

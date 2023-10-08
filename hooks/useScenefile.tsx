@@ -32,6 +32,7 @@ type ScenefileContextType = {
   scenefile: Scenefile;
   scenefilePath?: string;
   originalScenefile: Scenefile;
+  scenefileHasChanged: boolean;
   lights: Light[];
   templateGroupMap: { [name: string]: Group };
   select: (id: Selected) => void;
@@ -102,6 +103,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   scenefile: initialScenefile,
   scenefilePath: undefined,
   originalScenefile: initialScenefile,
+  scenefileHasChanged: false,
   selected: undefined,
   select: () => {},
   lights: [],
@@ -141,6 +143,7 @@ export const ScenefileProvider = ({
   const [scenefilePath, setScenefilePath] = useState<string>();
   const [originalScenefile, setOriginalScenefile] =
     useState<Scenefile>(initialScenefile);
+  const scenefileHasChanged = scenefile !== originalScenefile;
   const [selected, setSelected] = useState<Selected>();
   const { toast } = useToast();
 
@@ -525,6 +528,7 @@ export const ScenefileProvider = ({
         scenefile,
         scenefilePath,
         originalScenefile,
+        scenefileHasChanged,
         lights,
         templateGroupMap,
         select,
