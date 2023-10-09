@@ -4,24 +4,22 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  QuestionMarkCircleIcon
-} from "@heroicons/react/24/outline";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function Help() {
-
   return (
     <TooltipProvider>
       <Tooltip>
         <Link
+          className="flex items-center"
           href="https://cs1230.graphics/docs/scenes-tutorial"
           target="_blank"
         >
           <TooltipTrigger>
-            <QuestionMarkCircleIcon className="h-7 w-7 text-slate-300 pt-1.5"/>   
+            <InformationCircleIcon className="h-6 w-6 text-slate-300" />
           </TooltipTrigger>
         </Link>
         <TooltipContent side="bottom" collisionPadding={{ left: 40 }}>
@@ -29,6 +27,5 @@ export default function Help() {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-    
-  )
+  );
 }
