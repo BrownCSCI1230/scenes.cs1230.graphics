@@ -1,5 +1,6 @@
 import useScenefile from "@/hooks/useScenefile";
 import { Group } from "@/types/Scenefile";
+import { Vector3 } from "three";
 import SceneLight from "./SceneLight";
 import ScenePrimitive from "./ScenePrimitive";
 
@@ -10,19 +11,20 @@ export default function SceneGroup({ group }: { group: Group }) {
   const scaleX = group.scale?.[0] ?? 1;
   const scaleY = group.scale?.[1] ?? 1;
   const scaleZ = group.scale?.[2] ?? 1;
+  const rotateAxis = new Vector3(...(group.rotate?.slice(0, 3) ?? [0, 1, 0]))
+    .normalize()
+    .toArray();
   const rotateX = group.rotate
-    ? ((group.rotate[0] * group.rotate[3]) / 180) * Math.PI
+    ? ((rotateAxis[0] * group.rotate[3]) / 180) * Math.PI
     : 0;
   const rotateY = group.rotate
-    ? ((group.rotate[1] * group.rotate[3]) / 180) * Math.PI
+    ? ((rotateAxis[1] * group.rotate[3]) / 180) * Math.PI
     : 0;
   const rotateZ = group.rotate
-    ? ((group.rotate[2] * group.rotate[3]) / 180) * Math.PI
+    ? ((rotateAxis[2] * group.rotate[3]) / 180) * Math.PI
     : 0;
 
-  const { toggleSelect, selected, templateGroupMap } = useScenefile();
-
-  const isSelected = selected && selected.item === group;
+  const { toggleSelect, templateGroupMap } = useScenefile();
 
   const isATemplateGroupUser =
     group.name &&

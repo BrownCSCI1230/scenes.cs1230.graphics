@@ -10,7 +10,6 @@ export default function GroupEditor() {
     setGroupRotate,
     setGroupScale,
     setGroupName,
-    rotateGroup,
   } = useScenefile();
 
   if (selected?.type !== "group") return null;
