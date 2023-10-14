@@ -16,9 +16,10 @@ export default function Help() {
         <Link
           className="flex items-center"
           href="https://cs1230.graphics/docs/scenes-tutorial"
-          target="_blank"
+          target="_blank" 
+          aria-label="How to use Scenes"
         >
-          <TooltipTrigger>
+          <TooltipTrigger aria-label="How to use Scenes">
             <InformationCircleIcon className="h-6 w-6 text-slate-300" />
           </TooltipTrigger>
         </Link>

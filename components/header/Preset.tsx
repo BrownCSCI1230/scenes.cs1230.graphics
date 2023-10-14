@@ -24,8 +24,8 @@ export default function Preset() {
 
   return (
     <Select onValueChange={handleClick}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={scenefilePath ?? "No file loaded"} />
+      <SelectTrigger className="w-[180px]" aria-label="Load preset">
+        <SelectValue placeholder={scenefilePath ?? "No file loaded"} aria-label="Load preset" />
       </SelectTrigger>
       <SelectContent>
         {files.keys().map((key: string) => {
