@@ -17,6 +17,7 @@ import {
   PrimitiveProperty,
   Scenefile,
   ScenefileSchema,
+  _Scenefile,
 } from "@/types/Scenefile";
 import {
   createContext,
@@ -39,6 +40,7 @@ type ScenefileContextType = {
   toggleSelect: (id: Selected) => void;
   selected: Selected | undefined;
   loadFile: (file: File) => void;
+  setScenefile: (scene: _Scenefile) => void;
   setSceneName: (name: string) => void;
   updateGlobalData: (globalData: GlobalData) => void;
   deleteItem: (item: Deletable) => void;
@@ -111,6 +113,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   templateGroupMap: {},
   toggleSelect: () => {},
   loadFile: () => {},
+  setScenefile: () => {},
   setSceneName: () => {},
   updateGlobalData: () => {},
   deleteItem: () => {},
@@ -208,17 +211,19 @@ export const ScenefileProvider = ({
     [selected],
   );
 
+  const setScenefile = useCallback((scene: _Scenefile) => {
+    const withIDs = assignIDs(scene);
+    dispatch({ type: "LOAD_FILE", scenefile: withIDs });
+    setOriginalScenefile(withIDs);
+    setSelected(undefined);
+  }, []);
+
   const loadFile = useCallback(
     async (file: File) => {
       const data = await loadJSON(file);
       const result = ScenefileSchema.safeParse(data);
       if (result.success) {
-        const scenefile = assignIDs(result.data);
-        dispatch({ type: "LOAD_FILE", scenefile: scenefile });
-        setScenefilePath(file.name);
-        setOriginalScenefile(scenefile);
-        setSelected(undefined);
-        console.log("Loaded file", file.name);
+        setScenefile(result.data);
       } else {
         result.error.errors.forEach((e) => {
           console.error(e.message, e.path),
@@ -230,7 +235,7 @@ export const ScenefileProvider = ({
         });
       }
     },
-    [toast],
+    [toast, setScenefile],
   );
 
   const setSceneName = useCallback((name: string) => {
@@ -548,6 +553,7 @@ export const ScenefileProvider = ({
         select,
         toggleSelect,
         selected,
+        setScenefile,
         loadFile,
         setSceneName,
         updateGlobalData,

@@ -1,4 +1,4 @@
-type Scenefile = {
+export type ReadableScenefile = {
   name?: string;
   globalData: GlobalData;
   cameraData: CameraData;
@@ -103,4 +103,4 @@ type lightEqual = IsEqual<Light, _Light>; // true
 type globalDataEqual = IsEqual<GlobalData, _GlobalData>; // true
 type cameraDataEqual = IsEqual<CameraData, _CameraData>; // true
 type templateGroupEqual = IsEqual<TemplateGroup, _TemplateGroup>; // true
-type scenefileEqual = IsEqual<Scenefile, _Scenefile>; // true
+type scenefileEqual = IsEqual<ReadableScenefile, _Scenefile>; // true
