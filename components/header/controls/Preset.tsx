@@ -1,13 +1,23 @@
 "use client";
 
+import { useScenefile } from "@/hooks/useScenefile";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { useScenefile } from "@/hooks/useScenefile";
-
 import chess from "@/examples/chess.json";
 import cornell_box from "@/examples/cornell_box.json";
 import defaultExample from "@/examples/default.json";
@@ -52,27 +62,65 @@ const isExampleName = (name: string): name is keyof typeof examples =>
 export const Preset = () => {
   const { setScenefile } = useScenefile();
   const [key, setKey] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const [selected, setSelected] = useState<keyof typeof examples>();
 
   return (
-    <Select
-      key={key}
-      onValueChange={async (name) => {
-        if (!isExampleName(name)) return;
-        const scenefile = await ScenefileSchema.parseAsync(examples[name]);
-        setScenefile(scenefile);
-        setKey((key) => key + 1);
-      }}
-    >
-      <SelectTrigger className="w-[180px]" aria-label="Load preset">
-        Choose a preset...
-      </SelectTrigger>
-      <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
-        {Object.entries(examples).map((example) => (
-          <SelectItem key={example[0]} value={example[0]}>
-            {example[0]}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <>
+      <AlertDialog open={alertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Any unsaved changes will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setSelected(undefined);
+                setAlertOpen(false);
+              }}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                if (selected === undefined) return;
+                const scenefile = await ScenefileSchema.parseAsync(
+                  examples[selected],
+                );
+                setScenefile(scenefile);
+                setKey((key) => key + 1);
+                setSelected(undefined);
+                setAlertOpen(false);
+              }}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Select
+        key={key}
+        onValueChange={async (name) => {
+          if (!isExampleName(name)) return;
+          setAlertOpen(true);
+          setSelected(name);
+        }}
+      >
+        <SelectTrigger className="w-[180px]" aria-label="Load preset">
+          Choose a preset...
+        </SelectTrigger>
+        <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
+          {Object.entries(examples).map((example) => (
+            <SelectItem key={example[0]} value={example[0]}>
+              {example[0]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
   );
 };
