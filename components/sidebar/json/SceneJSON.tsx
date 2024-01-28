@@ -1,6 +1,6 @@
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 
-export default function SceneJSON() {
+export const SceneJSON = () => {
   const { scenefile } = useScenefile();
 
   return (
@@ -9,4 +9,4 @@ export default function SceneJSON() {
       {JSON.stringify(scenefile, null, 2).replace(/"id": "[^"]*",?/g, "")}
     </pre>
   );
-}
+};

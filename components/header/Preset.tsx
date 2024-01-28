@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 
 import chess from "@/examples/chess.json";
 import cornell_box from "@/examples/cornell_box.json";
@@ -49,7 +49,7 @@ const examples = {
 const isExampleName = (name: string): name is keyof typeof examples =>
   name in examples;
 
-export default function Preset() {
+export const Preset = () => {
   const { setScenefile } = useScenefile();
   const { scenefilePath } = useScenefile();
 
@@ -76,4 +76,4 @@ export default function Preset() {
       </SelectContent>
     </Select>
   );
-}
+};

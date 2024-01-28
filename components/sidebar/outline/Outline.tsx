@@ -1,5 +1,10 @@
-import useScenefile from "@/hooks/useScenefile";
-import { cn } from "@/lib/cn";
+import {
+  OutlineItem,
+  OutlineItemContent,
+  OutlineItemHeader,
+} from "@/components/sidebar/outline/OutlineItem";
+import { useScenefile } from "@/hooks/useScenefile";
+import { cn } from "@/lib/utils";
 import { Group } from "@/types/Scenefile";
 import {
   IconArrowsDown,
@@ -13,12 +18,8 @@ import {
   IconSunHigh,
   IconTriangles,
 } from "@tabler/icons-react";
-import OutlineItem, {
-  OutlineItemContent,
-  OutlineItemHeader,
-} from "./OutlineItem";
 
-export default function Outline() {
+export const Outline = () => {
   const { select, selected, scenefile } = useScenefile();
 
   return (
@@ -40,7 +41,7 @@ export default function Outline() {
       ))}
     </OutlineScene>
   );
-}
+};
 
 const isATemplateGroupUser = (group: Group) =>
   group.name &&

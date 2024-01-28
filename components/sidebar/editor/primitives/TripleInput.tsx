@@ -12,7 +12,7 @@ interface TripleInputProps {
   onZChange: (value: number) => void;
 }
 
-const TripleInput: React.FC<TripleInputProps> = ({
+export const TripleInput: React.FC<TripleInputProps> = ({
   label,
   x,
   y,
@@ -77,5 +77,3 @@ const TripleInput: React.FC<TripleInputProps> = ({
     </div>
   );
 };
-
-export default TripleInput;

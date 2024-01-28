@@ -1,9 +1,9 @@
-import Download from "../Download";
-import Help from "../Help";
-import Preset from "../Preset";
-import Upload from "../Upload";
+import { Download } from "@/components/header/Download";
+import { Help } from "@/components/header/Help";
+import { Preset } from "@/components/header/Preset";
+import { Upload } from "@/components/header/Upload";
 
-export default function HeaderControls() {
+export const HeaderControls = () => {
   return (
     <div className="flex flex-shrink-0 items-center justify-between gap-2">
       <Help />
@@ -12,4 +12,4 @@ export default function HeaderControls() {
       <Upload />
     </div>
   );
-}
+};

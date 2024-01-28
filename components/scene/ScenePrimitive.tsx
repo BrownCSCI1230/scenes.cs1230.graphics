@@ -1,7 +1,7 @@
 import { Primitive } from "@/types/Scenefile";
 import { Color } from "three";
 
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 
 const primitiveComponent = (primitive: Primitive) => {
   switch (primitive.type) {
@@ -17,11 +17,7 @@ const primitiveComponent = (primitive: Primitive) => {
   return <></>;
 };
 
-export default function ScenePrimitive({
-  primitive,
-}: {
-  primitive: Primitive;
-}) {
+export const ScenePrimitive = ({ primitive }: { primitive: Primitive }) => {
   const { scenefile } = useScenefile();
 
   const ambient = new Color(...(primitive.ambient ?? [0, 0, 0])).multiplyScalar(
@@ -47,4 +43,4 @@ export default function ScenePrimitive({
       {primitiveComponent(primitive)}
     </mesh>
   );
-}
+};

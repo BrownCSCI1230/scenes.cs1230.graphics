@@ -1,7 +1,9 @@
 "use client";
 
-import useCamera from "@/hooks/useCamera";
-import useScenefile from "@/hooks/useScenefile";
+import { SceneCamera } from "@/components/scene/SceneCamera";
+import { SceneGroup } from "@/components/scene/SceneGroup";
+import { useCamera } from "@/hooks/useCamera";
+import { useScenefile } from "@/hooks/useScenefile";
 import {
   GizmoHelper,
   GizmoViewport,
@@ -9,10 +11,8 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import SceneCamera from "./SceneCamera";
-import SceneGroup from "./SceneGroup";
 
-export default function Scene() {
+export const Scene = () => {
   const { scenefile } = useScenefile();
   const { perspectiveCamera, orbitControls, setOrbitTarget } = useCamera();
 
@@ -46,4 +46,4 @@ export default function Scene() {
       ))}
     </Canvas>
   );
-}
+};

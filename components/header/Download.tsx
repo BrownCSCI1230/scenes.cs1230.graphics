@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 
-export default function Upload() {
+export const Download = () => {
   const { scenefile } = useScenefile();
 
   const downloadScene = () => {
@@ -34,4 +34,4 @@ export default function Upload() {
       Download
     </Button>
   );
-}
+};

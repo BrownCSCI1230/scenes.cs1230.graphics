@@ -3,7 +3,7 @@ import { CameraData } from "@/types/Scenefile";
 import { PerspectiveCamera } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 
-export default function SceneLight({ camera }: { camera: CameraData }) {
+export const SceneCamera = ({ camera }: { camera: CameraData }) => {
   const cameraRef = useRef(null!);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -31,4 +31,4 @@ export default function SceneLight({ camera }: { camera: CameraData }) {
       {isMounted && <cameraHelper args={[cameraRef.current]} />}
     </>
   );
-}
+};

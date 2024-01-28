@@ -1,17 +1,20 @@
+import {
+  DraggableInput,
+  DraggableInputProps,
+} from "@/components/sidebar/editor/primitives/DraggableInput";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 import { useId } from "react";
-import DraggableInput, { DraggableInputProps } from "./DraggableInput";
 
 interface SingleInputProps extends DraggableInputProps {
   label?: string;
 }
 
-export default function SingleInput({
+export const SingleInput = ({
   label,
   className,
   ...props
-}: SingleInputProps) {
+}: SingleInputProps) => {
   const id = useId();
   return (
     <div className="flex items-center justify-end">
@@ -27,4 +30,4 @@ export default function SingleInput({
       />
     </div>
   );
-}
+};

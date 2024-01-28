@@ -84,7 +84,7 @@ type Mat4 = number[][];
 type RGB = number[];
 
 /**
- * Check that the inferred types from ./Scenefile.ts are the same as the readable ones here
+ * Check that the inferred types from Scenefile.ts are the same as the readable ones here
  */
 import {
   CameraData as _CameraData,
@@ -94,7 +94,7 @@ import {
   _Primitive,
   _Scenefile,
   _TemplateGroup,
-} from "./Scenefile";
+} from "@/types/Scenefile";
 
 type IsEqual<Type1, Type2> = Type1 | Type2 extends Type1 & Type2 ? true : never;
 type groupEqual = IsEqual<Group, _Group>; // true

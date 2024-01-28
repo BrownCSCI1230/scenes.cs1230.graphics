@@ -1,8 +1,8 @@
-import useScenefile from "@/hooks/useScenefile";
-import EditorSection from "../components/EditorSection";
-import SingleInput from "../components/SingleInput";
+import { EditorSection } from "@/components/sidebar/editor/primitives/EditorSection";
+import { SingleInput } from "@/components/sidebar/editor/primitives/SingleInput";
+import { useScenefile } from "@/hooks/useScenefile";
 
-export default function PrimitiveEditor() {
+export const PrimitiveEditor = () => {
   const { selected, setPrimitiveProperty } = useScenefile();
 
   if (selected?.type !== "primitive") return null;
@@ -92,4 +92,4 @@ export default function PrimitiveEditor() {
       </EditorSection>
     </>
   );
-}
+};

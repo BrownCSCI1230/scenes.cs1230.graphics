@@ -9,14 +9,14 @@ import {
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-export default function Help() {
+export const Help = () => {
   return (
     <TooltipProvider>
       <Tooltip>
         <Link
           className="flex items-center"
           href="https://cs1230.graphics/docs/scenes-tutorial"
-          target="_blank" 
+          target="_blank"
           aria-label="How to use Scenes"
         >
           <TooltipTrigger aria-label="How to use Scenes">
@@ -29,4 +29,4 @@ export default function Help() {
       </Tooltip>
     </TooltipProvider>
   );
-}
+};

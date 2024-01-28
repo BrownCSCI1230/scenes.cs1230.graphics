@@ -28,8 +28,8 @@ import {
   IconTriangles,
 } from "@tabler/icons-react";
 
-import useScenefile from "@/hooks/useScenefile";
-import { cn } from "@/lib/cn";
+import { useScenefile } from "@/hooks/useScenefile";
+import { cn } from "@/lib/utils";
 import React, { forwardRef, useDeferredValue, useState } from "react";
 
 interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
@@ -41,7 +41,7 @@ interface OutlineItemProps extends React.ComponentPropsWithoutRef<"div"> {
   deleteAction?: () => void;
 }
 
-const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
+export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
   (
     {
       initialOpen,
@@ -248,6 +248,5 @@ const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
 );
 OutlineItem.displayName = "OutlineItem";
 
-export default OutlineItem;
 export const OutlineItemHeader = React.Fragment;
 export const OutlineItemContent = React.Fragment;

@@ -1,8 +1,8 @@
+import { EditorSection } from "@/components/sidebar/editor/primitives/EditorSection";
+import { SingleInput } from "@/components/sidebar/editor/primitives/SingleInput";
 import { Input } from "@/components/ui/input";
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 import { LightProperty } from "@/types/Scenefile";
-import EditorSection from "../components/EditorSection";
-import SingleInput from "../components/SingleInput";
 
 // TODO: find better way to infer this from actual Zod types??
 type SingleTripleProp = "single" | "triple";
@@ -56,7 +56,7 @@ for (const lightType in LIGHT_PROPERTIES_BY_TYPE) {
   ];
 }
 
-export default function LightEditor() {
+export const LightEditor = () => {
   const { selected, setLightProperty, setLightName } = useScenefile();
 
   if (selected?.type !== "light") return null;
@@ -168,4 +168,4 @@ export default function LightEditor() {
       })}
     </>
   );
-}
+};

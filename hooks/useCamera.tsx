@@ -77,5 +77,3 @@ export const CameraProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useCamera = () => useContext(CameraContext);
-
-export default useCamera;

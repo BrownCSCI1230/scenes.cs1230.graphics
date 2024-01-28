@@ -1,10 +1,10 @@
 "use client";
 
-import useScenefile from "@/hooks/useScenefile";
+import { Button } from "@/components/ui/button";
+import { useScenefile } from "@/hooks/useScenefile";
 import { ChangeEvent, useRef } from "react";
-import { Button } from "../ui/button";
 
-export default function Upload() {
+export const Upload = () => {
   const { loadFile } = useScenefile();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,4 +33,4 @@ export default function Upload() {
       />
     </>
   );
-}
+};

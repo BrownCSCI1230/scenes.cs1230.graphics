@@ -1,8 +1,8 @@
+import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { CameraProvider } from "@/hooks/useCamera";
 import { ScenefileProvider } from "@/hooks/useScenefile";
 import { Inter } from "next/font/google";
-import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,24 +1,24 @@
 "use client";
 
-import useScenefile from "@/hooks/useScenefile";
-import { cn } from "@/lib/cn";
+import { Editor } from "@/components/sidebar/editor/Editor";
+import { SceneJSON } from "@/components/sidebar/json/SceneJSON";
+import { Outline } from "@/components/sidebar/outline/Outline";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
-import Editor from "./editor/Editor";
-import SceneJSON from "./json/SceneJSON";
-import Outline from "./outline/Outline";
+} from "@/components/ui/accordion";
+import { useScenefile } from "@/hooks/useScenefile";
+import { cn } from "@/lib/utils";
 
 const itemStyle =
   "flex flex-col overflow-auto flex-auto data-[state=closed]:flex-none";
-const triggerStyle = "pt-0 pb-1 font-semibold hover:no-underline";
+const triggerStyle = "pt-0 pb-1 font-semibold hover:no-underline select-none";
 const contentStyle =
   "flex-auto overflow-auto data-[state=closed]:animate-none data-[state=open]:animate-none";
 
-export default function Sidebar() {
+export const Sidebar = () => {
   const { scenefile } = useScenefile();
 
   return (
@@ -50,4 +50,4 @@ export default function Sidebar() {
       </Accordion>
     </aside>
   );
-}
+};

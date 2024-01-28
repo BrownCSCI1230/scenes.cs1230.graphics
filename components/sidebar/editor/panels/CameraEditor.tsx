@@ -1,3 +1,5 @@
+import { EditorSection } from "@/components/sidebar/editor/primitives/EditorSection";
+import { SingleInput } from "@/components/sidebar/editor/primitives/SingleInput";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,14 +9,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useCamera from "@/hooks/useCamera";
-import useScenefile from "@/hooks/useScenefile";
+import { useCamera } from "@/hooks/useCamera";
+import { useScenefile } from "@/hooks/useScenefile";
 import { focusToLook } from "@/lib/cameraUtils";
 import { useEffect, useState } from "react";
-import EditorSection from "../components/EditorSection";
-import SingleInput from "../components/SingleInput";
 
-export default function CameraEditor() {
+export const CameraEditor = () => {
   const {
     selected,
     setCameraPosition,
@@ -236,4 +236,4 @@ export default function CameraEditor() {
       </EditorSection>
     </>
   );
-}
+};

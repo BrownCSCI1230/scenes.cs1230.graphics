@@ -1,9 +1,9 @@
+import { EditorSection } from "@/components/sidebar/editor/primitives/EditorSection";
+import { SingleInput } from "@/components/sidebar/editor/primitives/SingleInput";
 import { Input } from "@/components/ui/input";
-import useScenefile from "@/hooks/useScenefile";
-import EditorSection from "../components/EditorSection";
-import SingleInput from "../components/SingleInput";
+import { useScenefile } from "@/hooks/useScenefile";
 
-export default function GroupEditor() {
+export const GroupEditor = () => {
   const {
     selected,
     setGroupTranslate,
@@ -61,10 +61,10 @@ export default function GroupEditor() {
               index === 0
                 ? "X"
                 : index === 1
-                ? "Y"
-                : index === 2
-                ? "Z"
-                : "Angle"
+                  ? "Y"
+                  : index === 2
+                    ? "Z"
+                    : "Angle"
             }
             value={value}
             step={1}
@@ -102,4 +102,4 @@ export default function GroupEditor() {
       </EditorSection>
     </>
   );
-}
+};

@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input, InputProps } from "@/components/ui/input";
-import useEvent from "@/hooks/useEvent";
+import { useEvent } from "@/hooks/useEvent";
 import { useForwardedRef } from "@/hooks/useForwardedRef";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
 export type DraggableInputProps = Omit<InputProps, "type">;
 
 // Extends Input component to make it draggable and add buttons on the left and right
-const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
+export const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
   ({ className, ...props }, ref) => {
     const propsValue = typeof props.value === "number" ? props.value : 0;
     const [isMouseDown, setIsMouseDown] = useState(false);
@@ -287,8 +287,6 @@ const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
 );
 
 DraggableInput.displayName = "DraggableInput";
-
-export default DraggableInput;
 
 const niceParseFloat = (value: string) => {
   if (value.startsWith(".")) {

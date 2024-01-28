@@ -1,10 +1,10 @@
-import useScenefile from "@/hooks/useScenefile";
+import { SceneLight } from "@/components/scene/SceneLight";
+import { ScenePrimitive } from "@/components/scene/ScenePrimitive";
+import { useScenefile } from "@/hooks/useScenefile";
 import { Group } from "@/types/Scenefile";
 import { Vector3 } from "three";
-import SceneLight from "./SceneLight";
-import ScenePrimitive from "./ScenePrimitive";
 
-export default function SceneGroup({ group }: { group: Group }) {
+export const SceneGroup = ({ group }: { group: Group }) => {
   const translateX = group.translate?.[0] ?? 0;
   const translateY = group.translate?.[1] ?? 0;
   const translateZ = group.translate?.[2] ?? 0;
@@ -84,4 +84,4 @@ export default function SceneGroup({ group }: { group: Group }) {
       )}
     </>
   );
-}
+};

@@ -4,7 +4,7 @@ import { Color, Matrix4 } from "three";
 
 const noTransform: Matrix4 = new Matrix4().identity();
 
-export default function SceneLight({ light }: { light: Light }) {
+export const SceneLight = ({ light }: { light: Light }) => {
   const lightRef = useRef(null!);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -79,4 +79,4 @@ export default function SceneLight({ light }: { light: Light }) {
         </>
       );
   }
-}
+};

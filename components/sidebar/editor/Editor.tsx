@@ -1,12 +1,12 @@
-import useScenefile from "@/hooks/useScenefile";
+import { CameraEditor } from "@/components/sidebar/editor/panels/CameraEditor";
+import { GroupEditor } from "@/components/sidebar/editor/panels/GroupEditor";
+import { LightEditor } from "@/components/sidebar/editor/panels/LightEditor";
+import { PrimitiveEditor } from "@/components/sidebar/editor/panels/PrimitiveEditor";
+import { SceneEditor } from "@/components/sidebar/editor/panels/SceneEditor";
+import { useScenefile } from "@/hooks/useScenefile";
 import { useMemo } from "react";
-import CameraEditor from "./panels/CameraEditor";
-import GroupEditor from "./panels/GroupEditor";
-import LightEditor from "./panels/LightEditor";
-import PrimitiveEditor from "./panels/PrimitiveEditor";
-import SceneEditor from "./panels/SceneEditor";
 
-export default function Editor() {
+export const Editor = () => {
   const { selected } = useScenefile();
 
   const selectedEditor = useMemo(() => {
@@ -34,4 +34,4 @@ export default function Editor() {
     );
 
   return <div className="flex flex-col gap-2 py-2">{selectedEditor}</div>;
-}
+};

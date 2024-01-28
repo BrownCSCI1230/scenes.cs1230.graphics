@@ -1,5 +1,5 @@
+import { useScenefile } from "@/hooks/useScenefile";
 import { useEffect } from "react";
-import useScenefile from "./useScenefile";
 
 export const useExitWarning = () => {
   const { scenefileHasChanged } = useScenefile();

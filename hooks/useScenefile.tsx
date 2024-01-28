@@ -885,5 +885,3 @@ type ScenefileAction =
   | SetLightNameAction
   | SetLightPropertyAction
   | SetGlobalDataPropertyAction;
-
-export default useScenefile;

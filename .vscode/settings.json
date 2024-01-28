@@ -18,5 +18,6 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     }
-  }
+  },
+  "javascript.preferences.importModuleSpecifier": "non-relative"
 }

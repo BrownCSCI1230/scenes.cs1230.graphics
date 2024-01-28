@@ -1,10 +1,10 @@
+import { EditorSection } from "@/components/sidebar/editor/primitives/EditorSection";
+import { SingleInput } from "@/components/sidebar/editor/primitives/SingleInput";
 import { Input } from "@/components/ui/input";
-import useScenefile from "@/hooks/useScenefile";
+import { useScenefile } from "@/hooks/useScenefile";
 import { GlobalDataProperty } from "@/types/Scenefile";
-import EditorSection from "../components/EditorSection";
-import SingleInput from "../components/SingleInput";
 
-export default function SceneEditor() {
+export const SceneEditor = () => {
   const { scenefile, selected, setSceneName, setGlobalDataProperty } =
     useScenefile();
 
@@ -51,7 +51,7 @@ export default function SceneEditor() {
       </EditorSection>
     </div>
   );
-}
+};
 
 const globalPropertyDisplayNames: Record<GlobalDataProperty, string> = {
   ambientCoeff: "Ambient",

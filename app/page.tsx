@@ -1,8 +1,8 @@
 "use client";
 
-import Header from "@/components/header/Header";
-import Scene from "@/components/scene/Scene";
-import Sidebar from "@/components/sidebar/Sidebar";
+import { Header } from "@/components/header/Header";
+import { Scene } from "@/components/scene/Scene";
+import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
