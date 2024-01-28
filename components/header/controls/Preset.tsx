@@ -5,7 +5,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { useScenefile } from "@/hooks/useScenefile";
 
@@ -26,6 +25,7 @@ import unit_cube from "@/examples/unit_cube.json";
 import unit_cylinder from "@/examples/unit_cylinder.json";
 import unit_sphere from "@/examples/unit_sphere.json";
 import { ScenefileSchema } from "@/types/Scenefile";
+import { useState } from "react";
 
 const examples = {
   "default.json": defaultExample,
@@ -51,21 +51,20 @@ const isExampleName = (name: string): name is keyof typeof examples =>
 
 export const Preset = () => {
   const { setScenefile } = useScenefile();
-  const { scenefilePath } = useScenefile();
+  const [key, setKey] = useState(0);
 
   return (
     <Select
+      key={key}
       onValueChange={async (name) => {
         if (!isExampleName(name)) return;
         const scenefile = await ScenefileSchema.parseAsync(examples[name]);
         setScenefile(scenefile);
+        setKey((key) => key + 1);
       }}
     >
       <SelectTrigger className="w-[180px]" aria-label="Load preset">
-        <SelectValue
-          placeholder={scenefilePath ?? "No file loaded"}
-          aria-label="Load preset"
-        />
+        Choose a preset...
       </SelectTrigger>
       <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
         {Object.entries(examples).map((example) => (

@@ -20,7 +20,7 @@ export const Help = () => {
           aria-label="How to use Scenes"
         >
           <TooltipTrigger aria-label="How to use Scenes">
-            <InformationCircleIcon className="h-6 w-6 opacity-40" />
+            <InformationCircleIcon className="text-border h-6 w-6" />
           </TooltipTrigger>
         </Link>
         <TooltipContent side="bottom" collisionPadding={{ left: 40 }}>
