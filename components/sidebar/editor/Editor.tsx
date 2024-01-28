@@ -28,7 +28,7 @@ export const Editor = () => {
 
   if (!selectedEditor)
     return (
-      <div className="flex h-full flex-col items-center justify-center p-8 text-center text-slate-400 dark:text-slate-400">
+      <div className="flex h-full flex-col items-center justify-center p-8 text-center">
         Select something in the outline to see and edit its properties here
       </div>
     );

@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { CameraProvider } from "@/hooks/useCamera";
 import { ScenefileProvider } from "@/hooks/useScenefile";
@@ -17,12 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ScenefileProvider>
-          <CameraProvider>{children}</CameraProvider>
-        </ScenefileProvider>
-        <Toaster />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ScenefileProvider>
+            <CameraProvider>{children}</CameraProvider>
+          </ScenefileProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

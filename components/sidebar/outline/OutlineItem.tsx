@@ -90,7 +90,7 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
           {showTrigger && (
             <ChevronDownIcon
               className={cn(
-                "h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 dark:text-slate-400",
+                "h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200",
                 isOpen ? "rotate-0" : "-rotate-90",
               )}
             />
@@ -103,26 +103,28 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
 
           <div onClick={(e) => e.stopPropagation()}>
             <DropdownMenu>
-              <div className="flex items-center justify-center">
-                <div className="">
-                  {selected && deleteAction !== undefined && (
-                    <div
-                      className="ml-2 flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300"
-                      onClick={deleteAction}
-                    >
-                      <TrashIcon className="h-4 w-4" />
-                    </div>
-                  )}
-                </div>
+              <div className="flex items-center justify-center gap-2">
+                {selected && deleteAction !== undefined && (
+                  <div
+                    className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300"
+                    onClick={deleteAction}
+                  >
+                    <TrashIcon className="h-4 w-4" />
+                  </div>
+                )}
                 {showTrigger && selected && (
-                  <DropdownMenuTrigger className="">
-                    <div className="ml-2 flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300">
+                  <DropdownMenuTrigger>
+                    <div className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300">
                       <PlusIcon className="h-4 w-4" />
                     </div>
                   </DropdownMenuTrigger>
                 )}
               </div>
-              <DropdownMenuContent align="end" sideOffset={5}>
+              <DropdownMenuContent
+                align="end"
+                sideOffset={5}
+                onCloseAutoFocus={(e) => e.preventDefault()}
+              >
                 <DropdownMenuGroup>
                   <DropdownMenuItem
                     className="flex gap-2"

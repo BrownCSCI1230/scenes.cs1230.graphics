@@ -67,7 +67,7 @@ export const Preset = () => {
           aria-label="Load preset"
         />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
         {Object.entries(examples).map((example) => (
           <SelectItem key={example[0]} value={example[0]}>
             {example[0]}
