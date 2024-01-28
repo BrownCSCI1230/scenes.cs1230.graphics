@@ -78,7 +78,6 @@ export const LightEditor = () => {
     <>
       <EditorSection label="Light name">
         <Input
-          className="bg-white"
           type="text"
           autoComplete="off"
           placeholder={

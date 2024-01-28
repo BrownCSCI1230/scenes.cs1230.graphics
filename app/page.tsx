@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useExitWarning } from "@/hooks/useExitWarning";
+import { cn } from "@/lib/utils";
 import { Martian_Mono } from "next/font/google";
 import Link from "next/link";
 
@@ -22,16 +23,18 @@ export default function Home() {
     <div className="flex h-screen max-h-screen flex-col overflow-hidden">
       <Header />
       <Separator />
-      <main className="flex flex-grow gap-4 overflow-auto p-8 text-slate-700">
-        <div className="absolute bottom-10 left-10 z-10 text-xs text-slate-300">
+      <main className="flex flex-grow gap-4 overflow-auto p-8">
+        <div className="absolute bottom-10 left-10 z-10 text-xs">
           <TooltipProvider>
             <Tooltip>
               <Link
                 href="https://github.com/BrownCSCI1230/scenes.cs1230.graphics"
                 target="_blank"
               >
-                <TooltipTrigger className={font.className}>
-                  Made with <span style={{ fontSize: "1rem" }}>❤</span>
+                <TooltipTrigger
+                  className={cn(font.className, "text-foreground/30")}
+                >
+                  Made with <span className="text-base">❤</span>
                 </TooltipTrigger>
               </Link>
               <TooltipContent side="top" collisionPadding={{ left: 40 }}>

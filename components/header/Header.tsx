@@ -1,5 +1,5 @@
 import { Logo } from "@/components/header/Logo";
-import { HeaderControls } from "@/components/header/controls/HeaderControls";
+import { HeaderControls } from "@/components/header/HeaderControls";
 
 export const Header = () => {
   return (

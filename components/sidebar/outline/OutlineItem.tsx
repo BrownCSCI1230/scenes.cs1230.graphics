@@ -81,8 +81,8 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
         <div
           className={cn(
             "header",
-            "flex cursor-pointer items-center justify-between gap-2 px-2 hover:bg-orange-50",
-            selected ? "bg-orange-200 hover:bg-orange-200" : "bg-transparent",
+            "flex cursor-pointer items-center justify-between gap-2 px-2 hover:bg-accent/50",
+            selected && "bg-accent hover:bg-accent",
           )}
           style={{ paddingLeft: `${(depth ?? 0) + 0.5}rem` }}
           onClick={handleHeaderClick}
@@ -90,7 +90,7 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
           {showTrigger && (
             <ChevronDownIcon
               className={cn(
-                "h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200",
+                "h-4 w-4 shrink-0  transition-transform duration-200",
                 isOpen ? "rotate-0" : "-rotate-90",
               )}
             />
@@ -106,7 +106,7 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
               <div className="flex items-center justify-center gap-2">
                 {selected && deleteAction !== undefined && (
                   <div
-                    className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300"
+                    className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-accent-foreground/10"
                     onClick={deleteAction}
                   >
                     <TrashIcon className="h-4 w-4" />
@@ -114,7 +114,7 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
                 )}
                 {showTrigger && selected && (
                   <DropdownMenuTrigger>
-                    <div className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-orange-300">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-sm hover:bg-accent-foreground/10">
                       <PlusIcon className="h-4 w-4" />
                     </div>
                   </DropdownMenuTrigger>

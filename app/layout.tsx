@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/header/controls/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { CameraProvider } from "@/hooks/useCamera";
 import { ScenefileProvider } from "@/hooks/useScenefile";

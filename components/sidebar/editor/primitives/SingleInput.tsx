@@ -26,7 +26,7 @@ export const SingleInput = ({
       <DraggableInput
         {...props}
         id={id}
-        className={cn("w-auto max-w-[4rem] bg-white", className)}
+        className={cn("w-auto max-w-[4rem]", className)}
       />
     </div>
   );

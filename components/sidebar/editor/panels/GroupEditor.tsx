@@ -23,7 +23,6 @@ export const GroupEditor = () => {
     <>
       <EditorSection label="Group name">
         <Input
-          className="bg-white"
           type="text"
           autoComplete="off"
           id={`group-name` + group.id}

@@ -19,7 +19,6 @@ export const SceneEditor = () => {
     <div className="flex flex-col gap-4">
       <EditorSection label="Scene name">
         <Input
-          className="bg-white"
           type="text"
           autoComplete="off"
           id="scene name"
