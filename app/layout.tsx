@@ -3,9 +3,6 @@ import { ThemeProvider } from "@/components/header/controls/theme/ThemeProvider"
 import { Toaster } from "@/components/ui/toaster";
 import { CameraProvider } from "@/hooks/useCamera";
 import { ScenefileProvider } from "@/hooks/useScenefile";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Scene Viewer | CS1230",
@@ -19,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ScenefileProvider>
             <CameraProvider>{children}</CameraProvider>

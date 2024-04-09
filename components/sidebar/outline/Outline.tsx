@@ -43,15 +43,6 @@ export const Outline = () => {
   );
 };
 
-const isATemplateGroupUser = (group: Group) =>
-  group.name &&
-  !group.translate &&
-  !group.scale &&
-  !group.rotate &&
-  !group.groups &&
-  !group.primitives &&
-  !group.lights;
-
 const SceneOutlineItemTemplate = ({
   fallbackTitle,
   initialOpen,
@@ -99,9 +90,9 @@ const SceneOutlineItemTemplate = ({
   };
 
 const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
-  const { select, selected, deleteItem } = useScenefile();
-  const isTemplateGroupUser = isATemplateGroupUser(group);
-  const GroupTemplate = isTemplateGroupUser
+  const { select, selected, deleteItem, isTemplateGroupUser } = useScenefile();
+  const isTemplate = isTemplateGroupUser(group);
+  const GroupTemplate = isTemplate
     ? OutlineTemplateGroupTemplate
     : OutlineGroupTemplate;
 
@@ -114,9 +105,7 @@ const OutlineGroup = ({ group, depth }: { group: Group; depth?: number }) => {
       depth={depth}
       deleteAction={() => deleteItem(group)}
       icon={
-        isTemplateGroupUser ? (
-          <IconRubberStamp size={16} color="#15a334" />
-        ) : undefined
+        isTemplate ? <IconRubberStamp size={16} color="#15a334" /> : undefined
       }
     >
       {group.lights?.map((light) => (

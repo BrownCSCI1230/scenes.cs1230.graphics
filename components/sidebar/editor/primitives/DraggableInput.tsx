@@ -96,6 +96,7 @@ export const DraggableInput = forwardRef<HTMLInputElement, DraggableInputProps>(
           {...props}
           type="number"
           className={cn(
+            "font-mono",
             "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
             "rounded-none",
             "cursor-ew-resize focus-visible:ring-0",

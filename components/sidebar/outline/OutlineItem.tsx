@@ -79,11 +79,8 @@ export const OutlineItem = forwardRef<HTMLDivElement, OutlineItemProps>(
         {...props}
       >
         <div
-          className={cn(
-            "header",
-            "flex cursor-pointer items-center justify-between gap-2 px-2 hover:bg-accent/50",
-            selected && "bg-accent hover:bg-accent",
-          )}
+          data-selected={selected}
+          className="flex cursor-pointer items-center justify-between gap-2 px-2 hover:bg-accent/50 data-[selected=true]:bg-accent data-[selected=true]:hover:bg-accent"
           style={{ paddingLeft: `${(depth ?? 0) + 0.5}rem` }}
           onClick={handleHeaderClick}
         >

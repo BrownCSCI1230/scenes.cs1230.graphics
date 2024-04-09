@@ -36,6 +36,7 @@ type ScenefileContextType = {
   scenefileHasChanged: boolean;
   lights: Light[];
   templateGroupMap: { [name: string]: Group };
+  isTemplateGroupUser: (group: Group) => boolean;
   select: (id: Selected) => void;
   toggleSelect: (id: Selected) => void;
   selected: Selected | undefined;
@@ -111,6 +112,7 @@ const ScenefileContext = createContext<ScenefileContextType>({
   select: () => {},
   lights: [],
   templateGroupMap: {},
+  isTemplateGroupUser: () => false,
   toggleSelect: () => {},
   loadFile: () => {},
   setScenefile: () => {},
@@ -164,12 +166,15 @@ export const ScenefileProvider = ({
     return map;
   }, [scenefile]);
 
+  const isTemplateGroupUser = (group: Group) =>
+    group.name !== undefined && templateGroupMap[group.name] !== undefined;
+
   // TODO: use something like LightCTM in HelperTypes to colllect CTM info along recursive path?
   // .. is there a better way to collect light info than this?
   const getLightsRecursive = useCallback((group: Group) => {
     let allLights: Light[] = [];
     if (group.lights) {
-      allLights = allLights.concat(group.lights);
+      allLights = allLights.concat(group.lights || []);
     }
     if (group.groups) {
       group.groups.forEach((childGroup) => {
@@ -550,6 +555,7 @@ export const ScenefileProvider = ({
         scenefileHasChanged,
         lights,
         templateGroupMap,
+        isTemplateGroupUser,
         select,
         toggleSelect,
         selected,
